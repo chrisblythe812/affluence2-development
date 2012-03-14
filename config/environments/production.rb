@@ -64,4 +64,10 @@ Affluence2::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  # If you are deploying Rails 3.1 on Heroku, you may want to set:
+  config.assets.initialize_on_precompile = false
+
+  #Ensure you have defined default url options.
+  config.action_mailer.default_url_options = { :host => 'affluence.org' }
 end

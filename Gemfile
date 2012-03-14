@@ -8,6 +8,13 @@ gem 'haml-rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
+gem 'devise'
+gem 'activeadmin', '=0.4.0' 
+gem 'aasm'
+gem "paperclip", "~> 2.3"
+gem 'aws-s3'
+gem 'acts-as-taggable-on'
+
 
 
 # Gems used only for assets and not required

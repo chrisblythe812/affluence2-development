@@ -29,9 +29,28 @@ Affluence2::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
+  # If you are deploying Rails 3.1 on Heroku, you may want to set:
+  config.assets.initialize_on_precompile = false
+
   # Do not compress assets
   config.assets.compress = false
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  #Ensure you have defined default url options.
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  ActionMailer::Base.smtp_settings = {
+    :address        => "smtp.sendgrid.net",
+    :port           => "25",
+    :authentication => :plain,
+    :user_name      => "app1419099@heroku.com",
+    :password       => "e55ljkwa",
+    :domain         => "heroku.com"
+  }
+
 end
+
+

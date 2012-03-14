@@ -1,0 +1,20 @@
+common: &default_settings
+  access_key_id: "AKIAISP2FLPBRZYWFUSA"
+  secret_access_key: "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"
+
+development:
+  <<: *default_settings
+  bucket: "affluence2-development"
+
+staging:
+  <<: *default_settings
+  bucket: "affluence2-staging"
+
+production:
+  <<: *default_settings
+  bucket: "affluence2-production"
+
+test:
+  <<: *default_settings
+  bucket: "affluence2-test"
+

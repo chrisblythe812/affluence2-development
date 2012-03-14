@@ -16,7 +16,7 @@
 .idea
 *.*~
 *~
-
+nbproject
 db/schema.rb
 config/database.yml
 

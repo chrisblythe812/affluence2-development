@@ -1,4 +1,16 @@
 Affluence2::Application.routes.draw do
+
+  ActiveAdmin.routes(self)
+
+
+  get "home/index"
+  match '/profile/index' => 'profile#index', :as => :profile_index 
+
+#  get "home/index"
+
+  devise_for :users
+  get "welcome/index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -48,7 +60,11 @@ Affluence2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+<<<<<<< HEAD
+  root :to => 'home#index'
+=======
+   root :to => 'welcome#index'
+>>>>>>> e8aaf48b7211be4fef73090f1e63a4362beefb4f
 
   # See how all your routes lay out with "rake routes"
 
