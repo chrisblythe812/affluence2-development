@@ -61,7 +61,11 @@ Affluence2::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
 <<<<<<< HEAD
+<<<<<<< HEAD
   root :to => 'home#index'
+=======
+   root :to => 'welcome#index'
+>>>>>>> e8aaf48b7211be4fef73090f1e63a4362beefb4f
 =======
    root :to => 'welcome#index'
 >>>>>>> e8aaf48b7211be4fef73090f1e63a4362beefb4f
