@@ -77,11 +77,11 @@
           %small new
           Members
         %hr.zero
-          %ul.thumbnails
-            - @new_members.each do |new_member|
-              %li.span1
-                %a.thumbnail{"data-original-title" => "#{new_member.email}", "data-placement" => "bottom", :href => "#", :rel => "tooltip"}
-                  %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw"}
+          %ul.thumbnails#latest_members
+            %li
+              #spinner
+                = image_tag 'ajax-loader.gif', :class => 'ajax-loader' 
+                %p Loading....
           %p.pull-right
             %a{:href => "./members.html"} see more members
           %br/

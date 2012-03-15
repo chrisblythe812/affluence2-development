@@ -7,5 +7,22 @@
         padding-top: 60px;
         padding-bottom: 40px;
       }
+      #spinner
+        {
+          margin:33px 0;
+          position:relative;
+          width:800px;
+          left:50%;
+
+        }
+      .ajax-loader
+        {
+          margin:0 7px;
+ 
+        }
   %body
     = yield
+    :javascript
+      $(function () {
+        $("#latest_members").load("#{home_latest_members_path}");
+      });

@@ -5,6 +5,7 @@ Affluence2::Application.routes.draw do
 
   get "home/index"
   match '/profile/index' => 'profile#index', :as => :profile_index 
+  match '/home/latest_members' => 'home#latest_members', :as => :home_latest_members
 
 #  get "home/index"
 
