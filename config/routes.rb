@@ -1,5 +1,17 @@
 Affluence2::Application.routes.draw do
 
+  get "event/index"
+
+  get "event/new"
+
+  get "event/create"
+
+  get "event/edit"
+
+  get "event/update"
+
+  get "event/delete"
+
   ActiveAdmin.routes(self)
 
 
