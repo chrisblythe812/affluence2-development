@@ -30,7 +30,7 @@
                 %a{:href => "./orders.html"} Order History
               %li.divider
               %li
-                %a{:href => "#"} Sign Out
+                = link_to 'Sign Out', destroy_user_session_path, :method => :delete
       / /.nav-collapse
 .container
   .row

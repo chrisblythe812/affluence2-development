@@ -9,7 +9,8 @@ Affluence2::Application.routes.draw do
 
 #  get "home/index"
 
-  devise_for :users
+  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
+
   get "welcome/index"
 
   # The priority is based upon order of creation:
