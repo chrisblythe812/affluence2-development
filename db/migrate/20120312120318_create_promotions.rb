@@ -5,5 +5,5 @@ class CreatePromotions < ActiveRecord::Migration
       t.timestamps
     end
   end
-    add_index "promotions", ["promotionable_id", "promotionable_type"], :name => "promotion_event"
+    #add_index "promotions", ["promotionable_id", "promotionable_type"], :name => "promotion_event"
 end
