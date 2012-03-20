@@ -21,6 +21,7 @@
             %label.control-label{:for => "input04"} Confirm Password
             .controls
               = f.password_field :password_confirmation, :class => 'input span4', :placeholder => ""
+              = f.hidden_field :role, :value => 'member'
           %legend
             %h6 How You Pay
           .control-group
