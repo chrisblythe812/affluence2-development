@@ -15,7 +15,9 @@ gem "paperclip", "~> 2.3"
 gem 'aws-s3'
 gem 'acts-as-taggable-on'
 gem 'aws-sdk'
-
+gem 'country_select'
+gem 'braintree'
+gem 'permalink_fu'
 
 
 # Gems used only for assets and not required
