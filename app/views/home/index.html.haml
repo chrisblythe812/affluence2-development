@@ -134,3 +134,10 @@
       $("#latest_members").load("#{latest_members_members_path}");
       $("#latest_events").load("#{home_page_events_event_index_path}");
     });
+
+  :javascript
+      $(function () {
+        $('a[rel=tooltip]').tooltip({
+        	live: true
+        })
+      });
