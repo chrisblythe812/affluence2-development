@@ -27,7 +27,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "./paid/index.html"} Affluence
+          = link_to('Affluence', root_path, :class => "brand")
           .nav-collapse
             /
               <ul class="nav">
@@ -42,90 +42,13 @@
               /%form.form-search.nav.pull-right{:style => "margin-top:5px;",:action=>"/users/sign_in",:method=>"post"}
               %input.input.span2{:name=>"user[email]", :type => "text",:placeholder=>"Email"}
                 %input.input.span2{:name => "user[password]", :type => "password",:placeholder=>"Password"}
-                  %a{:href => "./paid/home.html"}
-                    %button.btn.btn-primary{:style => "margin-top: 0px;", :type => "submit"} Login
+                  /%a{:href => "./paid/home.html"}
+                  %button.btn.btn-primary{:style => "margin-top: 0px;", :type => "submit"} Login
                   / <p class="help-block"><a href="#" class="white">Forgot Password?</a><label class="checkbox white"><input type="checkbox"> Remember Me?</label> </p>
           / /.nav-collapse
     #landing
       .container
-        .hero-unit
-          %h1 Exclusive Access
-          %p Gain Access to the most Prestigious Events, Meet some of the world's most Powerful People and gain Exclusive Benefits for becoming a member of Affluence.
-          %p
-            %a.btn.btn-primary.btn-large{:href => "./register.html"} Register Now
-        .row
-          .span12
-            %h2{:style => "text-align:center"}
-              Bridge the Gap
-              %hr.soften.zero
-        .row
-          .span4
-            %h3 Socialize
-            %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-          .span4
-            %h3 Access
-            %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-          .span4
-            %h3 Benefits
-            %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-        / row
-        .page-header
-          %h1
-            %small upcoming
-            Events
-        .row
-          .span4
-            .thumbnail
-              = image_tag ("events-1.jpg")
-              .caption
-                %h5 Grammy Event & Party
-                %p Join Affluence for an all access pass to the 2012 Grammy's.  Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.
-          / span4
-          .span4
-            .thumbnail
-              = image_tag ("events-2.jpg")
-              .caption
-                %h5 Weekend at the Masters
-                %p Let Affluence treat you to a Masters like you have never experienced before.  Enjoy Saturday and Sunday event passes with all access to every tent and party.
-          / span4
-          .span4
-            .thumbnail
-              = image_tag ("events-3.jpg")
-              .caption
-                %h5 2012 Oscars Party
-                %p Join Affluence for an all access pass to the 2012 Grammy's.  Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.
-          / span4
-        / row
-        .page-header
-          %h1
-            %small top
-            Offers
-        .row
-          .span3
-            .thumbnail
-              = image_tag ("offer-1.jpg")
-              .caption
-                %h5 60% Off Flying Private
-                %p Fly private for as little as $3,000/hr.
-          .span3
-            .thumbnail
-              = image_tag ("offer-2.jpg")
-              .caption
-                %h5 Small Luxury Hotel Upgrades
-                %p Free room upgrade, late checkout & more.
-          .span3
-            .thumbnail
-              = image_tag ("offer-3.jpg")
-              .caption
-                %h5 30% Off Lifelock
-                %p Protect your identity for less than $7 a month.
-          .span3
-            .thumbnail
-              = image_tag ("offer-3.jpg")
-              .caption
-                %h5 30% Off Lifelock
-                %p Protect your identity for less than $7 a month.
-        / row
+        = yield
         %hr
           %footer
             %p © Company 2012
@@ -150,3 +73,4 @@
     %script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"}
     %script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"}
     %script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
+    = yield(:javascripts)

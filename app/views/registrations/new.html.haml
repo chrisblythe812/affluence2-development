@@ -1,0 +1,66 @@
+.row
+  .span7.well
+    %h2 Register Today
+    %hr
+      = form_for(resource.with_profile, :as => resource_name, :url => registration_path(resource_name),:html => {:class => "form-horizontal"} ) do |f|
+        = devise_error_messages!
+        %fieldset
+          = f.fields_for :profile do |builder|
+            = render "profile_fields", :f => builder
+          %legend
+            %h6 Login Info
+          .control-group
+            %label.control-label{:for => "input02"} Email
+            .controls
+              = f.email_field :email, :class => 'input span4', :placeholder => "yourname@domain.com"
+          .control-group
+            %label.control-label{:for => "input03"} Password
+            .controls
+              = f.password_field :password, :class => 'input span4', :placeholder => ""
+          .control-group
+            %label.control-label{:for => "input04"} Confirm Password
+            .controls
+              = f.password_field :password_confirmation, :class => 'input span4', :placeholder => ""
+          %legend
+            %h6 How You Pay
+          .control-group
+            %label.control-label Plan
+            .controls
+              %label.radio
+                = f.radio_button :plan, "free", {:id =>'optionsRadios',:checked => "" }
+                Free - Limited Access
+                %em
+                  %strong your card will not be billed
+              %label.radio
+                = f.radio_button :plan, "Monthly", {:id =>'optionsRadios1',:checked => "" }
+                Monthly - $50 per Month
+              %label.radio
+                = f.radio_button :plan, "Yearly", {:id =>'optionsRadios2',:checked => "" }
+                Yearly - $450 per Year
+                %em
+                  %strong Save 25%
+          %hr.zero
+            .control-group
+              %label.control-label{:for => "input05"} Card Number
+              .controls
+                = f.text_field :card_number, :class => "input span2"
+            .control-group
+              %label.control-label{:for => "select02"} Expiration Date
+              .controls
+                = f.select :expiry_month,["Month","01 - 02 - February", "03 - March", "04 - April","05 - May"],{},{:class => "span2", :id => "select02" }
+                = f.select :expiry_year,["Year","2012", "2013", "2014","2015"],{},{:class => "span1", :id => "select03" }
+            .control-group
+              %label.control-label{:for => "input06"} Zip Code
+              .controls
+                = f.text_field :zip_code, :class => "input span2"
+            .form-actions
+              %a{:href => "./free/home.html"}
+                %button.btn.btn-primary{:type => "submit"} Register
+  .span4
+    %h2 This is a Benefit
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+    %h2 This is a Benefit
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+    %h2 This is a Benefit
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+%hr/

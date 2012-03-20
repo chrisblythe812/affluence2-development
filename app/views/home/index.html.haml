@@ -1,0 +1,136 @@
+.span9
+  %div
+    %h2
+      %small new
+      Members
+    %hr.zero
+      %ul.thumbnails#latest_members
+        %li
+          #spinner
+            = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+            %p Loading....
+      %p.pull-right
+        = link_to "see more members",find_members_members_path
+      %br/
+      %br/
+  %div
+    %h2
+      %small new
+      Events
+    %hr.zero
+      %ul.thumbnails#latest_events
+        %li
+          #spinner
+            = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+            %p Loading....
+      %p.pull-right
+        %a{:href => "/event"} see more events
+      %br/
+      %br/
+  %div
+    %h2
+      %small new
+      Offers
+    %hr.zero
+      %ul.thumbnails
+        %li.span3
+          .thumbnail
+            %img{:alt => "", :src => "./img/offer-1.jpg"}
+              .caption
+                %h5 60% Off Flying Private
+                %p Fly private for as little as $3,000/hr.
+                %p
+                  %a.btn.btn-small.btn-info{:href => "#"}
+                    %i.icon-ok.icon-white
+                    Ativate
+        %li.span3
+          .thumbnail
+            %img{:alt => "", :src => "./img/offer-2.jpg"}
+              .caption
+                %h5 Small Luxury Hotel Upgrades
+                %p Free room upgrade, late checkout & more.
+                %p
+                  %a.btn.btn-small.btn-info{:href => "#"}
+                    %i.icon-ok.icon-white
+                    Ativate
+        %li.span3
+          .thumbnail
+            %img{:alt => "", :src => "./img/offer-3.jpg"}
+              .caption
+                %h5 30% Off Lifelock
+                %p Protect your identity for less than $7 a month.
+                %p
+                  %a.btn.btn-small.btn-info{:href => "#"}
+                    %i.icon-ok.icon-white
+                    Ativate
+      %p.pull-right
+        %a{:href => "./offers.html"} see more offers
+      %br/
+      %br/
+  %div
+    %h2 Activity
+    %hr.zero
+      %table.table.table-striped
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 John Doe
+            %p
+              has activated the
+              %a{:href => "./offer-1.html"} Lifelock
+              Offer
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 Michael Smith
+            %p
+              has purchased a ticket to the
+              %a{:href => "./events-1.html"} Grammy Event & Party
+              Event
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 Chris Morris
+            %p
+              has used
+              %a{:href => "./events-1.html"} Affluence Concierge
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 Doug Lowe
+            %p
+              has donated to
+              %a{:href => "./events-1.html"} Affluence Gives
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 Chris Morris
+            %p
+              has used
+              %a{:href => "./events-1.html"} Affluence Concierge
+        %tr
+          %td.span1
+            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+          %td
+            %h5 Doug Lowe
+            %p
+              has donated to
+              %a{:href => "./events-1.html"} Affluence Gives
+/ span9
+-content_for :javascripts do
+  :javascript
+    $(function () {
+      $("#latest_members").load("#{latest_members_members_path}");
+      $("#latest_events").load("#{home_page_events_event_index_path}");
+    });

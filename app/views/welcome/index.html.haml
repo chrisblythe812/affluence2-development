@@ -1,0 +1,65 @@
+.hero-unit
+  %h1 Exclusive Access
+  %p Gain Access to the most Prestigious Events, Meet some of the world's most Powerful People and gain Exclusive Benefits for becoming a member of Affluence.
+  %p
+    = link_to( 'Register Now', new_user_registration_path, :class => "btn btn-primary btn-large")
+.row
+  .span12
+    %h2{:style => "text-align:center"}
+      Bridge the Gap
+      %hr.soften.zero
+.row
+  .span4
+    %h3 Socialize
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+  .span4
+    %h3 Access
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+  .span4
+    %h3 Benefits
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+/ row
+.page-header
+  %h1
+    %small upcoming
+    Events
+.row#latest_events
+  #spinner
+    = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+    %p Loading....
+/ row
+.page-header
+  %h1
+    %small top
+    Offers
+.row
+  .span3
+    .thumbnail
+      = image_tag ("offer-1.jpg")
+      .caption
+        %h5 60% Off Flying Private
+        %p Fly private for as little as $3,000/hr.
+  .span3
+    .thumbnail
+      = image_tag ("offer-2.jpg")
+      .caption
+        %h5 Small Luxury Hotel Upgrades
+        %p Free room upgrade, late checkout & more.
+  .span3
+    .thumbnail
+      = image_tag ("offer-3.jpg")
+      .caption
+        %h5 30% Off Lifelock
+        %p Protect your identity for less than $7 a month.
+  .span3
+    .thumbnail
+      = image_tag ("offer-3.jpg")
+      .caption
+        %h5 30% Off Lifelock
+        %p Protect your identity for less than $7 a month.
+/ row
+-content_for :javascripts do
+  :javascript
+    $(function () {
+      $("#latest_events").load("#{landing_page_events_event_index_path}");
+    });

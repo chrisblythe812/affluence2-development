@@ -1,29 +1,18 @@
 Affluence2::Application.routes.draw do
 
-  get "event/index"
 
-  get "event/new"
-
-  get "event/create"
-
-  get "event/edit"
-
-  get "event/update"
-
-  get "event/delete"
 
   ActiveAdmin.routes(self)
 
 
   get "home/index"
-  match '/profile/index' => 'profile#index', :as => :profile_index 
+  #match '/profile/index' => 'profile#index', :as => :profile_index
   match '/home/latest_members' => 'home#latest_members', :as => :home_latest_members
 
 #  get "home/index"
 
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
 
-  get "welcome/index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -40,16 +29,27 @@ Affluence2::Application.routes.draw do
   #   resources :products
 
   # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
+     resources :event do
+       member do
+       end
   #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
+       collection do
+         get 'home_page_events'
+         get 'landing_page_events'
+       end
+     end
+
+  resources :home do
+
+  end
+
+  resources :profile
+  resources :members do
+    collection do
+      get 'latest_members'
+      get 'find_members'
+    end
+  end
 
   # Sample resource route with sub-resources:
   #   resources :products do
@@ -74,7 +74,7 @@ Affluence2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#index'
+  root :to => 'welcome#index'
 
 
   # See how all your routes lay out with "rake routes"

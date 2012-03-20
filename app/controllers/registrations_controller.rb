@@ -1,11 +1,11 @@
 class RegistrationsController < Devise::RegistrationsController
-
+        layout "welcome"
   def new
     super
   end
 
   def create
-    # add custom create logic here
+    super
   end
 
   def update

@@ -1,0 +1,38 @@
+
+.span3
+  %div
+    %img{:src => "http://www.washingtonexec.com/wp-content/uploads/2011/10/Jim-Jones-Head-Shot.jpg"}
+  .well
+    %ul.nav.nav-list
+      %li.nav-header Socialize
+      %li.active
+        %a{:href => "/home"}
+          %i.icon-star>
+          What's New
+      %li
+        %a{:href => "/profile/#{current_user.permalink}"}
+          %i.icon-home>
+          Profile
+      %li
+        %a{:href => "/members/#{current_user.permalink}"}
+          %i.icon-user>
+          Members
+      %li
+        %a{:href => "#"}
+          %i.icon-comment>
+          Messages
+      %li
+        %a{:href => "#"}
+          %i.icon-glass>
+          Concierge
+  / side bar nav
+  %div
+    %form.well
+      %h3 Call Concierge
+      %hr.zero
+        %input.span2{:placeholder => "847-481-9989", :type => "text"}
+          %span.help-inline Press Call and Your Phone will Ring
+          %button.btn.btn-primary{:type => "submit"} Call Concierge
+          %br/
+  / concierge
+/ span3
