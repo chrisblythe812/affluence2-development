@@ -24,7 +24,7 @@
             = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
             %p Loading....
       %p.pull-right
-        %a{:href => "/event"} see more events
+        %a{:href => "/events"} see more events
       %br/
       %br/
   %div
@@ -132,7 +132,7 @@
   :javascript
     $(function () {
       $("#latest_members").load("#{latest_members_members_path}");
-      $("#latest_events").load("#{home_page_events_event_index_path}");
+      $("#latest_events").load("#{home_page_events_events_path}");
     });
 
   :javascript

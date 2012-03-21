@@ -36,7 +36,7 @@
               %li.active
                 %a{:href => "/home"} Home
               %li
-                %a{:href => "/event"} Events
+                %a{:href => "/events"} Events
               %li
                 %a{:href => "./offers.html"} Offers
               %li
@@ -48,7 +48,7 @@
                   %b.caret
                 %ul.dropdown-menu
                   %li
-                    %a{:href => "./settings.html"} Settings
+                    = link_to 'Settings', settings_profile_index_path
                   %li
                     %a{:href => "./privacy.html"} Privacy
                   %li

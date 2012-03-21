@@ -1,5 +1,4 @@
-class EventController < ApplicationController
-
+class EventsController < ApplicationController
   def index
     @profile_tab = false
   end
