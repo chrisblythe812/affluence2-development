@@ -8,6 +8,6 @@
 .control-group
   %label.control-label{:for => "select01"} Location
   .controls
-    = f.country_select(:country, {},{:class => "span2", :id => "select01"})
+    = f.country_select(:country, {},{}, {:class => "span2", :id => "select01"})
     = f.text_field :city, :class => 'input span2', :placeholder => "City"
 
