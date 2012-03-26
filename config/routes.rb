@@ -42,7 +42,7 @@ Affluence2::Application.routes.draw do
   #   resources :products
 
   # Sample resource route with options:
-     resources :event do
+     resources :events do
        member do
        end
   #
@@ -56,7 +56,18 @@ Affluence2::Application.routes.draw do
 
   end
 
-  resources :profile
+  resources :profile   do
+    collection do
+      get 'settings'
+      get 'confirm'
+      get 'confirm_credit_card_info'
+    end
+  end
+  match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
+  match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
+
+
+
   resources :members do
     collection do
       get 'latest'

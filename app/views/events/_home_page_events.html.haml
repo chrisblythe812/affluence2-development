@@ -1,0 +1,21 @@
+- @promotion_events.each do |promotion|
+  %li.span3
+    .thumbnail
+      = image_tag(promotion.photos.first.image)
+      .caption
+        %h5
+          = promotion.promotionable.title
+        %p
+          = promotion.promotionable.description
+        %p
+          %span.strike
+            =number_to_currency promotion.promotionable.price
+          %em Premium
+        %p
+          %a.btn.btn-success{:href => "#"}
+            %i.icon-pencil.icon-white
+            Register
+          %a.btn.btn-small.btn-info{:href => "./events-detail.html"}
+            %i.icon-info-sign.icon-white
+            More Info
+
