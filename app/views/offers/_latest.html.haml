@@ -1,0 +1,11 @@
+- @latest_offers.each do |offer|
+  %li.span3
+    .thumbnail
+      = image_tag offer.promotion.photos.first.image.url(:medium)
+      .caption
+        %h5= offer.title
+        %p= offer.description
+        %p
+          %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+            %i.icon-ok.icon-white
+            Ativate

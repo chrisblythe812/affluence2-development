@@ -1,6 +1,6 @@
 class Offer < ActiveRecord::Base
 
-  has_one :promotion, :as => :promotionable
+  has_one :promotion, :as => :promotionable, :dependent => :destroy
 
   
 

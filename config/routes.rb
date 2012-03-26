@@ -2,14 +2,27 @@ Affluence2::Application.routes.draw do
 
 
 
+  get "activities/index"
+
+  get "activities/connections"
+
+  get "offers/index"
+
+  get "offers/new"
+
+  get "offers/edit"
+
+  get "offers/create"
+
+  get "offers/update"
+
+  get "offers/show"
+
   ActiveAdmin.routes(self)
 
 
   get "home/index"
-  #match '/profile/index' => 'profile#index', :as => :profile_index
-  match '/home/latest_members' => 'home#latest_members', :as => :home_latest_members
 
-#  get "home/index"
 
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
 
@@ -46,12 +59,22 @@ Affluence2::Application.routes.draw do
   resources :profile
   resources :members do
     collection do
-      get 'latest_members'
+      get 'latest'
       get 'find_members'
     end
   end
 
-  # Sample resource route with sub-resources:
+  resources :offers do
+    collection do
+      get 'latest' 
+    end
+  end
+
+  resources :activities do
+    collection do
+      get 'latest'
+    end
+  end  # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
   #     resource :seller

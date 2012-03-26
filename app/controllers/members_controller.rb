@@ -8,8 +8,8 @@ class MembersController < ApplicationController
   def find_members
 
   end
-  def latest_members
-    @latest_members = User.members.find(:all, :order => "id desc", :limit => 5).reverse
-    render :partial => 'latest_members'
+  def latest
+    @latest_members = User.members.find(:all, :order => "id desc", :limit => 18)
+    render :partial => 'latest'
   end
 end

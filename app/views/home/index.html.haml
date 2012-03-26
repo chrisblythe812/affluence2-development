@@ -32,112 +32,74 @@
       %small new
       Offers
     %hr.zero
-      %ul.thumbnails
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "./img/offer-1.jpg"}
-              .caption
-                %h5 60% Off Flying Private
-                %p Fly private for as little as $3,000/hr.
-                %p
-                  %a.btn.btn-small.btn-info{:href => "#"}
-                    %i.icon-ok.icon-white
-                    Ativate
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "./img/offer-2.jpg"}
-              .caption
-                %h5 Small Luxury Hotel Upgrades
-                %p Free room upgrade, late checkout & more.
-                %p
-                  %a.btn.btn-small.btn-info{:href => "#"}
-                    %i.icon-ok.icon-white
-                    Ativate
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "./img/offer-3.jpg"}
-              .caption
-                %h5 30% Off Lifelock
-                %p Protect your identity for less than $7 a month.
-                %p
-                  %a.btn.btn-small.btn-info{:href => "#"}
-                    %i.icon-ok.icon-white
-                    Ativate
+      %ul.thumbnails#latest_offers
+        %li
+          #spinner
+            = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+            %p Loading....
       %p.pull-right
         %a{:href => "./offers.html"} see more offers
       %br/
       %br/
-  %div
-    %h2 Activity
+  #activity
+    .row.zero-row
+      .span5
+        %h2 Activity
+      .span4
+        .btn-group.pull-right{"data-toggle" => "buttons-radio"}
+          %button.btn.btn-small.btn-primary.active#entire_network Entire Network
+          %button.btn.btn-small.btn-primary#my_connections my Connections
     %hr.zero
       %table.table.table-striped
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 John Doe
-            %p
-              has activated the
-              %a{:href => "./offer-1.html"} Lifelock
-              Offer
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 Michael Smith
-            %p
-              has purchased a ticket to the
-              %a{:href => "./events-1.html"} Grammy Event & Party
-              Event
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 Chris Morris
-            %p
-              has used
-              %a{:href => "./events-1.html"} Affluence Concierge
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 Doug Lowe
-            %p
-              has donated to
-              %a{:href => "./events-1.html"} Affluence Gives
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 Chris Morris
-            %p
-              has used
-              %a{:href => "./events-1.html"} Affluence Concierge
-        %tr
-          %td.span1
-            <a href"#" rel="tooltip" data-original-title="John Doe" data-placement="bottom" class="thumbnail">
-            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-          %td
-            %h5 Doug Lowe
-            %p
-              has donated to
-              %a{:href => "./events-1.html"} Affluence Gives
-/ span9
+        %tbody#latest_activities
+          %tr
+            %td.span1
+              #spinner
+                = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+                %p Loading....
+
+
 -content_for :javascripts do
   :javascript
     $(function () {
-      $("#latest_members").load("#{latest_members_members_path}");
+      // gets latest members
+      $("#latest_members").load("#{latest_members_path}");
+      $("#latest_offers").load("#{latest_offers_path}");
       $("#latest_events").load("#{home_page_events_event_index_path}");
-    });
-
-  :javascript
-      $(function () {
-        $('a[rel=tooltip]').tooltip({
-        	live: true
-        })
+      $("#latest_activities").load("#{latest_activities_path}");
+      
+      $('#activity button').click(function(){
+         getActivities($(this).text() == 'my Connections');
       });
+
+ 
+      $('a[rel=tooltip]').tooltip({
+        	live: true
+        });
+
+      });
+
+
+    function getActivities(text){
+      $.ajax({
+        type: "GET",
+        url: "#{latest_activities_path}",
+        data: "my_connections=" + text,
+        beforeSend: function ( xhr ) {
+          $("#latest_activities").html("<tr>" +
+                    "<td class='span1'>" +
+                      "<div id='spinner'>" +
+                        "<img src='/assets/ajax-loader.gif' class='ajax-loader' alt='Ajax-loader'>" +
+                        "<p>Loading....</p>" +
+                      "</div>" +
+                    "</td>" +
+                  "</tr>"  );
+         },
+        success: function(data) {
+           $("#latest_activities").html(data);
+        }
+      });
+    }  
+
+
+

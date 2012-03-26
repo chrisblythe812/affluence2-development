@@ -4,13 +4,13 @@ class Profile < ActiveRecord::Base
   attr_accessible :first_name, :last_name,:city,:country
 
 
-  acts_as_taggable_on :interests, :expertises
+#  acts_as_taggable_on :interests, :expertises
 
   has_many :photos, :as => :photoable, :dependent => :destroy
-  has_one :photo_stream, :dependent => :destroy
+#    has_one :photo_stream, :dependent => :destroy
 
-  has_one :privacy_setting
-  has_one :notification_setting
+  has_one :privacy_setting, :dependent => :destroy
+  has_one :notification_setting, :dependent => :destroy
   has_many :activities, :as => :resource, :dependent => :destroy
 
  
@@ -21,6 +21,7 @@ class Profile < ActiveRecord::Base
   attr_accessible :privacy_setting_attributes
 
   
+  before_create :create_associated_records
 
   #TODO friends_profiles
   #  scope :friends_profiles, lambda { |user_id|
@@ -40,5 +41,12 @@ class Profile < ActiveRecord::Base
 
   def update_full_name
     self.full_name = name if (first_name_changed? || middle_name_changed? || last_name_changed?)
+  end
+
+  private
+
+  def create_associated_records
+   self.build_notification_setting
+   self.build_privacy_setting
   end
 end

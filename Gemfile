@@ -13,7 +13,7 @@ gem 'activeadmin', '=0.4.0'
 gem 'aasm'
 gem "paperclip", "~> 2.3"
 gem 'aws-s3'
-gem 'acts-as-taggable-on'
+# gem 'acts-as-taggable-on'
 gem 'aws-sdk'
 gem 'country_select'
 gem 'braintree'

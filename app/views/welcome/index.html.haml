@@ -33,30 +33,13 @@
     %small top
     Offers
 .row
-  .span3
-    .thumbnail
-      = image_tag ("offer-1.jpg")
-      .caption
-        %h5 60% Off Flying Private
-        %p Fly private for as little as $3,000/hr.
-  .span3
-    .thumbnail
-      = image_tag ("offer-2.jpg")
-      .caption
-        %h5 Small Luxury Hotel Upgrades
-        %p Free room upgrade, late checkout & more.
-  .span3
-    .thumbnail
-      = image_tag ("offer-3.jpg")
-      .caption
-        %h5 30% Off Lifelock
-        %p Protect your identity for less than $7 a month.
-  .span3
-    .thumbnail
-      = image_tag ("offer-3.jpg")
-      .caption
-        %h5 30% Off Lifelock
-        %p Protect your identity for less than $7 a month.
+  - @latest_offers.each do |offer|
+    .span3
+      .thumbnail
+        = image_tag offer.promotion.photos.first.image
+        .caption
+          %h5= offer.title
+          %p= offer.description
 / row
 -content_for :javascripts do
   :javascript
