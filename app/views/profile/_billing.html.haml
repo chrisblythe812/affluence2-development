@@ -1,0 +1,68 @@
+.accordion-group
+  .accordion-heading
+    %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseTwo"}
+      %h3 Billing
+  #collapseTwo.accordion-body.collapse{:style => "height: 0px; "}
+    .accordion-inner
+      #billing
+        - if @result
+          = h(@result.errors.inspect)
+        - if current_user.has_payment_info?
+          /%form.form-horizontal
+          = form_for :customer,
+              :url => Braintree::TransparentRedirect.url,
+              :params => @result && @result.params[:customer],
+              :builder => ApplicationHelper::BraintreeFormBuilder,
+              :errors => @result && @result.errors.for(:customer),
+              :existing => @credit_card,
+              :html => {:class => 'form-horizontal'} do |f|
+
+
+            = field_set_tag "Credit Card" do
+              - f.fields_for :credit_card do |cc|
+                = cc.label :old_card, "Old card: #{@credit_card.masked_number}"
+                = cc.label :number, "New Card Number"
+                = cc.text_field :number, :value => @credit_card.masked_number
+                = cc.label :expiration_date, 'Exipration Date (MM/YY)'
+                = cc.text_field :expiration_date
+                = cc.label :cvv, 'CVV'
+                = cc.text_field :cvv
+            = hidden_field_tag :tr_data, @tr_data
+
+            .form-actions
+              %button.btn.btn-primary{:type => "submit"} Save changes
+        - else
+          - if @result
+            = h(@result.errors.inspect)
+          = form_for :customer,
+              :url => Braintree::TransparentRedirect.url,
+              :params => @result && @result.params[:customer],
+              :builder => ApplicationHelper::BraintreeFormBuilder,
+              :errors => @result && @result.errors.for(:customer),
+              :html => {:class => 'form-horizontal'} do |f|
+            /= field_set_tag "Customer" do
+            =# f.label :first_name, 'First Name'
+            = f.hidden_field :first_name, :value => current_user.profile.first_name
+            =# f.label :last_name, 'Last Name'
+            = f.hidden_field :last_name , :value => current_user.profile.last_name
+            =# f.label :phone, 'Phone'
+            = f.hidden_field :phone  , :value => current_user.profile.phone
+            =# f.label :email, 'Email'
+            = f.hidden_field :email,:value => current_user.email
+
+            = field_set_tag "Credit Card" do
+              - f.fields_for :credit_card do |cc|
+                = cc.label :number, 'Number'
+                = cc.text_field :number
+                = cc.label :expiration_date, 'Exipration Date (MM/YY)'
+                = cc.text_field :expiration_date
+                = cc.label :cvv, 'CVV'
+                = cc.text_field :cvv
+            = hidden_field_tag :tr_data, @tr_data
+
+            .form-actions
+              %button.btn.btn-primary{:type => "submit"} Save changes
+      / billing
+    / accordion-inner
+  / accordion-body
+/ accordion-group

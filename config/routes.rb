@@ -61,8 +61,12 @@ Affluence2::Application.routes.draw do
       get 'settings'
       get 'confirm'
       get 'confirm_credit_card_info'
+      get 'profile_session'
+      get 'check_avilability'
     end
   end
+
+
   match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
   match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
 

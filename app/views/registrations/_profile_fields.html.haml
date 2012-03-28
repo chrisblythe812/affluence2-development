@@ -3,11 +3,11 @@
 .control-group
   = f.label('Name', :class=> "control-label", :for => "")
   .controls
-    = f.text_field :first_name, :class => 'input span2', :placeholder => "First"
-    = f.text_field :last_name, :class => 'input span2', :placeholder => "Last"
+    = f.text_field :first_name, :class => 'input span2 user_fields', :placeholder => "First"
+    = f.text_field :last_name, :class => 'input span2 user_fields', :placeholder => "Last"
 .control-group
   %label.control-label{:for => "select01"} Location
   .controls
-    = f.country_select(:country, {},{}, {:class => "span2", :id => "select01"})
-    = f.text_field :city, :class => 'input span2', :placeholder => "City"
+    = f.country_select(:country, {},{}, {:class => "span2 user_fields", :id => "select01"})
+    = f.text_field :city, :class => 'input span2 user_fields', :placeholder => "City"
 
