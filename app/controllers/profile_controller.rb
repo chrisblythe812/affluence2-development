@@ -30,7 +30,8 @@ class ProfileController < ApplicationController
 
   def confirm
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
-    if session[:user_info][:user][:plan] == 'free'
+
+    if !session[:user_info].blank? && session[:user_info][:user][:plan] == 'free'
       @user = User.new(session[:user_info][:user])
       if @user.save!
         sign_in @user
