@@ -14,17 +14,18 @@ class ProfileController < ApplicationController
   end
 
   def settings
-    if current_user.has_payment_info?
-      current_user.with_braintree_data!
-      @credit_card = Braintree::CreditCard.find(current_user.default_credit_card.token)
-      @tr_data = Braintree::TransparentRedirect.
-          update_credit_card_data(:redirect_url => confirm_credit_card_info_profile_url,
-                                  :payment_method_token => @credit_card.token)
 
-    else
-      @tr_data = Braintree::TransparentRedirect.
-      create_customer_data(:redirect_url => confirm_profile_url)
-    end
+    #if current_user.has_payment_info?
+     # current_user.with_braintree_data!
+      #@credit_card = Braintree::CreditCard.find(current_user.default_credit_card.token)
+      #@tr_data = Braintree::TransparentRedirect.
+      #    update_credit_card_data(:redirect_url => confirm_credit_card_info_profile_url,
+      #                            :payment_method_token => @credit_card.token)
+
+    #else
+      #@tr_data = Braintree::TransparentRedirect.
+      #create_customer_data(:redirect_url => confirm_profile_url)
+    #end
   end
 
   def confirm
