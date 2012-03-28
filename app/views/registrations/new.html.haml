@@ -1,9 +1,12 @@
+= csrf_meta_tags
 .row
   .span7.well
     %h2 Register Today
     %hr
-      = form_for(resource.with_profile, :as => resource_name, :url => registration_path(resource_name),:html => {:class => "form-horizontal"} ) do |f|
+      = form_for(resource.with_profile, :as => resource_name, :url => Braintree::TransparentRedirect.url,
+          :html => {:class => "braintree_form form-horizontal", :onSubmit => 'return validate_user_info();'} ) do |f|
         = devise_error_messages!
+        = flash[:notice]
         %fieldset
           = f.fields_for :profile do |builder|
             = render "profile_fields", :f => builder
@@ -12,51 +15,68 @@
           .control-group
             %label.control-label{:for => "input02"} Email
             .controls
-              = f.email_field :email, :class => 'input span4', :placeholder => "yourname@domain.com"
+              = f.email_field :email, :class => 'input span4 user_fields', :placeholder => "yourname@domain.com"
+              %p{:style => "display:none;color:red", :id => 'not_avilable'} Email has already been taken
+
+              = hidden_field_tag(:email_avilability, false)
           .control-group
             %label.control-label{:for => "input03"} Password
             .controls
-              = f.password_field :password, :class => 'input span4', :placeholder => ""
+              = f.password_field :password, :class => 'input span4 user_fields', :placeholder => ""
           .control-group
             %label.control-label{:for => "input04"} Confirm Password
             .controls
-              = f.password_field :password_confirmation, :class => 'input span4', :placeholder => ""
+              = f.password_field :password_confirmation, :class => 'input span4 user_fields', :placeholder => ""
               = f.hidden_field :role, :value => 'member'
           %legend
             %h6 How You Pay
           .control-group
             %label.control-label Plan
             .controls
-              %label.radio
-                = f.radio_button :plan, "free", {:id =>'optionsRadios',:checked => "" }
+              %label.radio.plan_free
+                = f.radio_button :plan, "free", {:id =>'optionsRadios',:checked => "",:class => 'user_fields' }
                 Free - Limited Access
                 %em
                   %strong your card will not be billed
-              %label.radio
-                = f.radio_button :plan, "Monthly", {:id =>'optionsRadios1',:checked => "" }
+              %label.radio.plan_monthly
+                = f.radio_button :plan, "Monthly", {:id =>'optionsRadios1',:checked => "" ,:class => 'user_fields' }
                 Monthly - $50 per Month
-              %label.radio
-                = f.radio_button :plan, "Yearly", {:id =>'optionsRadios2',:checked => "" }
+              %label.radio.plan_yearly
+                = f.radio_button :plan, "Yearly", {:id =>'optionsRadios2',:checked => "",:class => 'user_fields'  }
                 Yearly - $450 per Year
                 %em
                   %strong Save 25%
-          %hr.zero
+        %hr.zero
+          .credit_card
             .control-group
               %label.control-label{:for => "input05"} Card Number
               .controls
-                = f.text_field :card_number, :class => "input span2"
+                %input#user_card_number.input.span2{:name => "customer[credit_card][number]", :size => "30", :type => "text"}
             .control-group
               %label.control-label{:for => "select02"} Expiration Date
               .controls
-                = f.select :expiry_month,["Month","01 - 02 - February", "03 - March", "04 - April","05 - May"],{},{:class => "span2", :id => "select02" }
-                = f.select :expiry_year,["Year","2012", "2013", "2014","2015"],{},{:class => "span1", :id => "select03" }
+                %select#select02.span2{:name => "customer[credit_card][expiration_month]"}
+                  %option{:value => "1"} 1 - January
+                  %option{:value => "2"} 2 - February
+                  %option{:value => "3"} 3 - March
+                  %option{:value => "4"} 4 - April
+                  %option{:value => "5"} 5 - May
+                %select#select03.span1{:name => "customer[credit_card][expiration_year]"}
+                  %option 2012
+                  %option 2013
+                  %option 2014
+                  %option 2015
             .control-group
-              %label.control-label{:for => "input06"} Zip Code
+              %label.control-label{:for => "input06"} CVV
               .controls
-                = f.text_field :zip_code, :class => "input span2 "
-            .form-actions
-              %a{:href => "./free/home.html"}
-                %button.btn.btn-primary{:type => "submit"} Register
+                %input#user_zip_code.input.span2{:name => "customer[credit_card][cvv]", :size => "30", :type => "text"}/
+            = hidden_field_tag :tr_data, @tr_data
+            = hidden_field_tag :session_info_status, false
+          /= text_field_tag :submition_status, false
+          /%iframe{:src => "http://localhost:3000/profile/profile_billing", :height => 300, :width => 500}
+          .form-actions
+            /%a{:href => "./free/home.html"}
+            %button.btn.btn-primary{:type => "submit"} Register
   .span4
     %h2 This is a Benefit
     %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
@@ -65,3 +85,371 @@
     %h2 This is a Benefit
     %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
 %hr/
+-content_for :javascripts do
+  :javascript
+    $(function () {
+      $('form.user_fields_form111').submit(function(){
+              var form = $(this)
+               var userdata = form.find('.user_fields').serialize();
+               alert(userdata);
+              //var status = false;
+               $.ajax({
+                    type : 'post',
+                    url : '/users?format=json',
+                    datatype : 'json',
+                    data : userdata,
+                   headers: {
+                         'X-Transaction': 'POST Example',
+                         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                       },
+                    success : function(data) {
+                    //status = true;
+                     alert('success');
+                    },
+                    error : function(data){
+                    //status = false;
+                    alert('error');
+                    }
+                  });
+
+           return false;
+      });
+
+    });
+
+  :javascript
+    var Userregistration = {
+      set_userinfo : function(number){
+      alert('set_userinfo');
+                     $.ajax({
+                          type : 'get',
+                          url : '/profile/profile_session?format=json',
+                          datatype : 'json',
+                          data : userdata,
+                         headers: {
+                               'X-Transaction': 'GET Example',
+                               'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                             },
+                          success : function(data) {
+                           //status = true;
+                           alert('success');
+
+                          },
+                          error : function(data){
+                          //status = false;
+                          alert('error');
+
+                          }
+                        });
+
+       alert('sdfs');
+      },
+
+
+
+
+
+
+    validate_userinfo : function(){
+
+                    var first_name = $('#user_profile_attributes_first_name');
+                    if (first_name.val()=="")
+                    {
+                    alert("First Name field can't be blank");
+                    first_name.focus();
+                    return false
+                    }
+
+
+                    var last_name = $('#user_profile_attributes_last_name');
+                    if (last_name.val()=="")
+                    {
+                    alert("Last Name field can't be blank");
+                    last_name.focus();
+                    return false
+                    }
+
+                    var country = $('#select01');
+                    if (country.val()=="")
+                    {
+                    alert("Country field can't be blank");
+                    country.focus();
+                    return false
+                    }
+
+
+                    var city = $('#user_profile_attributes_city');
+                    if (city.val()=="")
+                    {
+                    alert("City field can't be blank");
+                    city.focus();
+                    return false
+                    }
+
+                   var email = $('#user_email');
+                   if (email.val()=="")
+                   {
+                   alert("email field can't be blank");
+                   email.focus();
+                   return false
+                   }
+
+
+                   var password = $('#user_password');
+                   var confirm_password = $('#user_password_confirmation');
+
+                   if (password.val()=="")
+                   {
+                   alert("Password field can't be blank");
+                   password.focus();
+                   return false
+                   }
+
+                  if (password.val().length < 6)
+                  {
+                  alert(" Password is too short (minimum is 6 characters)");
+                  password.focus();
+                  return false
+                  }
+
+
+
+
+                   if (confirm_password.val()=="")
+                   {
+                   alert("Confirmation Password field can't be blank");
+                   confirm_password.focus();
+                   return false
+                   }
+
+                   if(confirm_password.val() != password.val())
+                   {
+                   alert("Password mismatch");
+                   password.val('');
+                   confirm_password.val('');
+                   password.focus();
+                   return false
+                   }
+
+                     var plans = $("input[name='user[plan]']");
+                     var plan_checked = false;
+
+                     for (var i=0; i<plans.length; i++)
+                     {
+                       if (plans[i].checked) {
+                         plan_checked = true;
+                         break;
+                       }
+                      }
+                    if(!plan_checked)
+                      {
+                      alert("PLease choose the plan");
+                      return false
+                      }
+                   if(plans[0].checked == false) {
+                   var user_card_number = $('#user_card_number');
+                   if (user_card_number.val()=="")
+                   {
+                   alert("Card can't be blank");
+                   user_card_number.focus();
+                   return false
+                   }
+
+                   var user_zip_code = $('#user_zip_code');
+                   if (user_zip_code.val()=="")
+                   {
+                   alert("CVV can't be blank");
+                   user_zip_code.focus();
+                   return false
+                   }
+
+                  }
+                   var email_avilability = $('#email_avilability');
+                   if (email_avilability.val()=="false")
+                   {
+                   alert("Email was already been taken. Please use another email.");
+                   email.focus();
+                   return false
+                   }
+
+
+
+
+                   return true
+
+    }
+
+    };
+
+  :javascript
+    $(function () {
+      $('form.braintree_form123').submit(function(){
+      //alert('bt');
+
+
+               var form = $(this);
+               var userdata = form.find('.user_fields').serialize();
+               //alert(userdata);
+
+               //validations
+
+               if(Userregistration.validate_userinfo()){
+
+                                     $.ajax({
+                                          type : 'get',
+                                          url : '/profile/profile_session?format=json',
+                                          datatype : 'json',
+                                          data : userdata,
+                                         headers: {
+                                               'X-Transaction': 'GET Example',
+                                               'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                             },
+                                          success : function(data) {
+                                           //status = true;
+                                           alert('success');
+
+                                          },
+                                          error : function(data){
+                                          //status = false;
+                                          alert('error');
+
+                                          }
+                                        });
+                   alert('set_userinfo');
+                   return true
+               }
+               else
+               {
+               return false
+               }
+
+
+
+            // alert('after getmethod');
+
+
+               //var email = $('#user_email').val();
+               //var password = $('#user_password');
+               //var password_confirmation = $('#user_password_confirmation');
+
+               //var brain_form = $('#tr_data').val();
+              //var status = false;
+              //alert(password_confirmation.val());
+              //&time=
+               //var myarray = brain_form.split('&time=');
+               //alert(myarray[0]);
+              //var form_data = myarray[0]+'?user[:email]='+email+'&time='+myarray[1];
+              //var form_data = brain_form+'?'+userdata;
+              //alert(form_data);
+              //$('#tr_data').val(form_data);
+              //alert($('#tr_data').val());
+           return false;
+      });
+
+    });
+  :javascript
+    function validate_user_info(){
+
+     if(Userregistration.validate_userinfo())
+     {
+
+                   var userdata = $('form.braintree_form').find('.user_fields').serialize();
+                   //alert(userdata);
+
+                   $.ajax({
+                        type : 'get',
+                        url : '/profile/profile_session?format=json',
+                        datatype : 'json',
+                        data : userdata,
+                       headers: {
+                             'X-Transaction': 'GET Example',
+                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                           },
+                        success : function(data) {
+                        $('#session_info_status').val('true');
+                         //alert('success');
+                        return true;
+                        },
+                        error : function(data){
+                        $('#session_info_status').val('false');
+                        //alert('error');
+
+                        }
+                      });
+
+
+                   var session_info_status = $('#session_info_status');
+                   if (session_info_status.val()=="false")
+                   {
+                   alert("Please wait while your information is validated");
+                     return false
+                   }
+
+           //var plans = $("input[name='user[plan]']");
+          // if(plans[0].checked == false)
+          // {
+           //alert('false');
+           //$("#braintree_form").attr("action", 'https://sandbox.braintreegateway.com:443/merchants/m6fnnb5fmshx6r8y/transparent_redirect_requests');
+           //}
+           //else
+           //{
+           //alert('true');
+           //$("#braintree_form").attr("action",'/users');
+           //}
+          //alert('inside validate_user_info');
+
+
+     return true;
+     }
+     else return false;
+     return false;
+    }
+  :javascript
+        $(function () {
+          $('#user_email').blur(function(){
+
+          var email = $(this).val();
+                 $.ajax({
+                        type : 'get',
+                        url : '/profile/check_avilability?email='+email+'&format=json',
+                        datatype : 'json',
+                        //data : email,
+                        headers: {
+                             'X-Transaction': 'POST Example',
+                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                           },
+                        success : function(data) {
+                         if(data.avilability == true)
+                         {
+                         $('#email_avilability').val('true');
+                         $('#not_avilable').hide();
+                         }
+                         else {$('#not_avilable').show();
+                         $('#email_avilability').val('false');
+                         }
+                         //alert($('#email_avilability').val());
+                        },
+                        error : function(data){
+                        //alert($('#email_avilability').val());
+                        }
+                      });
+             });
+
+        });
+  :javascript
+  $(function (){
+    $('.plan_free').click(function(){
+
+      $('.credit_card').hide();
+      $('.zero').hide();
+    });
+    $('.plan_monthly').click(function(){
+          $('.credit_card').show();
+          $('.zero').show();
+        });
+    $('.plan_yearly').click(function(){
+          $('.credit_card').show();
+          $('.zero').show();
+        });
+
+  });

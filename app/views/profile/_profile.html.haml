@@ -1,0 +1,77 @@
+.accordion-group
+  .accordion-heading
+    %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseOne" }
+      %h3 Profile Info
+  / according-heading
+  #collapseOne.accordion-body.in.collapse{:style => "height: auto; "}
+    .accordion-inner
+      #profile
+        %form.form-horizontal
+          %fieldset
+            .control-group
+              %label.control-label{:for => "fileInput"} Profile Picture
+              .controls
+                %input#fileInput.input-file{:type => "file"}
+            %hr
+              .control-group
+                %label.control-label{:for => "input01"} Name
+                .controls
+                  %input.input.span2{:placeholder => "First", :type => "text"}
+                    %input.input.span2{:placeholder => "Middle (optional)", :type => "text"}
+                      %input.input.span2{:placeholder => "Last", :type => "text"}
+              .control-group
+                %label.control-label{:for => "input04"} Email
+                .controls
+                  %input.input.span4{:placeholder => "blake.macleod@gmail.com", :type => "text"}
+              .control-group
+                %label.control-label{:for => "input05"} Phone #
+                .controls
+                  %input.input.span3{:placeholder => "773-336-2323", :type => "text"}
+              .control-group
+                %label.control-label{:for => "select01"} Location
+                .controls
+                  %select#select01.span2
+                    %option Country
+                    %option United States
+                    %option Canada
+                    %option England
+                    %option France
+                  %select#select02.span2
+                    %option State
+                    %option Alabama
+                    %option Alaska
+                    %option Arizona
+                    %option Arkansa
+                  %input.input.span2{:placeholder => "City", :type => "text"}
+              .control-group
+                %label.control-label{:for => "input03"} Work
+                .controls
+                  %input.input.span2{:placeholder => "Title", :type => "text"}
+                    %input.input.span2{:placeholder => "Company", :type => "text"}
+              %hr
+                .control-group
+                  %label.control-label{:for => "textarea"} Bio
+                  .controls
+                    %textarea#textarea.input.span6{:rows => "8"}
+                %hr
+                  .control-group
+                    %label.control-label{:for => "textarea"} Associations
+                    .controls
+                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      %p.help-block 1 Association per line
+                  .control-group
+                    %label.control-label{:for => "textarea"} Interests
+                    .controls
+                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      %p.help-block 1 Interest per line
+                  .control-group
+                    %label.control-label{:for => "textarea"} Expertise
+                    .controls
+                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      %p.help-block 1 Expertise per line
+                  .form-actions
+                    %button.btn.btn-primary{:type => "submit"} Save changes
+      / profile
+    / according-inner
+  / according-body
+/ accordion-group
