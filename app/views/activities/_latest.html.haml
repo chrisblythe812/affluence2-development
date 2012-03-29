@@ -1,15 +1,13 @@
 - @latest_activities.each do |activity|
   %tr
     %td.span1
-      %a.thumbnail{"data-original-title" => "#{activity.resource.name}", "data-placement" => "bottom", :href => "", :rel => "tooltip"}
-        = image_tag activity.resource.photos.first.image.url(:thumb)
+      %a.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "", :rel => "tooltip"}
+        = image_tag activity.user.profile.photos.first.image.url(:thumb)
     %td
-      %h5= activity.resource.name
+      %h5= activity.user.profile.name
       %p
         = activity.body 
-        has activated the
-        %a{:href => "./offer-1.html"} Lifelock
-        Offer
+
 :javascript
   $(function () {
     $('a[rel=tooltip]').tooltip({
