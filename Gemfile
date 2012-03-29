@@ -31,7 +31,7 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 end
-
+  
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
@@ -46,21 +46,21 @@ gem 'jquery-rails'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-
-group :test, :development do
-#   gem 'rspec-rails'
- #  gem 'launchy'
+group :development do 
 # To use debugger
 #   gem 'ruby-debug19', :require => 'ruby-debug'
-#   gem 'capybara-webkit'
-#   gem 'spork', '~> 0.9.0.rc'
-#   gem 'guard-spork'
 end
+
 group :test do
-#   gem "factory_girl_rails", ">= 1.7.0"
-#   gem "email_spec", ">= 1.2.1"
-#   gem "capybara", ">= 1.1.2"
-#   gem "cucumber-rails", ">= 1.3.0"
- #  gem "database_cleaner", ">= 0.7.1"
- #  gem 'shoulda-matchers'
+  gem 'rspec-rails'
+  gem 'launchy'
+  gem "factory_girl_rails", ">= 1.7.0"
+  gem "email_spec", ">= 1.2.1"
+  gem 'capybara-webkit'
+  gem "capybara", ">= 1.1.2"
+  gem "cucumber-rails", ">= 1.3.0"
+  gem "database_cleaner", ">= 0.7.1"
+  gem 'shoulda-matchers'
+  gem 'spork', '~> 0.9.0.rc'
+  gem 'guard-spork'
 end
