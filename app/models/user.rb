@@ -55,6 +55,10 @@ class User < ActiveRecord::Base
     self.profile.name  
   end
 
+   def with_profile
+     self.build_profile
+     self
+   end
   FIELDS = [:first_name, :last_name, :phone, :website, :company, :fax, :addresses, :credit_cards, :custom_fields]
   attr_accessor *FIELDS
   attr_accessible :braintree_customer_id
