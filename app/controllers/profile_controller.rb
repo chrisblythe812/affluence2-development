@@ -148,7 +148,7 @@ class ProfileController < ApplicationController
     avilability = !user.blank? ? false : true
     respond_to do |format|
       format.json do
-        render :status => 200, :json => {:avilability => avilability}
+        render :status => 200, :json => {:avilability => avilability} and return
       end
     end
   end
