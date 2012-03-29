@@ -11,7 +11,6 @@ class Profile < ActiveRecord::Base
 
   has_one :privacy_setting, :dependent => :destroy
   has_one :notification_setting, :dependent => :destroy
-  has_many :activities, :as => :resource, :dependent => :destroy
 
  
   #accepts_nested_attributes_for :user

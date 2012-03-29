@@ -1,0 +1,117 @@
+/*
+ *Edited Styles by Blake Macleod
+ */
+/* line 5, ../../app/assets/stylesheets/main.css.scss */
+hr.soften {
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+  border: 0;
+}
+
+/* Jumbotrons
+-------------------------------------------------- */
+/* line 16, ../../app/assets/stylesheets/main.css.scss */
+.jumbotron {
+  position: relative;
+}
+/* line 18, ../../app/assets/stylesheets/main.css.scss */
+.jumbotron h1 {
+  margin-bottom: 9px;
+  font-size: 81px;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+/* line 23, ../../app/assets/stylesheets/main.css.scss */
+.jumbotron p {
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+/* line 26, ../../app/assets/stylesheets/main.css.scss */
+.jumbotron .btn-large {
+  font-size: 20px;
+  font-weight: normal;
+  padding: 14px 24px;
+  margin-right: 10px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+/* Masthead (docs home) */
+/* line 37, ../../app/assets/stylesheets/main.css.scss */
+.masthead {
+  padding-top: 36px;
+  margin-bottom: 72px;
+}
+/* line 40, ../../app/assets/stylesheets/main.css.scss */
+.masthead h1, .masthead p {
+  text-align: center;
+}
+/* line 42, ../../app/assets/stylesheets/main.css.scss */
+.masthead h1 {
+  margin-bottom: 18px;
+}
+/* line 44, ../../app/assets/stylesheets/main.css.scss */
+.masthead p {
+  margin-left: 5%;
+  margin-right: 5%;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+/* line 50, ../../app/assets/stylesheets/main.css.scss */
+.strike {
+  text-decoration: line-through;
+}
+
+/* line 53, ../../app/assets/stylesheets/main.css.scss */
+.zero {
+  margin: 0px 0px 10px 0px;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #ffffff;
+}
+
+/* line 59, ../../app/assets/stylesheets/main.css.scss */
+.zero-row {
+  padding-bottom: 0px;
+}
+
+/* Home Form */
+/* line 64, ../../app/assets/stylesheets/main.css.scss */
+.home-control {
+  margin-left: 20px;
+}
+
+/* line 67, ../../app/assets/stylesheets/main.css.scss */
+.home-form-action {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+/* line 71, ../../app/assets/stylesheets/main.css.scss */
+.white {
+  color: white;
+}
+
+/* line 74, ../../app/assets/stylesheets/main.css.scss */
+#landing {
+  background-image: url();
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-color: #fff;
+}
+
+/* line 81, ../../app/assets/stylesheets/main.css.scss */
+.dashboard h1 {
+  font-size: 60px;
+  padding: 20px 0 20px 0;
+}
+/* line 84, ../../app/assets/stylesheets/main.css.scss */
+.dashboard h3 {
+  font-size: 34px;
+  padding-bottom: 10px;
+}

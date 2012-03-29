@@ -1,19 +1,22 @@
 class ConnectionObserver < ActiveRecord::Observer
 
   def after_create(connection)
-    return if connection.skip_observer
-
-    reciprocate_connection(connection)
-    remove_associated_friend_requests(connection)
-    send_connection_approved_email(connection)
-    create_connection_activity(connection)
+    Activity.create(:user_id  => connection.user_id,
+                           :body => connection.user.profile.name + ' are now connected ' + connection.friend.name,
+                           :resource_type => 'Connection',
+                           :resource_id => connection.friend.id)
+#
+#    reciprocate_connection(connection)
+#    remove_associated_friend_requests(connection)
+#    send_connection_approved_email(connection)
+#    create_connection_activity(connection)
   end
 
   def after_destroy(connection)
-    remove_reciprocated_connection(connection)
+#    remove_reciprocated_connection(connection)
   end
 
-private
+#private
 
   def send_connection_approved_email(connection)
 
