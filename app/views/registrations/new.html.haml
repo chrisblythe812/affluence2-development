@@ -3,7 +3,7 @@
   .span7.well
     %h2 Register Today
     %hr
-      = form_for(resource.with_profile, :as => resource_name, :url => Braintree::TransparentRedirect.url,
+      = form_for(@user.with_profile, :as => 'user', :url => Braintree::TransparentRedirect.url,
           :html => {:class => "braintree_form form-horizontal", :onSubmit => 'return validate_user_info();'} ) do |f|
         = devise_error_messages!
         = flash[:notice]
@@ -61,11 +61,29 @@
                   %option{:value => "3"} 3 - March
                   %option{:value => "4"} 4 - April
                   %option{:value => "5"} 5 - May
+                  %option{:value => "6"} 6 - June
+                  %option{:value => "7"} 7 - July
+                  %option{:value => "8"} 8 - August
+                  %option{:value => "9"} 9 - September
+                  %option{:value => "10"} 10 - October
+                  %option{:value => "11"} 11 - November
+                  %option{:value => "12"} 12 - December
                 %select#select03.span1{:name => "customer[credit_card][expiration_year]"}
                   %option 2012
                   %option 2013
                   %option 2014
                   %option 2015
+                  %option 2016
+                  %option 2017
+                  %option 2018
+                  %option 2019
+                  %option 2020
+                  %option 2021
+                  %option 2022
+                  %option 2023
+                  %option 2024
+                  %option 2025
+
             .control-group
               %label.control-label{:for => "input06"} CVV
               .controls
@@ -247,6 +265,7 @@
                       return false
                       }
                    if(plans[0].checked == false) {
+
                    var user_card_number = $('#user_card_number');
                    if (user_card_number.val()=="")
                    {
@@ -255,10 +274,24 @@
                    return false
                    }
 
+                   if (user_card_number.val().length<12 || user_card_number.val().length>19)
+                   {
+                   alert("Credit card number must be 12-19 digits");
+                   user_card_number.focus();
+                   return false
+                   }
+
                    var user_zip_code = $('#user_zip_code');
                    if (user_zip_code.val()=="")
                    {
                    alert("CVV can't be blank");
+                   user_zip_code.focus();
+                   return false
+                   }
+
+                   if (user_zip_code.val().length<3 || user_zip_code.val().length>4)
+                   {
+                   alert("CVV must be 3 or 4 digits");
                    user_zip_code.focus();
                    return false
                    }
@@ -361,6 +394,7 @@
                         url : '/profile/profile_session?format=json',
                         datatype : 'json',
                         data : userdata,
+                        async: false,
                        headers: {
                              'X-Transaction': 'GET Example',
                              'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -381,7 +415,7 @@
                    var session_info_status = $('#session_info_status');
                    if (session_info_status.val()=="false")
                    {
-                   alert("Please cross check the information before you submit");
+                   // alert("Please cross check the information before you submit");
                      return false
                    }
 
