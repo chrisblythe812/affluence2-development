@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
   ssl_required :confirm
+  ssl_exceptions :check_avilability
 
    before_filter :authenticate_user! , :except => [:profile_session, :confirm, :check_avilability]
    before_filter :set_profile_navigation, :except => [:settings,:confirm,:confirm_credit_card_info,:profile_billing]
