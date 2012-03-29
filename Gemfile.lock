@@ -52,6 +52,7 @@ GEM
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
+    bartt-ssl_requirement (1.4.2)
     bcrypt-ruby (3.0.1)
     bourbon (1.4.0)
       sass (>= 3.1)
@@ -65,9 +66,6 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    capybara-webkit (0.10.0)
-      capybara (>= 1.0.0, < 1.2)
-      json
     childprocess (0.3.1)
       ffi (~> 1.0.6)
     chunky_png (1.2.5)
@@ -256,9 +254,8 @@ DEPENDENCIES
   activeadmin (= 0.4.0)
   aws-s3
   aws-sdk
+  bartt-ssl_requirement (~> 1.4.0)
   braintree
-  capybara (>= 1.1.2)
-  capybara-webkit
   coffee-rails (~> 3.2.1)
   compass
   country_select
