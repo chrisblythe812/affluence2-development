@@ -1,0 +1,30 @@
+= form_for :customer,
+    :url => Braintree::TransparentRedirect.url,
+    :params => @result && @result.params[:customer],
+    :builder => ApplicationHelper::BraintreeFormBuilder,
+    :errors => @result && @result.errors.for(:customer),
+    :html => {:class => 'form-horizontal'} do |f|
+  /= field_set_tag "Customer" do
+  =# f.label :first_name, 'First Name'
+  = f.hidden_field :first_name
+  =# f.label :last_name, 'Last Name'
+  = f.hidden_field :last_name
+  =# f.label :phone, 'Phone'
+  = f.hidden_field :phone
+  =# f.label :email, 'Email'
+  = f.hidden_field :emai
+
+  = field_set_tag "Credit Card" do
+    - f.fields_for :credit_card do |cc|
+      = cc.label :number, 'Number'
+      = cc.text_field :number
+      = cc.label :expiration_date, 'Exipration Date (MM/YY)'
+      = cc.text_field :expiration_date
+      = cc.label :cvv, 'CVV'
+      = cc.text_field :cvv
+  = hidden_field_tag :tr_data, @tr_data
+
+/ billing
+/ accordion-inner
+/ accordion-body
+/ accordion-group

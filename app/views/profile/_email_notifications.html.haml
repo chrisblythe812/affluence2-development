@@ -1,0 +1,54 @@
+.accordion-group
+  .accordion-heading
+    %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseThree"}
+      %h3 Email Notifications
+  #collapseThree.accordion-body.collapse{:style => "height: 0px; "}
+    .accordion-inner
+      #notifications
+        %table.table.table-bordered.table-striped
+          %tbody
+            %tr
+              %td Newsletter
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td New Events
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td New Offers
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td New Messages
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td Event Reminders
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td Site News
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-primary.active On
+                  %button.btn.btn-primary Off
+            %tr
+              %td
+              %td
+                %p
+                  %em You will receive email receipts for all purchases made on the site including events and membership dues.
+      / notifications
+    / accordion-inner
+  / accordion-body
+/ accordion-group
