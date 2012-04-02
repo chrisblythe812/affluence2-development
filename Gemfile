@@ -19,6 +19,7 @@ gem 'country_select'
 gem 'braintree'
 gem 'permalink_fu'
 gem 'bartt-ssl_requirement', '~>1.4.0', :require => 'ssl_requirement'
+gem 'uuid'
 
 # Gems used only for assets and not required
 # in production environments by default.

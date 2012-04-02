@@ -1,8 +1,12 @@
 class CreateSuperadminUser < ActiveRecord::Migration
   def up
+    user = User.find_by_email('default@example.com')
+    if !user.blank?
     user = User.new(:email => 'default@example.com', :password => 'password', :role => 'superadmin', :plan => 'free')
     profile = user.build_profile(:first_name => 'admin', :last_name => 'user',:country => 'India')
-    user.save!
+    user.save
+    end
+
   end
 
   def down

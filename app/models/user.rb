@@ -59,6 +59,15 @@ class User < ActiveRecord::Base
      self.build_profile
      self
    end
+
+ def plan_amount
+   return 50 if plan == 'Monthly'
+   return 450 if plan == 'Yearly'
+   return 0 if plan == 'free'
+ end
+
+
+
   FIELDS = [:first_name, :last_name, :phone, :website, :company, :fax, :addresses, :credit_cards, :custom_fields]
   attr_accessor *FIELDS
   attr_accessible :braintree_customer_id

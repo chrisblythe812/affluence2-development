@@ -57,6 +57,7 @@ class ProfileController < ApplicationController
         if @user.save
           @user.braintree_customer_id = @result.customer.id
           @user.save
+          SubscriptionFeeTracker.create(:user_id => @user.id,:renewal_date => Date.today, :amount => @user.plan_amount )
           #@user.with_braintree_data!
           #@credit_card = @user.default_credit_card
           #subscription_result = Braintree::Subscription.create(
