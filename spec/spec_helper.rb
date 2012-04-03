@@ -18,15 +18,37 @@ RSpec.configure do |config|
   # config.mock_with :rr
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+#  config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+#  config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.include Devise::TestHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
 end
+
+require "webrat"
+
+Webrat.configure do |config|
+  config.mode = :selenium
+  #optional:
+  config.application_port = 4567 # defaults to 3001. Avoid Selenium's default port, 4444
+  config.application_framework = :sinatra  # could also be :merb. Defaults to :rails
+  config.application_environment = Rails.env|| :test # should equal the environment of the test runner because of database and gem dependencies. Defaults to :test.
+end
+
+
+
+
+ 
+
+
+
+

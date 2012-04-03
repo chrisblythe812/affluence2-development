@@ -76,6 +76,7 @@ Affluence2::Application.routes.draw do
     collection do
       get 'latest'
       get 'find_members'
+#      get 'index'
     end
   end
 

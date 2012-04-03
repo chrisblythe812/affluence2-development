@@ -1,7 +1,8 @@
 class WelcomeController < ApplicationController
   layout "welcome"
   def index
-    @latest_offers = Offer.find(:all, :order => "id desc", :limit => 4).reverse
+    @latest_offers = Offer.latest(4)
     
   end
 end
+ 

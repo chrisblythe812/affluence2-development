@@ -10,11 +10,11 @@
           %i.icon-star>
           What's New
       %li
-        %a{:href => "/profile/#{current_user.permalink}"}
+        %a{:href => "#{profile_path(current_user.permalink)}"}
           %i.icon-home>
           Profile
       %li
-        %a{:href => "/members/#{current_user.permalink}"}
+        %a{:href => "#{members_path}"}  
           %i.icon-user>
           Members
       %li
@@ -22,7 +22,7 @@
           %i.icon-comment>
           Messages
       %li
-        %a{:href => "#"}
+        %a{:href => "#"}   
           %i.icon-glass>
           Concierge
   / side bar nav

@@ -58,8 +58,7 @@
                     = link_to 'Sign Out', destroy_user_session_path, :method => :delete
     .container
       .row
-        - if @profile_navigation
-          = render 'shared/profile_navigation'
+        = render 'shared/profile_navigation'
         = yield
       %hr
         %footer
@@ -70,19 +69,5 @@
   \==================================================
 / Placed at the end of the document so the pages load faster
 / javascript
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/jquery.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-carousel.js"}
-%script{:src => "http://twitter.github.com/bootstrap/assets/js/bootstrap-typeahead.js"}
 = yield(:javascripts)
 

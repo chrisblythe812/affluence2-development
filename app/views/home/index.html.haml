@@ -10,7 +10,7 @@
             = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
             %p Loading....
       %p.pull-right
-        = link_to "see more members",find_members_members_path
+        = link_to "see more members", members_path
       %br/
       %br/
   %div
@@ -38,7 +38,7 @@
             = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
             %p Loading....
       %p.pull-right
-        %a{:href => "./offers.html"} see more offers
+        = link_to "see more offers", offers_path
       %br/
       %br/
   #activity
