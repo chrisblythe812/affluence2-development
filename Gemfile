@@ -18,7 +18,8 @@ gem 'aws-sdk'
 gem 'country_select'
 gem 'braintree'
 gem 'permalink_fu'
-
+gem 'bartt-ssl_requirement', '~>1.4.0', :require => 'ssl_requirement'
+gem 'uuid'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -55,15 +56,15 @@ end
  
 group :test do
   gem 'sqlite3'
-  gem 'rcov'
+  gem 'simplecov'
 
   gem 'webrat'
   gem 'selenium-client'
   
   gem 'launchy'
   gem "email_spec", ">= 1.2.1"
-  gem 'capybara-webkit'
-  gem "capybara", ">= 1.1.2"
+  #gem 'capybara-webkit'
+  #gem "capybara", ">= 1.1.2"
   gem "cucumber-rails", ">= 1.3.0"
   gem "database_cleaner", ">= 0.7.1"
   gem 'shoulda-matchers'

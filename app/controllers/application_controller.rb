@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
+  include SslRequirement
   
   def authenticate_admin_user!
     authenticate_user!

@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
 
+  ssl_required :confirm, :check_avilability, :profile_session
 
    before_filter :authenticate_user! , :except => [:profile_session, :confirm, :check_avilability]
    before_filter :set_profile_navigation, :except => [:settings,:confirm,:confirm_credit_card_info,:profile_billing]
@@ -56,6 +57,7 @@ class ProfileController < ApplicationController
         if @user.save
           @user.braintree_customer_id = @result.customer.id
           @user.save
+          SubscriptionFeeTracker.create(:user_id => @user.id,:renewal_date => Date.today, :amount => @user.plan_amount )
           #@user.with_braintree_data!
           #@credit_card = @user.default_credit_card
           #subscription_result = Braintree::Subscription.create(
@@ -147,7 +149,7 @@ class ProfileController < ApplicationController
     avilability = !user.blank? ? false : true
     respond_to do |format|
       format.json do
-        render :status => 200, :json => {:avilability => avilability}
+        render :status => 200, :json => {:avilability => avilability} and return
       end
     end
   end
