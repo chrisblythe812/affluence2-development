@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe OffersController do
+  before(:all) do
+    (1..10).collect do |x|
+       offer = FactoryGirl.create(:offer, :title => "offer"+x.to_s)
+       FactoryGirl.create(:photo,
+                  :image => Rails.root.join('app', 'assets', 'images', 'events-1.jpg'),
+                  :photoable => offer)
+    end
+  end
 
- describe "GET 'latest'" do
+  describe "GET 'latest'" do
   it "returns http success" do
       @latest_offers = Offer.last(3)
       @latest_offers.size.should == 3
@@ -12,4 +20,3 @@ describe OffersController do
     end
   end
 end
-     

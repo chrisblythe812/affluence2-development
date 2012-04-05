@@ -1,16 +1,11 @@
 FactoryGirl.define do
   factory :photo, :class => 'photo' do
-
-    city     'Chicago'
-    state    'IL'
-    country  'US'
-    phone    '+1230032143'
-    bio      'CEO of Affluence'
-    title        'CEO'
-    company      'Affluence'
-    last_name    'Davidson'
-    middle_name  ''
-    first_name   'John'
-    full_name    "#{first_name} #{last_name}"
+    association :photoable
+    title "photo title"
+    description "photo description"
+    image_file_name ""
+    image_file_size ""
+    image_content_type ""
+    image_updated_at ""
   end
 end

@@ -140,17 +140,42 @@ promotions.each do |promotion|
 end
 
 
-
 # user seed data
 User.all.each {|user| user.destroy unless user.role == 'superadmin'}
-
+states = ['Alabama', 'Alaska', 'Arkansas', 'California', 'Colorado', 'Illinois',
+     'Indiana', 'Kansas', 'North Carolina'
+  ]    
+bios = ['Duis autem vel eum iriure dolor in hendrerit in
+vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
+ at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
+delenit augue duis dolore te feugait nulla facilisi.',
+'Duis autem vel eum iriure dolor in hendrerit in
+vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
+ at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
+delenit augue duis dolore te feugait nulla facilisi.Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
+ nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+ ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+aliquip ex ea commodo consequat.',
+'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
+ nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+ ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
+ at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
+delenit augue duis dolore te feugait nulla facilisi.Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
+ nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+ ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+aliquip ex ea commodo consequat. '
+]
+companies = ['affluence', 'seneca global', 'fox productions', 'minipolis']
 i=0
 while i < 30
   i = i + 1
   user = User.new(:email => "john+#{i.to_s}@gmail.com", :password => 'password',
     :password_confirmation => 'password', :plan => 'free', :role => 'member')
   profile = user.build_profile(:first_name=>'John'+i.to_s, :last_name=>'Davidson',
-    :city=>'hyderabad', :country=>'India')
+    :city=>'hyderabad', :state => states.sample, :country=>'United States',
+    :company => companies.sample, :bio => bios.sample)
   user.save!
   photo = profile.photos.build
   photo.image=File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)

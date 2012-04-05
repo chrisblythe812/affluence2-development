@@ -1,14 +1,14 @@
 .span9
   .row
     .span7
-      %h1 Blake Macleod
+      %h1= current_user.profile.name.capitalize
       %h5
         %strong CTO
-        %em at Affluence.org
+        %em=" at #{current_user.profile.company}"
       %h6
         %i.icon-map-marker>
-        Chicago, IL
-        %small United States
+        = "#{current_user.profile.city}, #{current_user.profile.state}"
+        %small= current_user.profile.country
     .span2
       %p.pull-right
         %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
@@ -19,7 +19,7 @@
     .span9
       %h3 About
       %hr.zero
-        %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+        %p= current_user.profile.bio
     / span9
   / row
   .row
@@ -53,6 +53,9 @@
     .span9
       %h3 Activity
       %table.table.table-striped
+        - @latest_activities = current_user.activities
+        = render :partial => "activities/latest", :object => @latest_activities
+ 
         %tr
           %td.span1
             <a href"#" rel="tooltip" data-original-title="Blake Macleod" data-placement="bottom" class="thumbnail">

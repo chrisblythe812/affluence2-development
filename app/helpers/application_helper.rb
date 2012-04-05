@@ -60,4 +60,8 @@ module ApplicationHelper
       end
     end
   end
+
+  def profile?
+    params[:controller] == 'profile'
+  end
 end

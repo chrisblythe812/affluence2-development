@@ -1,16 +1,14 @@
 class Profile < ActiveRecord::Base
   belongs_to :user
-
-  attr_accessible :first_name, :last_name,:city,:country
-
-
-#  acts_as_taggable_on :interests, :expertises
-
   has_many :photos, :as => :photoable, :dependent => :destroy
-#    has_one :photo_stream, :dependent => :destroy
-
   has_one :privacy_setting, :dependent => :destroy
   has_one :notification_setting, :dependent => :destroy
+  #  has_one :photo_stream, :dependent => :destroy
+
+  attr_accessible :first_name, :last_name, :city, :country, :state, :company, :bio
+
+ #  acts_as_taggable_on :interests, :expertises
+
 
  
   #accepts_nested_attributes_for :user

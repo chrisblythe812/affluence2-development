@@ -56,7 +56,8 @@ end
  
 group :test do
   gem 'sqlite3'
-  gem 'simplecov'
+  gem "simplecov", "~> 0.6.1"
+
 
   gem 'webrat'
   gem 'selenium-client'
