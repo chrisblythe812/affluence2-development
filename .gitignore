@@ -19,5 +19,5 @@
 nbproject
 db/schema.rb
 config/database.yml
-
+coverage/
 

@@ -7,7 +7,7 @@ gem 'haml-rails'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'pg', :group => [:development, :production]
 gem 'devise'
 gem 'activeadmin', '=0.4.0' 
 gem 'aasm'
@@ -47,15 +47,22 @@ gem 'jquery-rails'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-group :development do 
+group :test, :development do
+  gem 'rspec-rails'
+  gem "factory_girl_rails", ">= 1.7.0"
 # To use debugger
 #   gem 'ruby-debug19', :require => 'ruby-debug'
 end
-
+ 
 group :test do
-  gem 'rspec-rails'
+  gem 'sqlite3'
+  gem "simplecov", "~> 0.6.1"
+
+
+  gem 'webrat'
+  gem 'selenium-client'
+  
   gem 'launchy'
-  gem "factory_girl_rails", ">= 1.7.0"
   gem "email_spec", ">= 1.2.1"
   #gem 'capybara-webkit'
   #gem "capybara", ">= 1.1.2"

@@ -1,8 +1,9 @@
 !!!
 %html{:lang => "en"}
   %head
-    = stylesheet_link_tag    "bootstrap"
+    = stylesheet_link_tag 'bootstrap', 'main'
     = javascript_include_tag :application
+
     :css
       body {
         padding-top: 60px;
@@ -19,12 +20,18 @@
       .ajax-loader
         {
           margin:0 7px;
- 
+
         }
   %body
-    = yield
-    :javascript
-      $(function () {
-        $("#latest_members").load("#{home_latest_members_path}");
-        $("#latest_events").load("#{latest_events_event_index_path}");
-      });
+    = render 'shared/header'
+    .container
+      .row
+        = render 'shared/profile_navigation'
+        = yield
+      = render 'shared/footer'
+
+
+/ Placed at the end of the document so the pages load faster
+/ javascript
+= yield(:javascripts)
+

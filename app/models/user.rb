@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
 
 
   def name
-    self.profile.name
+    self.profile.nil? ? '' : self.profile.name
   end
 
    def with_profile
