@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
 
 
   def name
-    self.profile.name  
+    self.profile.name
   end
 
    def with_profile
@@ -65,6 +65,13 @@ class User < ActiveRecord::Base
    return 450 if plan == 'Yearly'
    return 0 if plan == 'free'
  end
+
+
+  def plan_period_in_days
+    return 30 if plan == 'Monthly'
+    return 365 if plan == 'Yearly'
+    return 0 if plan == 'free'
+  end
 
 
 
