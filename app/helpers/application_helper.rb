@@ -61,7 +61,7 @@ module ApplicationHelper
     end
   end
 
-  def profile?
-    params[:controller] == 'profile'
+  def profiles?
+    params[:controller] == 'profiles'
   end
 end

@@ -58,20 +58,20 @@
                     %label.control-label{:for => "textarea"} Associations
                     .controls
                       = f.text_area :association_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
-                      %p.help-block 1 Association per line
+                      %p.help-block Associations are comma seperated.
                   .control-group
                     %label.control-label{:for => "textarea"} Interests
                     .controls
                       = f.text_area :interest_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
-                      %p.help-block 1 Interest per line
+                      %p.help-block Interests are comma seperated.
                   .control-group
                     %label.control-label{:for => "textarea"} Expertise
                     .controls
                       = f.text_area :expertise_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
-                      %p.help-block 1 Expertise per line
+                      %p.help-block Expertise are comma seperated.
                   .form-actions
                     %button.btn.btn-primary{:type => "submit"} Save changes
-
+  
 
   :javascript
     $(function() {
