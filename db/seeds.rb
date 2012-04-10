@@ -9,154 +9,156 @@
 images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2.jpg', 'offer-3.jpg', 'profile-1.jpg', 'profile-2.jpg', 'profile-3.jpg', 'profile-4.jpg']
 
 # Events seed data
-Event.all.each{|event| event.destroy}
+#Event.all.each{|event| event.destroy}
 
 #<Event id: nil, title: nil, description: nil, price: nil, created_at: nil, updated_at: nil>
 #<Promotion id: nil, promotionable_id: nil, promotionable_type: "Event", created_at: nil, updated_at: nil>
 #<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
+if Event.all.blank?
+  events_seed =[
+    {
+      title: 'Grammy Event & Party',
+      description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
+      price: '1800'
+    },
+    {
+      title: 'Weekend at the Masters',
+      description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
+      price: '2200'
+    },
+    {
+      title: '2012 Oscars Party',
+      description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
+      price: '1100'
+    },
+    {
+      title: '2012 New Year Party',
+      description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
+      price: '180000'
+    }]
+  events=[]
+  events_seed.each do |event|
+    events << Event.create(event)
+  end
 
-events_seed =[
-  {
-    title: 'Grammy Event & Party',
-    description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-    price: '1800'
-  },
-  {
-    title: 'Weekend at the Masters',
-    description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-    price: '2200'
-  },
-  {
-    title: '2012 Oscars Party',
-    description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-    price: '1100'
-  },
-  {
-    title: '2012 New Year Party',
-    description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-    price: '180000'
-  }]
-events=[]
-events_seed.each do |event|
-  events << Event.create(event)
-end
+  promotions = []
+  events.each do |event|
+    event.build_promotion
+    event.save!
+    promotions << event.promotion
+  end
 
-promotions = []
-events.each do |event|
-  event.build_promotion
-  event.save!
-  promotions << event.promotion
-end
-
-photos=[
-  {
-    title: 'Grammy Event & Party',
-    description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.'
-  },
-  {
-    title: 'Weekend at the Masters',
-    description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.'
-  },
-  {
-    title: '2012 Oscars Party',
-    description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.'
-  },
-  {
-    title: '2012 New Year Party',
-    description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.'
-  }]
-
-
-promotions.each do |promotion|
-  promotion.photos.build(photos)
-  promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
-  promotion.save!
-end
+  photos=[
+    {
+      title: 'Grammy Event & Party',
+      description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.'
+    },
+    {
+      title: 'Weekend at the Masters',
+      description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.'
+    },
+    {
+      title: '2012 Oscars Party',
+      description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.'
+    },
+    {
+      title: '2012 New Year Party',
+      description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.'
+    }]
 
 
+  promotions.each do |promotion|
+    promotion.photos.build(photos)
+    promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
+    promotion.save!
+  end
+
+end  
 
 # Offers seed data
-Offer.all.each{|offer| offer.destroy}
+#Offer.all.each{|offer| offer.destroy}
 
 #<Offer id: nil, title: nil, description: nil, created_at: nil, updated_at: nil>
 #<Promotion id: nil, promotionable_id: nil, promotionable_type: "Offer", created_at: nil, updated_at: nil>
 #<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
 
+if Offer.all.blank?
           
-offers_seed =[
-  {
-    title: '60% Off Flying Private',
-    description: 'Fly private for as little as $3,000/hr.'
-  },
-  {
-    title: 'Small Luxury Hotel Upgrades',
-    description: 'Free room upgrade, late checkout & more.'
-  },
-  {
-    title: '30% Off Lifelock',
-    description: 'Protect your identity for less than $7 a month.'
-  },
-  {
-    title: '5% off on ebay',
-    description: 'Buy any electronic gadgets and get 5% off.'
-  }]
-offers =[]
-offers_seed.each do |offer|
-  offers << Offer.create(offer)
+  offers_seed =[
+    {
+      title: '60% Off Flying Private',
+      description: 'Fly private for as little as $3,000/hr.'
+    },
+    {
+      title: 'Small Luxury Hotel Upgrades',
+      description: 'Free room upgrade, late checkout & more.'
+    },
+    {
+      title: '30% Off Lifelock',
+      description: 'Protect your identity for less than $7 a month.'
+    },
+    {
+      title: '5% off on ebay',
+      description: 'Buy any electronic gadgets and get 5% off.'
+    }]
+  offers =[]
+  offers_seed.each do |offer|
+    offers << Offer.create(offer)
+  end
+
+  promotions = []
+  offers.each do |offer|
+    offer.build_promotion
+    offer.save!
+    promotions << offer.promotion
+  end
+
+
+  photos=[
+    {
+      title: '60% Off Flying Private',
+      description: 'Fly private for as little as $3,000/hr.'
+    },
+    {
+      title: 'Small Luxury Hotel Upgrades',
+      description: 'Free room upgrade, late checkout & more.'
+    },
+    {
+      title: '30% Off Lifelock',
+      description: 'Protect your identity for less than $7 a month.'
+    },
+    {
+      title: '5% off on ebay',
+      description: 'Buy any electronic gadgets and get 5% off.'
+    }]
+
+  offers.each {|offer| offer.save!}
+
+  promotions.each do |promotion|
+    promotion.photos.build(photos)
+    promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
+    promotion.save!
+  end
+
 end
-
-promotions = []
-offers.each do |offer|
-  offer.build_promotion
-  offer.save!
-  promotions << offer.promotion
-end
-
-
-photos=[
-  {
-    title: '60% Off Flying Private',
-    description: 'Fly private for as little as $3,000/hr.'
-  },
-  {
-    title: 'Small Luxury Hotel Upgrades',
-    description: 'Free room upgrade, late checkout & more.'
-  },
-  {
-    title: '30% Off Lifelock',
-    description: 'Protect your identity for less than $7 a month.'
-  },
-  {
-    title: '5% off on ebay',
-    description: 'Buy any electronic gadgets and get 5% off.'
-  }]
-
-offers.each {|offer| offer.save!}
-
-promotions.each do |promotion|
-  promotion.photos.build(photos)
-  promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
-  promotion.save!
-end
-
 
 # user seed data
-User.all.each {|user| user.destroy unless user.role == 'superadmin'}
+#User.all.each {|user| user.destroy unless user.role == 'superadmin'}
 states = ['Alabama', 'Alaska', 'Arkansas', 'California', 'Colorado', 'Illinois',
-     'Indiana', 'Kansas', 'North Carolina'
-  ]    
+  'Indiana', 'Kansas', 'North Carolina'
+]    
 bios = ['Duis autem vel eum iriure dolor in hendrerit in
 vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
  at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
 delenit augue duis dolore te feugait nulla facilisi.',
-'Duis autem vel eum iriure dolor in hendrerit in
+  'Duis autem vel eum iriure dolor in hendrerit in
 vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
  at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
 delenit augue duis dolore te feugait nulla facilisi.Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
  nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
  ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
 aliquip ex ea commodo consequat.',
-'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
+  'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
  nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
  ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
 aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
@@ -291,13 +293,21 @@ User.members.each do |user|
   user.save
 end
 
- 
+# init tags
+tags=['Golf', 'Paddle', 'Tennis', 'Water Sports', 'Fishing', 'Hunting', 'Swimming',
+  'Web Apps', 'HTML', 'CSS', 'JavaScript', 'Business Development', 'Java', 'C-language',
+  'Winnetka Paddle Tennis', 'Exclusive Hunting Club', 'St Judes Childrens Hospital',
+  'Mother Terresa Foundation', 'BCCI', 'Soccars club'
+]
 
-
-
-
-
-
+# load tags
+user = User.where(:email => "john+1@gmail.com").first
+profile = user.profile
+profile.interest_list='Golf, Paddle, Tennis, Water Sports, Fishing, Hunting'
+profile.expertise_list='Web Apps, HTML, CSS, JavaScript, Business Development'
+profile.association_list = 'Winnetka Paddle Tennis, Exclusive Hunting Club,' +
+  'St. Judes Childrens Hospital, Mother Terresa Foundation, BCCI, Soccars club'
+user.save
 
 
 

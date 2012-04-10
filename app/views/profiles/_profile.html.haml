@@ -6,7 +6,7 @@
   #collapseOne.accordion-body.in.collapse{:style => "height: auto; "}
     .accordion-inner
       #profile
-        %form.form-horizontal
+        = form_for current_user.profile, :html => { :class => "form-horizontal" } do |f|
           %fieldset
             .control-group
               %label.control-label{:for => "fileInput"} Profile Picture
@@ -57,21 +57,67 @@
                   .control-group
                     %label.control-label{:for => "textarea"} Associations
                     .controls
-                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      = f.text_area :association_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
                       %p.help-block 1 Association per line
                   .control-group
                     %label.control-label{:for => "textarea"} Interests
                     .controls
-                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      = f.text_area :interest_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
                       %p.help-block 1 Interest per line
                   .control-group
                     %label.control-label{:for => "textarea"} Expertise
                     .controls
-                      %textarea#textarea.input-xlarge{:rows => "3"}
+                      = f.text_area :expertise_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
                       %p.help-block 1 Expertise per line
                   .form-actions
                     %button.btn.btn-primary{:type => "submit"} Save changes
-      / profile
-    / according-inner
-  / according-body
-/ accordion-group
+
+
+  :javascript
+    $(function() {
+      function split( val ) {
+        return val.split( /,\s*/ );
+      }
+      function extractLast( term ) {
+        return split( term ).pop();
+      }
+      var url = null;
+      $( "#profile_interest_list" )
+        // don't navigate away from the field on tab when selecting an item
+        .bind( "keydown", function( event ) {
+          if ( event.keyCode === $.ui.keyCode.TAB &&
+              $( this ).data( "autocomplete" ).menu.active ) {
+            event.preventDefault();
+          }
+        })
+        .autocomplete({
+          source: function( request, response ) {
+            $.getJSON( "#{autocomplete_interest_name_profiles_path}", {
+              term: extractLast( request.term )
+            }, response );
+          },
+          search: function() {
+            // custom minLength
+            var term = extractLast( this.value );
+            if ( term.length < 2 ) {
+              return false;
+            }
+          },
+          focus: function() {
+            // prevent value inserted on focus
+            return false;
+          },
+          select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+          }
+        });
+    }); 
+  

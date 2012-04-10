@@ -1,0 +1,81 @@
+= render 'shared/profile_navigation'
+.span9
+  .row
+    .span7
+      %h1= current_user.profile.name.capitalize
+      %h5
+        %strong CTO
+        %em=" at #{current_user.profile.company}"
+      %h6
+        %i.icon-map-marker>
+        = "#{current_user.profile.city}, #{current_user.profile.state}"
+        %small= current_user.profile.country
+    .span2
+      %p.pull-right
+        %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
+          %i.icon-pencil.icon-white
+          Send a Message
+  / row
+  .row
+    .span9
+      %h3 About
+      %hr.zero
+        %p= current_user.profile.bio
+    / span9
+  / row
+  .row
+    .span3
+      %h5 Associations
+      %hr.zero
+        - current_user.profile.association_list.each do |x|
+          %span= x
+          %br/
+    .span3
+      %h5 Expertise
+      %hr.zero
+        - current_user.profile.expertise_list.each do |x|
+          %span.label.label-success= x
+    .span3
+      %h5 Interest
+      %hr.zero
+        - current_user.profile.interest_list.each do |x|
+          %span.label.label-info= x
+  / row
+  .row
+    .span9
+      %h3 Activity
+      %table.table.table-striped
+        - @latest_activities = current_user.activities.last(9)
+        = render :partial => "activities/latest", :object => @latest_activities
+    / span9
+  / row
+  .row
+    .span9
+      %h3 Photo Stream
+      %hr.zero
+        %ul.thumbnails
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+          %li.span3
+            %a.thumbnail{:href => "#"}
+              %img{:alt => "", :src => "http://placehold.it/260x180"}
+        %p.pull-right
+          %a{:href => "./members.html"} see more photos
+        %br/
+        %br/
+    / span9
+  / row
+/ span9

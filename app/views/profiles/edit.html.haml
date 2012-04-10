@@ -1,0 +1,14 @@
+= render 'shared/settings'
+
+.span9
+  = render 'profile'
+- content_for :accordion do
+  :javascript
+    $(function() {
+        $(".nav li").click(function(e){
+        alert('ss');
+          $(".collapse").collapse()
+
+      });
+
+    });

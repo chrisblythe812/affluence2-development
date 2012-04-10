@@ -56,13 +56,15 @@ Affluence2::Application.routes.draw do
 
   end
 
-  resources :profile   do
+  resources :profiles  do
     collection do
-      get 'settings'
       get 'confirm'
       get 'confirm_credit_card_info'
       get 'profile_session'
       get 'check_avilability'
+      get :autocomplete_interest_name 
+      get :autocomplete_expertise_name
+      get :autocomplete_association_name
     end
   end
 

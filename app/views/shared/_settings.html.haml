@@ -3,37 +3,29 @@
     %ul.nav.nav-list
       %li.nav-header Account Settings
       %li.active
-        %a{:href => "./settings.html"}
+        %a{:href => '#'}
           %i.icon-home>
           Profile Info
       %li
-        %a{:href => "./settings.html"}
+        %a{:href => '#'}
           %i.icon-shopping-cart>
           Billing Info
       %li
-        %a{:href => "./settings.html"}
+        %a{:href => '#'}
           %i.icon-envelope>
           Notifications
       %li
-        %a{:href => "./settings.html"}
+        %a{:href => '#'}
           %i.icon-lock>
           Change Password
       %li.nav-header Privacy Settings
       %li
-        %a{:href => "./privacy.html"}
+        %a{:href => ""}
           %i.icon-lock>
           Privacy
       %li.nav-header Order History
       %li
-        %a{:href => "./orders.html"}
+        %a{:href => ""}
           %i.icon-gift>
           Orders
 / span3
-.span9
-  #accordion2.accordion
-    = render :partial => 'profile'
-    //= render :partial => 'billing'
-    = render :partial => 'email_notifications'
-    = render :partial => 'change_password'
-  / accordian
-/ span9

@@ -2,7 +2,7 @@
 %html{:lang => "en"}
   %head
     = stylesheet_link_tag 'bootstrap', 'main'
-    = javascript_include_tag :application
+    = javascript_include_tag 'application'
 
     :css
       body {
@@ -26,12 +26,11 @@
     = render 'shared/header'
     .container
       .row
-        = render 'shared/profile_navigation'
         = yield
       = render 'shared/footer'
 
 
-/ Placed at the end of the document so the pages load faster
-/ javascript
-= yield(:javascripts)
+    / Placed at the end of the document so the pages load faster
+    / javascript
+    = yield(:accordion)
 

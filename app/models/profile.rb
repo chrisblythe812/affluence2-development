@@ -6,8 +6,8 @@ class Profile < ActiveRecord::Base
   #  has_one :photo_stream, :dependent => :destroy
 
   attr_accessible :first_name, :last_name, :city, :country, :state, :company, :bio
-
- #  acts_as_taggable_on :interests, :expertises
+    
+  acts_as_taggable_on :interests, :expertises, :associations
 
 
  
