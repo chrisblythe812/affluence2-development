@@ -143,7 +143,7 @@ if Offer.all.blank?
 end
 
 # user seed data
-#User.all.each {|user| user.destroy unless user.role == 'superadmin'}
+User.all.each {|user| user.destroy unless user.role == 'superadmin'}
 states = ['Alabama', 'Alaska', 'Arkansas', 'California', 'Colorado', 'Illinois',
   'Indiana', 'Kansas', 'North Carolina'
 ]    
