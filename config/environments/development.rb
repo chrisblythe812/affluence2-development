@@ -51,6 +51,8 @@ Affluence2::Application.configure do
     :domain         => "heroku.com"
   }
 
+  SslRequirement.disable_ssl_check = true
+
 end
 
 
