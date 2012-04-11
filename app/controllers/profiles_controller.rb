@@ -47,7 +47,7 @@ class ProfilesController < ApplicationController
       if @user.save!
         sign_in @user
         session[:user_info] = nil
-        redirect_to :action => "settings" and return
+        redirect_to profile_path(current_user.permalink) and return
       else
         session[:user_info] = nil
         redirect_to new_user_registration_path and return
@@ -87,7 +87,7 @@ class ProfilesController < ApplicationController
           session[:user_info] = nil
           #todo : set the user as logged in
           #todo : do the subscription
-          redirect_to :action => "settings" #and return
+          redirect_to profile_path(current_user.permalink) #and return
         else
           customer_delete_result = Braintree::Customer.delete(@result.customer.id)
           #if customer_delete_result.success?

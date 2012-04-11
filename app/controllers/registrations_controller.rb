@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def new
     @tr_data = Braintree::TransparentRedirect.
-        create_customer_data(:redirect_url => confirm_profile_url())
+        create_customer_data(:redirect_url => confirm_profiles_url())
     super
   end
 

@@ -3,16 +3,25 @@ namespace :affluence2 do
   task :do_subscriptions => :environment do
 
 
-    actual_subscriptions = SubscriptionFeeTracker.find(:all,
-    :conditions => ["status like ? AND renewal_date = ? AND retry_count <= ? AND retry_date is NULL",'pending',Date.today,3])
+     actual_subscriptions = SubscriptionFeeTracker.where(
+        :renewal_date => (Date.today-6)..(Date.today),
+        :status => 'pending',
+        :retry_count => 0..3,
+        :retry_date => NIL )
 
     SubscriptionFeeTracker.do_subscriptions(actual_subscriptions)
 
-    failed_subscriptions = SubscriptionFeeTracker.find(:all,
-    :conditions => ["status like ? AND retry_date = ? AND retry_count <= ? ",'failed',Date.today,3])
 
-    SubscriptionFeeTracker.do_subscriptions(failed_subscriptions)
 
+
+     failed_subscriptions = SubscriptionFeeTracker.where(
+         :status => 'failed',
+         :retry_count => 0..3,
+         :retry_date => Date.today)
+
+     SubscriptionFeeTracker.do_subscriptions(failed_subscriptions)
+
+    #todo convert the poeple who are out of freetrails and payment was failed, convert them to free from paid and notify them with email.
 
 
   end
