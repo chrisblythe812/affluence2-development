@@ -1,7 +1,7 @@
 - @promotion_events.each do |promotion|
   .span4
     .thumbnail
-      = image_tag(promotion.photos.first.image)  if  !promotion.photos.blank? && !promotion.photos.first.blank?
+        = display_image (promotion.photos, :thumb)
       .caption
         %h5= promotion.promotionable.title
         %p= promotion.promotionable.description

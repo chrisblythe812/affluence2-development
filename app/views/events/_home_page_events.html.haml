@@ -1,7 +1,7 @@
 - @promotion_events.each do |promotion|
   %li.span3
     .thumbnail
-      = image_tag(promotion.photos.first.image)
+      = display_image (promotion.photos, :thumb)
       .caption
         %h5
           = promotion.promotionable.title

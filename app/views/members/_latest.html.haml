@@ -1,7 +1,7 @@
 - @latest_members.each do |member|
   %li.span1
     %a.thumbnail{"data-original-title" => "#{member.profile.first_name}", "data-placement" => "bottom", :href => "#", :rel => "tooltip"}
-      = image_tag member.profile.photos.first.image.url(:thumb)
+      = display_image (member.profile.photos, :thumb)
 :javascript
   $(function () {
     $('a[rel=tooltip]').tooltip({

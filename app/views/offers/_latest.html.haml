@@ -1,7 +1,7 @@
 - @latest_offers.each do |offer|
   %li.span3
     .thumbnail
-      = image_tag offer.promotion.photos.first.image.url(:medium)
+      = display_image (offer.promotion.photos)
       .caption
         %h5= offer.title
         %p= offer.description
