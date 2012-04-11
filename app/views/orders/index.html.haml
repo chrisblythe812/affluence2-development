@@ -1,0 +1,45 @@
+= render 'shared/settings'
+.span9
+  #Orders
+    %h2 Order History
+    %hr.zero
+    %table.table.table-striped
+      %thead
+        %tr
+          %th #
+          %th Date
+          %th Purchased
+          %th Details
+          %th Cost
+      %tbody
+        - @orders.each_with_index do |order,i|
+          - i = i+1
+
+
+          %tr
+            %td #{i}
+            %td #{order.created_at.strftime("%d/%m/%Y")}
+            %td
+              = order_type(order.payable_type)
+              = order_content(order)
+            %td
+              %a{"data-content" => order_content_popup(order), :href => "#", :rel => "popover"} Details
+            %td $#{order.amount}
+
+:javascript
+  $(function () {
+    $('#myCarousel').carousel()
+  })
+
+   $(function () {
+    $('a[rel=popover]').popover({
+    	placement: 'left'
+    })
+  })
+
+
+
+
+
+
+

@@ -65,6 +65,10 @@ module ApplicationHelper
     params[:controller] == 'profiles'
   end
 
+  def orders?
+    params[:controller] == 'orders'
+  end
+
   def display_image(photos, format)
     if photos.blank?
       temp = (format == :thumb) ? 'aff-user-small.png':'aff-user-large.png'

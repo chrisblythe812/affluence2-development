@@ -92,7 +92,13 @@ Affluence2::Application.routes.draw do
     collection do
       get 'latest'
     end
-  end  # Sample resource route with sub-resources:
+  end
+
+  resources :orders
+
+
+
+    # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
   #     resource :seller
