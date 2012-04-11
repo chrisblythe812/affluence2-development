@@ -5,8 +5,8 @@ class Profile < ActiveRecord::Base
   has_one :notification_setting, :dependent => :destroy
   #  has_one :photo_stream, :dependent => :destroy
 
-  attr_accessible :first_name, :last_name, :city, :country, :state, :company, :bio
-    
+  attr_accessible :first_name, :last_name, :city, :country, :state, :company, :bio,
+   :middle_name, :phone, :title, :association_list, :interest_list, :expertise_list
   acts_as_taggable_on :interests, :expertises, :associations
 
 

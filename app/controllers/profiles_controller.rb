@@ -15,7 +15,19 @@ class ProfilesController < ApplicationController
   def edit
 
   end
+
   def update
+    @profile = current_user.profile
+    respond_to do |format|
+      if @profile.update_attributes(params[:profile])
+        format.html { redirect_to @profile, notice: 'Product was successfully updated.' }
+        format.json { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @profile.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   def show
