@@ -16,17 +16,17 @@
               .control-group
                 %label.control-label{:for => "input01"} Name
                 .controls
-                  %input.input.span2{:placeholder => "First", :type => "text"}
-                    %input.input.span2{:placeholder => "Middle (optional)", :type => "text"}
-                      %input.input.span2{:placeholder => "Last", :type => "text"}
+                  = f.text_field :first_name, :placeholder => "First", :class => "input span2"
+                  = f.text_field :middle_name, :placeholder => "Middle (optional)", :class => "input span2"
+                  = f.text_field :last_name, :placeholder => "Last", :class => "input span2"
               .control-group
                 %label.control-label{:for => "input04"} Email
                 .controls
-                  %input.input.span4{:placeholder => "blake.macleod@gmail.com", :type => "text"}
+                  = current_user.email
               .control-group
                 %label.control-label{:for => "input05"} Phone #
                 .controls
-                  %input.input.span3{:placeholder => "773-336-2323", :type => "text"}
+                  = f.text_field :phone, :placeholder => "773-336-2323", :class => "input span3"
               .control-group
                 %label.control-label{:for => "select01"} Location
                 .controls
@@ -42,17 +42,17 @@
                     %option Alaska
                     %option Arizona
                     %option Arkansa
-                  %input.input.span2{:placeholder => "City", :type => "text"}
+                  = f.text_field :city, :placeholder => "City", :class => "input span2"
               .control-group
                 %label.control-label{:for => "input03"} Work
                 .controls
-                  %input.input.span2{:placeholder => "Title", :type => "text"}
-                    %input.input.span2{:placeholder => "Company", :type => "text"}
+                  = f.text_field :title, :placeholder => "Title", :class => "input span2"
+                  = f.text_field :company, :placeholder => "Company", :class => "input span2"
               %hr
                 .control-group
                   %label.control-label{:for => "textarea"} Bio
                   .controls
-                    %textarea#textarea.input.span6{:rows => "8"}
+                    = f.text_area :bio, :rows => "8", :class => "input span6"
                 %hr
                   .control-group
                     %label.control-label{:for => "textarea"} Associations
@@ -70,8 +70,7 @@
                       = f.text_area :expertise_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
                       %p.help-block Expertise are comma seperated.
                   .form-actions
-                    %button.btn.btn-primary{:type => "submit"} Save changes
-  
+                    = f.submit "Save changes", :class => "btn btn-primary"
 
   :javascript
     $(function() {
@@ -82,7 +81,7 @@
         return split( term ).pop();
       }
       var url = null;
-      $( "#profile_interest_list" )
+      $( ".ui-autocomplete-input" )
         // don't navigate away from the field on tab when selecting an item
         .bind( "keydown", function( event ) {
           if ( event.keyCode === $.ui.keyCode.TAB &&

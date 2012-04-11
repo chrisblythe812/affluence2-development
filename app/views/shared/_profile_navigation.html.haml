@@ -1,7 +1,7 @@
 
 .span3
   %div
-    = image_tag current_user.profile.photos.first.image.url(:medium)
+    = display_image(current_user.profile.photos)
   .well
     %ul.nav.nav-list
       %li.nav-header Socialize

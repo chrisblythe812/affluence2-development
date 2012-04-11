@@ -64,4 +64,12 @@ module ApplicationHelper
   def profiles?
     params[:controller] == 'profiles'
   end
+
+  def display_image(photos, format = :medium)
+    if photos.blank?
+      image_tag 'profile.jpg'
+    else
+      image_tag photos.first.image.url(format)
+    end
+  end
 end
