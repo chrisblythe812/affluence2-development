@@ -64,13 +64,14 @@ module ApplicationHelper
   def profiles?
     params[:controller] == 'profiles'
   end
-
-  def display_image(photos, format)
+ 
+  def display_image(photos, format = :medium)
     if photos.blank?
       temp = (format == :thumb) ? 'aff-user-small.png':'aff-user-large.png'
       image_tag temp
     else
-      image_tag photos.first.image.ur(:format)
+      image_tag photos.first.image.url(format)
     end
   end
 end
+ 
