@@ -3,10 +3,11 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
   def self.make_payment(subscription)
-    if !subscription.last_payment.blank? && (subscription.last_payment.status == 'pending' || subscription.last_payment.status == 'failed')
+    if !subscription.past_payment.blank? && (subscription.past_payment.status == 'pending' || subscription.past_payment.status == 'failed')
       result = BrainTreeTranscation.make_payments_for_old_transactions(subscription)
-    elsif !subscription.last_payment.blank? && subscription.last_payment.status == 'completed'
-      puts "last payment was success. Update the subscription to success payment"
+    elsif !subscription.past_payment.blank? && subscription.past_payment.status == 'completed'
+      # happens when the schedular crashed before updating to SFT
+      PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 9 , :log_level => 1 )
       result = 'success'
     else
       result = BrainTreeTranscation.new_transaction(subscription)
@@ -17,13 +18,13 @@ class BrainTreeTranscation < ActiveRecord::Base
 
   def self.make_payments_for_old_transactions(subscription)
     #past_payments.each do |past_payment|
-      if  subscription.last_payment.status == 'pending'
+      if  subscription.past_payment.status == 'pending'
         result = BrainTreeTranscation.do_payments_by_compare_local_and_remote_trans(subscription)
-      elsif subscription.last_payment.status == 'failed'
-        result = BrainTreeTranscation.s2s_transaction(subscription.last_payment,subscription)
-        respond_with_result(subscription.last_payment,result)
+      elsif subscription.past_payment.status == 'failed'
+        PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 8 , :log_level => 1 )
+        result = BrainTreeTranscation.s2s_transaction(subscription.past_payment,subscription)
+        respond_with_result(subscription.past_payment,result)
       else
-        puts "payment status is failed. This may due to insufficient funds in last transaction"
         puts "Do the S2S transcation again"
       end
 
@@ -33,19 +34,19 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
   def self.do_payments_by_compare_local_and_remote_trans(subscription)
-    local_bt_trans = self.local_bt_search(subscription.last_payment.uuid)
-    remote_bt_trans = self.remote_bt_search(subscription.last_payment.uuid)
-
+    PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 4 , :log_level => 1 )
+    local_bt_trans = self.local_bt_search(subscription.past_payment.uuid)
+    remote_bt_trans = self.remote_bt_search(subscription.past_payment.uuid)
     if remote_bt_trans.blank?
-      puts "Remote Transaction was missing "
-      result = BrainTreeTranscation.s2s_transaction(subscription.last_payment,subscription)
-      respond_with_result(subscription.last_payment,result)
+      PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 5 , :log_level => 1 )
+      result = BrainTreeTranscation.s2s_transaction(subscription.past_payment,subscription)
+      respond_with_result(subscription.past_payment,result)
     elsif self.records_differ?(local_bt_trans,remote_bt_trans)
-      puts "Found difference in records"
-      self.create_missing_transactions(remote_bt_trans,subscription.last_payment,subscription)
-      respond_with_last_transaction(subscription.last_payment)
+      PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 6 , :log_level => 1 )
+      self.create_missing_transactions(remote_bt_trans,subscription.past_payment,subscription)
+      respond_with_last_transaction(subscription.past_payment)
     else
-      respond_with_last_transaction(subscription.last_payment)
+      respond_with_last_transaction(subscription.past_payment)
     end
   end
 
@@ -70,11 +71,11 @@ class BrainTreeTranscation < ActiveRecord::Base
    def self.respond_with_result(payment,result)
      if result == 'success'
        payment.update_attribute(:status,"completed")
-       puts "respond_with_result as success"
+       PaymentLog.create(:payment_id => payment.id, :info=> 7 , :log_level => 1 )
        return result
      else
        payment.update_attribute(:status, "failed")
-       puts "respond_with_result as failed"
+       PaymentLog.create(:payment_id => payment.id, :info=> 7 , :log_level => 3 )
        return result
      end
    end
@@ -104,6 +105,7 @@ class BrainTreeTranscation < ActiveRecord::Base
                            :uuid => uuid,
                            :trails_count => 1)
      payment.save
+     PaymentLog.create(:payment_id => payment.id, :info=> 1 , :log_level => 1 )
      return payment
    end
 
@@ -130,7 +132,7 @@ class BrainTreeTranscation < ActiveRecord::Base
 
   def self.save_transcation(transaction,payment,result='success')
     if result == 'success'
-    BrainTreeTranscation.create(
+    local_bt_transcation = BrainTreeTranscation.create(
         :payment_uuid =>  payment.uuid,
         :transaction_id  => transaction.id,
         :amount  => transaction.amount,
@@ -147,6 +149,7 @@ class BrainTreeTranscation < ActiveRecord::Base
         #:credit_card_customer_location       => transaction.credit_card_details.customer_location,
         #:complete_result          => complete_result,
     )
+    PaymentLog.create(:payment_id => payment.id, :brain_tree_transcation_id => local_bt_transcation.id,  :info=> 3 , :log_level => 1 )
     else
       BrainTreeTranscation.create(
           :payment_uuid =>  payment.uuid,
@@ -155,6 +158,7 @@ class BrainTreeTranscation < ActiveRecord::Base
           :status  => 'failed',
           :complete_result => transaction
       )
+      PaymentLog.create(:payment_id => payment.id, :info=> 3 , :log_level => 3 )
     end
 
     end
@@ -193,7 +197,7 @@ class BrainTreeTranscation < ActiveRecord::Base
  def self.create_missing_transactions(remote_bt_trans,past_payment,subscription)
    puts "Creating missing records"
    remote_bt_trans.each do |transaction|
-     self.save_transcation(transaction,past_payment)
+     self.save_transcation(transaction,past_payment,'success')
    end
  end
 
@@ -204,6 +208,7 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
   def self.s2s_transaction(payment,subscription)
+    PaymentLog.create(:payment_id => payment.id, :info=> 2 , :log_level => 1 )
     BrainTreeTranscation.transaction do
         result = Braintree::Transaction.sale(
                                             :amount => payment.amount,
@@ -213,12 +218,9 @@ class BrainTreeTranscation < ActiveRecord::Base
                                             )
           if result.success? &&  result.transaction.status == 'submitted_for_settlement'
             self.save_transcation(result.transaction,payment,'success')
-            puts "Got the success response from braintree"
             return 'success'
-            puts "Need to create next billing cycle."
           else
             self.save_transcation(result.errors,payment,'failed')
-            puts "Got failure response from braintree"
             return 'failed'
           end
       end

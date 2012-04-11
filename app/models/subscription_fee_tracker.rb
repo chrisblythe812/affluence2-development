@@ -2,7 +2,7 @@ class SubscriptionFeeTracker < ActiveRecord::Base
 
   belongs_to :user
 
-  NOOFRETRIES = 3
+  RETRIES = 3
   INTERVALS = 2
 
 
@@ -16,6 +16,8 @@ class SubscriptionFeeTracker < ActiveRecord::Base
           subscription.update_attribute(:status, "completed")
           create_next_billing_record(subscription)
         elsif result == 'failed'
+          # todo need to send email notification to user
+          # todo create record in notification_trackers
           subscription.update_with_number_of_trails_left
         end
 
@@ -30,6 +32,7 @@ class SubscriptionFeeTracker < ActiveRecord::Base
     :status => "failed"}
     puts "Update the subscription with params:#{subscription_params}"
     self.update_attributes(subscription_params)
+    #todo when retry_count = 3 then need to update
   end
 
   def calculate_renewal_date(retry_count)
@@ -62,13 +65,10 @@ class SubscriptionFeeTracker < ActiveRecord::Base
   end
 
 
-  def last_payment
-    Payment.find(:last, :conditions => ["payable_type = 'SubscriptionFeeTracker' and payable_id = ?",id])
+  def past_payment
+    Payment.where(:payable_id => id, :payable_type => 'SubscriptionFeeTracker').last
   end
 
-  def pending_payment
-    Payment.find(:last, :conditions => ["payable_type = 'SubscriptionFeeTracker' and payable_id = ?",id])
-  end
 
 
 end
