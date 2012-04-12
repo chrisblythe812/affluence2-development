@@ -3,6 +3,11 @@ class EventsController < ApplicationController
     @profile_tab = false
   end
 
+
+  def show
+    @profile_tab = false
+  end
+
   def new
   end
 
@@ -17,6 +22,9 @@ class EventsController < ApplicationController
 
   def delete
   end
+
+
+
 
   def home_page_events
     get_latest

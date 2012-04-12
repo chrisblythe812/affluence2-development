@@ -65,10 +65,27 @@ module ApplicationHelper
     params[:controller] == 'profiles'
   end
 
-
   def orders?
     params[:controller] == 'orders'
   end
+
+  def home?
+    params[:controller] == 'home'
+  end
+
+  def events?
+    params[:controller] == 'events'
+  end
+
+  def offers?
+    params[:controller] == 'offers'
+  end
+
+  def gives?
+    params[:controller] == 'gives'
+  end
+
+
 
   def display_image(photos, format = :medium)
     if photos.blank?

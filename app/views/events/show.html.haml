@@ -1,0 +1,198 @@
+.span6
+  .well
+    = image_tag('carousel-3.jpg')
+    %hr
+      .row
+        .span1
+          = image_tag('events-1.jpg')
+        .span1
+          = image_tag('events-1.jpg')
+        .span1
+          = image_tag('events-1.jpg')
+/ span6 images
+.span6
+  %h1 Grammy Weekend
+  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+  /
+    Tabs
+    \==================================================
+  %ul#tab.nav.nav-tabs
+    %li.active
+      %a{"data-toggle" => "tab", :href => "#includes"} Includes
+    %li
+      %a{"data-toggle" => "tab", :href => "#schedule"} Schedule
+  #myTabContent.tab-content
+    #includes.tab-pane.active
+      %ul
+        %li 2 tickets to the Grammys
+        %li 2 night stay at W hotel
+        %li Limo to and from Grammys
+        %li 2 tickets to P. Diddy after event party
+    / includes
+    #schedule.tab-pane
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Date
+            %th Time
+            %th Description
+        %tbody
+          %tr
+            %td 3/10/2012
+            %td 11:00am
+            %td Check into the W Hotel
+          %tr
+            %td 3/10/2012
+            %td 7:00pm
+            %td Limo to Pick you up at your hotel
+          %tr
+            %td 3/10/2012
+            %td 7:30pm
+            %td Arrive at the Grammys - walk the red carpet
+          %tr
+            %td 3/10/2012
+            %td 8:00pm - 11:00pm
+            %td Enjoy the show
+          %tr
+            %td 3/10/2012
+            %td 11:30pm
+            %td Get Back into the Limo
+          %tr
+            %td 3/10/2012
+            %td 11:45pm - ???
+            %td W hotel for P.Diddy after party
+    / schedule
+  / tab-content
+  %div
+    %h3 9 Members Attending
+    %hr.zero
+      %ul.thumbnails
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSxBfHGvjZb68NVLOrTAqlXXdnGZUQrjcnndSd8w5qvMM1CX6taAw"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSJXgIHrgms31dM7ZWyYIah0opjvvuccBCHoblNeN2v7hTre-hpQw"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSdhiqivyBt7osZ9wW9WmML47uveFdWfhKe-Y-jwo1pEfbbT3WK"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcQ821DgmCba9tROpeuz1GibDBWgS-i_yS3OruOHG0JfS5u_Sj-iMg"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
+      %ul.thumbnails
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSxBfHGvjZb68NVLOrTAqlXXdnGZUQrjcnndSd8w5qvMM1CX6taAw"}
+        %li.span1
+          %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
+            %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSJXgIHrgms31dM7ZWyYIah0opjvvuccBCHoblNeN2v7hTre-hpQw"}
+  .row
+    .span2
+      %p
+        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "#event1-register"}
+          %i.icon-pencil.icon-white
+          Register
+    .span2
+      %h4 $ 1,800
+      %i.icon-tags
+      %strong 7
+      %em Remaining
+
+
+/ Register Modal
+#event1-register.modal.hide.fade{:style => "display: none; "}
+  .modal-header
+    %a.close{"data-dismiss" => "modal", :href => "#"} ×
+    %h3 Register
+  .modal-body
+    %form.form-horizontal
+      %fieldset
+        %h4 Contact
+        .control-group
+          %label.control-label{:for => "input01"} Name
+          .controls
+            %input#input01.input-xlarge{:placeholder => "Blake Macleod", :type => "text"}
+        .control-group
+          %label.control-label{:for => "input02"} Email
+          .controls
+            %input#input01.input-xlarge{:placeholder => "blake@affluence.org", :type => "text"}
+        .control-group
+          %label.control-label{:for => "input03"} Phone #
+          .controls
+            %input#input01.input-xlarge{:placeholder => "773-336-2323", :type => "text"}
+        %hr.zero
+          .control-group
+            %label.control-label Credit Card
+            .controls
+              %label.radio
+                %input#optionsRadios1{:checked => "", :name => "optionsRadios", :type => "radio", :value => "option1"}
+                  %strong Master Card
+                  on file ending in
+                  %em 4101
+          .control-group
+            %label.control-label # of Tickets
+            .controls
+              %select.span1
+                %option 1
+                %option 2
+                %option 3
+                %option 4
+                %option 5
+              %span{:style => "margin-left:40px"}
+                Total cost:
+                %strong $1,200
+          /
+            <h4>Billing</h4>
+            <div class="control-group">
+            <label class="control-label" for="input04">Credit Card</label>
+            <div class="controls">
+            <input type="text" class="input-xlarge" id="input01">
+            </div>
+            </div>
+
+            <div class="control-group">
+            <label class="control-label" for="input05">Exp.</label>
+            <div class="controls">
+            <select class="span2">
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            </select>
+
+            <select class="span1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            </select>
+            </div>
+            </div>
+
+            <div class="control-group">
+            <label class="control-label" for="input06">Billing Zip</label>
+            <div class="controls">
+            <input type="text" class="input-xlarge span2" id="input06">
+            </div>
+            </div>
+          .form-actions
+            %button.btn.btn-primary{:type => "submit"} Register
+            %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+
+:javascript
+  $(function () {
+  $('a[rel=tooltip]').tooltip({
+  	live: true
+  })
+  })

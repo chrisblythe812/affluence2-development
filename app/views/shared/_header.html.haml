@@ -8,13 +8,13 @@
       = link_to "Affluence",root_path, :class => "brand"
       .nav-collapse
         %ul.nav
-          %li.active
+          %li{:class => "#{'active' if home?}"}
             %a{:href => "/home"} Home
-          %li
+          %li{:class => "#{'active' if events?}"}
             %a{:href => "/events"} Events
-          %li
+          %li{:class => "#{'active' if offers?}"}
             %a{:href => "./offers.html"} Offers
-          %li
+          %li{:class => "#{'active' if gives?}"}
             %a{:href => "./gives.html"} Gives
         %ul.nav.pull-right
           %li#menu1.dropdown

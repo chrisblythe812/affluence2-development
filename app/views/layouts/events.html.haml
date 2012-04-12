@@ -26,6 +26,12 @@
     = render 'shared/header'
     .container
       .row
+        .span12
+          %span.pull-right
+            %i.icon-time
+            %strong SALE ENDS
+            %em April 3, 2010
+      .row
         = yield
       = render 'shared/footer'
 

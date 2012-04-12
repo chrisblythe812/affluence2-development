@@ -13,11 +13,8 @@
           %th Cost
       %tbody
         - @orders.each_with_index do |order,i|
-          - i = i+1
-
-
           %tr
-            %td #{i}
+            %td #{i+1}
             %td #{order.created_at.strftime("%d/%m/%Y")}
             %td
               = order_type(order.payable_type)
