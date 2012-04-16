@@ -44,7 +44,7 @@ class ProfilesController < ApplicationController
 
     if !session[:user_info].blank? && session[:user_info][:user][:plan] == 'free'
       @user = User.new(session[:user_info][:user])
-      if @user.save!
+      if @user.save
         sign_in @user
         session[:user_info] = nil
         redirect_to profile_path(current_user.permalink) and return
