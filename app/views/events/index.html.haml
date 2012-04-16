@@ -33,96 +33,26 @@
     %a.btn.btn-primary{"data-toggle" => "modal", :href => "#event-schedule"} See Schedule
 / span 3
 / row
+
 %h1 Current Events
 %br/
 .row
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-1.jpg"}
+  - @events.each do |event|
+    .span4
+      .thumbnail
+        = display_image(event.promotion.photos)
         .caption
-          %h5 Grammy Event & Party
-          %p Join Affluence for an all access pass to the 2012 Grammy's.  Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.
+          %h5 #{event.title}
+          %p #{event.description}
           %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
+            %a.btn.btn-success{"data-toggle" => "modal", :href => "#event#{event.id}-register"}
               %i.icon-pencil.icon-white
               Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
+            %a.btn.btn-small.btn-info{:href => event_path(event.id)}
               %i.icon-info-sign.icon-white
               More Info
-  / span4
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-2.jpg"}
-        .caption
-          %h5 Weekend at the Masters
-          %p Let Affluence treat you to a Masters like you have never experienced before.  Enjoy Saturday and Sunday event passes with all access to every tent and party.
-          %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
-              %i.icon-pencil.icon-white
-              Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
-              %i.icon-info-sign.icon-white
-              More Info
-  / span4
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-3.jpg"}
-        .caption
-          %h5 2012 Oscars Party
-          %p Join Affluence for an all access pass to the 2012 Grammy's.  Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.
-          %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
-              %i.icon-pencil.icon-white
-              Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
-              %i.icon-info-sign.icon-white
-              More Info
-  / span4
-/ row
-.row
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-4.jpg"}
-        .caption
-          %h5 All Access US Open
-          %p Sit Court Side for any match you like.  Enjoy after event parties with the pro's including a 1 on 1 session with Roger Feder.
-          %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
-              %i.icon-pencil.icon-white
-              Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
-              %i.icon-info-sign.icon-white
-              More Info
-  / span4
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-5.jpg"}
-        .caption
-          %h5 Dinner with Adam Sandler
-          %p Fly to New York to have a 1 on 1 dinner with Adam Sandler.  Go to Adam's favorite restaurant and be treated to a 5 course meal.
-          %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
-              %i.icon-pencil.icon-white
-              Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
-              %i.icon-info-sign.icon-white
-              More Info
-  / span4
-  .span4
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-6.jpg"}
-        .caption
-          %h5 Backstage at U2 London
-          %p Enjoy front row seats for 4 at a U2 concert in London.  After the show, head backstage to hang out with Bono and others.
-          %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#premium-sign-up"}
-              %i.icon-pencil.icon-white
-              Register
-            %a.btn.btn-small.btn-info{:href => "/events/1"}
-              %i.icon-info-sign.icon-white
-              More Info
-  / span4
-/ row
+    = render :partial => 'event_registration', :locals => {:event => event}
+
 %h1 Past Events
 %br/
 .row

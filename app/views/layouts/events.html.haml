@@ -4,6 +4,7 @@
     = stylesheet_link_tag 'bootstrap', 'main'
     = javascript_include_tag 'application'
 
+
     :css
       body {
         padding-top: 60px;
@@ -26,13 +27,10 @@
     = render 'shared/header'
     .container
       .row
-        .span12
-          %span.pull-right
-            %i.icon-time
-            %strong SALE ENDS
-            %em April 3, 2010
+        = yield :event_ending_info
       .row
         = yield
       = render 'shared/footer'
+
 
 

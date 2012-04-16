@@ -1,3 +1,11 @@
+
+-content_for :event_ending_info do
+  .span12
+    %span.pull-right
+      %i.icon-time
+      %strong SALE ENDS
+      %em April 3, 2010
+
 .span6
   .well
     = image_tag('carousel-3.jpg')
@@ -98,7 +106,7 @@
   .row
     .span2
       %p
-        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "#event1-register"}
+        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "#event#{@event.id}-register"}
           %i.icon-pencil.icon-white
           Register
     .span2
@@ -109,86 +117,7 @@
 
 
 / Register Modal
-#event1-register.modal.hide.fade{:style => "display: none; "}
-  .modal-header
-    %a.close{"data-dismiss" => "modal", :href => "#"} ×
-    %h3 Register
-  .modal-body
-    %form.form-horizontal
-      %fieldset
-        %h4 Contact
-        .control-group
-          %label.control-label{:for => "input01"} Name
-          .controls
-            %input#input01.input-xlarge{:placeholder => "Blake Macleod", :type => "text"}
-        .control-group
-          %label.control-label{:for => "input02"} Email
-          .controls
-            %input#input01.input-xlarge{:placeholder => "blake@affluence.org", :type => "text"}
-        .control-group
-          %label.control-label{:for => "input03"} Phone #
-          .controls
-            %input#input01.input-xlarge{:placeholder => "773-336-2323", :type => "text"}
-        %hr.zero
-          .control-group
-            %label.control-label Credit Card
-            .controls
-              %label.radio
-                %input#optionsRadios1{:checked => "", :name => "optionsRadios", :type => "radio", :value => "option1"}
-                  %strong Master Card
-                  on file ending in
-                  %em 4101
-          .control-group
-            %label.control-label # of Tickets
-            .controls
-              %select.span1
-                %option 1
-                %option 2
-                %option 3
-                %option 4
-                %option 5
-              %span{:style => "margin-left:40px"}
-                Total cost:
-                %strong $1,200
-          /
-            <h4>Billing</h4>
-            <div class="control-group">
-            <label class="control-label" for="input04">Credit Card</label>
-            <div class="controls">
-            <input type="text" class="input-xlarge" id="input01">
-            </div>
-            </div>
-
-            <div class="control-group">
-            <label class="control-label" for="input05">Exp.</label>
-            <div class="controls">
-            <select class="span2">
-            <option>January</option>
-            <option>February</option>
-            <option>March</option>
-            <option>April</option>
-            <option>May</option>
-            </select>
-
-            <select class="span1">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            </select>
-            </div>
-            </div>
-
-            <div class="control-group">
-            <label class="control-label" for="input06">Billing Zip</label>
-            <div class="controls">
-            <input type="text" class="input-xlarge span2" id="input06">
-            </div>
-            </div>
-          .form-actions
-            %button.btn.btn-primary{:type => "submit"} Register
-            %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+= render :partial => 'event_registration', :locals => {:event => @event}
 
 :javascript
   $(function () {

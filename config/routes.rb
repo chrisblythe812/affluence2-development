@@ -44,11 +44,13 @@ Affluence2::Application.routes.draw do
   # Sample resource route with options:
      resources :events do
        member do
+         post :register
        end
   #
        collection do
          get 'home_page_events'
          get 'landing_page_events'
+         get 'confirm'
        end
      end
 
@@ -65,6 +67,7 @@ Affluence2::Application.routes.draw do
       get :autocomplete_interest_name 
       get :autocomplete_expertise_name
       get :autocomplete_association_name
+      get :user_plan
     end
   end
 

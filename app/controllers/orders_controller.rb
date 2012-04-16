@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
 
 
   def index
-   @orders = current_user.payments
+   @orders = current_user.payments.where(:status => 'completed')
   end
 
 end

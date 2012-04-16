@@ -132,6 +132,18 @@ class ProfilesController < ApplicationController
     end
   end
 
+
+  def user_plan
+    session[:user_plan] = nil
+    session[:user_plan]= params[:plan]
+    respond_to do |format|
+      format.json do
+        render :status => 200, :json => {:plan => session[:user_plan]}
+      end
+    end
+  end
+
+
   def profile_session
     session[:user_info] = nil
     session[:user_info]= params
