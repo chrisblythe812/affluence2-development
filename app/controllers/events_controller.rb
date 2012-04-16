@@ -3,7 +3,7 @@ class EventsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :create_braintree_object, :only =>  [:index, :show]
 
-  ssl_required :index,:show
+  #ssl_required :index,:show
 
 
   def index
