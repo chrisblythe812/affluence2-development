@@ -2,7 +2,7 @@
   .accordion-heading
     %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseThree"}
       %h3 Email Notifications
-  #collapseThree.accordion-body.collapse{:style => "height: 0px; "}
+  #collapseThree.accordion-body.collapse{:style => "height: auto; "}
     .accordion-inner
       #notifications
         %table.table.table-bordered.table-striped
@@ -11,38 +11,38 @@
               %td Newsletter
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.newsletter ? 'active':''}", :name => 'newsletter', :value => 'true'} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.newsletter ? '':'active'}", :name => 'newsletter', :value => 'false'} Off
             %tr
               %td New Events
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.events ? 'active':''}", :name => 'events', :value => 'true'} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.events ? '':'active'}", :name => 'events', :value => 'false'} Off
             %tr
               %td New Offers
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.offers ? 'active':''}", :name => 'offers', :value => 'true'} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.offers ? '':'active'}", :name => 'offers', :value => 'false'} Off
             %tr
               %td New Messages
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.messages ? 'active':''}", :name => 'messages', :value => 'true'} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.messages ? '':'active'}", :name => 'messages', :value => 'false'} Off
             %tr
               %td Event Reminders
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.event_reminders ? 'active':''}", :name => 'event_reminders', :value => 'true'} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.event_reminders ? '':'active'}", :name => 'event_reminders', :value => 'false'} Off
             %tr
               %td Site News
               %td
                 .btn-group{"data-toggle" => "buttons-radio"}
-                  %button.btn.btn-primary.active On
-                  %button.btn.btn-primary Off
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.site_news ? 'active':''}", :name => 'site_news', :value => true} On
+                  %button.btn.btn-primary{:class => "#{current_user.profile.notification_setting.site_news ? '':'active'}", :name => 'site_news', :value => 'false'} Off
             %tr
               %td
               %td
@@ -52,3 +52,17 @@
     / accordion-inner
   / accordion-body
 / accordion-group
+:javascript
+  $(function(){
+    $('#notifications td button').click(function(){
+      if(!$(this).hasClass('active')){
+        $.get("#{update_notifications_profiles_path}",
+          { name: $(this).attr('name'), value: $(this).val()},
+          function(data) {
+            $("#profile_state").html('');
+            console.debug(  "disabled"  );
+
+          });
+      }
+    });
+  });

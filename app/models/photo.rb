@@ -7,7 +7,7 @@ class Photo < ActiveRecord::Base
     :storage => :s3,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :path => "/:id/:style/:basename.:extension",
-    :styles => Proc.new { |clip| clip.instance.styles }  
+    :styles => Proc.new { |clip| clip.instance.styles }
   #  has_attached_file :avatar, :styles => lambda { |attachment| { :thumb => (attachment.instance.boss? ? "300x300>" : "100x100>") }  }
 
   def styles

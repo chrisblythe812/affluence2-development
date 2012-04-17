@@ -95,5 +95,26 @@ module ApplicationHelper
       image_tag photos.first.image.url(format)
     end
   end
+
+  def states_of(country_code)
+    begin
+      Carmen::states(country_code)
+    rescue Carmen::StatesNotSupported, Carmen::NonexistentCountry
+      [["No States Available", '']]
+    end
+  end
+
+  def resource_name
+    :user
+  end
+
+  def resource
+    current_user
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
+
 end
  

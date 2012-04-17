@@ -23,11 +23,7 @@ class User < ActiveRecord::Base
       LIMIT 6 OFFSET 0;
     }
   }
-
   has_many :payments
-
-
-
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -43,7 +39,6 @@ class User < ActiveRecord::Base
 
   validates_presence_of :plan
 
- 
   def superadmin?
     self.role == 'superadmin' 
   end

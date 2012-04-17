@@ -12,7 +12,7 @@ FactoryGirl.define do
     last_name    'Davidson'
     middle_name  ''
     first_name   'John'
-    full_name    "#{first_name} #{last_name}"
+#    full_name    "#{first_name} #{last_name}"
   end
   
 end

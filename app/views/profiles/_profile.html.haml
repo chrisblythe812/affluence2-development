@@ -6,12 +6,17 @@
   #collapseOne.accordion-body.in.collapse{:style => "height: auto; "}
     .accordion-inner
       #profile
-        = form_for current_user.profile, :html => { :class => "form-horizontal" } do |f|
+        = form_for @profile, :html => { :class => "form-horizontal" } do |f|
           %fieldset
             .control-group
               %label.control-label{:for => "fileInput"} Profile Picture
               .controls
-                %input#fileInput.input-file{:type => "file"}
+                = f.fields_for :photos, :html => { :multipart => true } do |x|
+                  = x.file_field :image, :class => 'input-file', :id => 'fileInput'
+                  = x.hidden_field :photoable_type
+                  %br
+                  = x.text_field :title, :placeholder => "Title", :class => "input span2"
+  
             %hr
               .control-group
                 %label.control-label{:for => "input01"} Name
@@ -30,18 +35,8 @@
               .control-group
                 %label.control-label{:for => "select01"} Location
                 .controls
-                  %select#select01.span2
-                    %option Country
-                    %option United States
-                    %option Canada
-                    %option England
-                    %option France
-                  %select#select02.span2
-                    %option State
-                    %option Alabama
-                    %option Alaska
-                    %option Arizona
-                    %option Arkansa
+                  = f.select :country, Carmen.countries, {}, { :class => 'span2'}
+                  = f.select :state, states_of(current_user.profile.country), {}, { :class => 'span2'}
                   = f.text_field :city, :placeholder => "City", :class => "input span2"
               .control-group
                 %label.control-label{:for => "input03"} Work
@@ -74,6 +69,7 @@
 
   :javascript
     $(function() {
+    //-------------------ajax autocomplete multiple values---------------------
       function split( val ) {
         return val.split( /,\s*/ );
       }
@@ -117,6 +113,23 @@
             this.value = terms.join( ", " );
             return false;
           }
+        });
+
+
+      //------------------ajax selectmenu for states-------------------
+
+        $("#profile_country").change(function(){
+            $.get("#{states_of_country_path}", { country_code: $(this).val()}, function(data) {
+              $("#profile_state").html('');
+              if(data.length > 0) {
+                $.each(data, function(index, val) {
+                  $("#profile_state").append("<option value=" +val[1] + ">" +val[0] + "</option>")
+                });
+              } else {
+                $("#profile_state").append("<option value=''>No States Available</option>")
+              }
+              
+            });
         });
     }); 
   

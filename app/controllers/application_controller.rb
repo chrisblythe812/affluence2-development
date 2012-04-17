@@ -17,5 +17,19 @@ class ApplicationController < ActionController::Base
   def set_profile_navigation
     @profile_navigation = true
   end
+  def states_of_country
+    begin
+      render :json => Carmen::states(params[:country_code]).to_json
+    rescue Carmen::StatesNotSupported, Carmen::NonexistentCountry
+      render :json => [].to_json
+    end
+  end
+  def resource_name
+    :user
+  end
+
+  def resource
+    current_user
+  end
 
 end
