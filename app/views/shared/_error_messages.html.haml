@@ -1,0 +1,9 @@
+- if target.errors.any?
+  #errorExplanation.alert.alert-error
+    %a.close{"data-dismiss" => "alert"}×
+    %h2.alert-heading
+      = pluralize(target.errors.count, "error")
+      prohibited this record from being saved:
+    %ul
+      - target.errors.full_messages.each do |msg|
+        %li= msg
