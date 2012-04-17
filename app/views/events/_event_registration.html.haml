@@ -1,4 +1,4 @@
-- if current_user.plan == 'free'
+- if current_user.plan == 'free' && display_free_modal == true
   .modal.hide.fade{:style => "display: none;", :id => "event#{event.id}-register"}
     .modal-header.well
       %a.close{"data-dismiss" => "modal", :href => "#"} ×
@@ -43,7 +43,7 @@
                             type : 'get',
                             url : '/profiles/user_plan?plan=Monthly&format=json',
                             datatype : 'json',
-                            //data : email,
+                            async: false,
                             headers: {
                                  'X-Transaction': 'POST Example',
                                  'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -62,7 +62,7 @@
                             type : 'get',
                             url : '/profiles/user_plan?plan=Yearly&format=json',
                             datatype : 'json',
-                            //data : email,
+                            async: false,
                             headers: {
                                  'X-Transaction': 'POST Example',
                                  'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -79,7 +79,7 @@
 
           });
 
--else
+-elsif current_user.plan == 'Yearly' || current_user.plan == 'Monthly'
   .modal.hide.fade{:style => "display: none;", :id => "event#{event.id}-register"}
     .modal-header
       %a.close{"data-dismiss" => "modal", :href => "#"} ×
