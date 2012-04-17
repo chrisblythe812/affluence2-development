@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:landing_page_events]
   before_filter :create_braintree_object, :only =>  [:index, :show]
 
   #ssl_required :index,:show
