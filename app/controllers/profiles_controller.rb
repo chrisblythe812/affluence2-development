@@ -79,7 +79,7 @@ class ProfilesController < ApplicationController
 
     if !session[:user_info].blank? && session[:user_info][:user][:plan] == 'free'
       @user = User.new(session[:user_info][:user])
-      if @user.save!
+      if @user.save
         sign_in @user
         session[:user_info] = nil
         redirect_to profile_path(current_user.permalink) and return
@@ -166,6 +166,18 @@ class ProfilesController < ApplicationController
       render :text => "settings"
     end
   end
+
+
+  def user_plan
+    session[:user_plan] = nil
+    session[:user_plan]= params[:plan]
+    respond_to do |format|
+      format.json do
+        render :status => 200, :json => {:plan => session[:user_plan]}
+      end
+    end
+  end
+
 
   def profile_session
     session[:user_info] = nil

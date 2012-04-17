@@ -45,11 +45,13 @@ Affluence2::Application.routes.draw do
   # Sample resource route with options:
      resources :events do
        member do
+         post :register
        end
   #
        collection do
          get 'home_page_events'
          get 'landing_page_events'
+         get 'confirm'
        end
      end
 
@@ -67,7 +69,7 @@ Affluence2::Application.routes.draw do
       get :autocomplete_expertise_name
       get :autocomplete_association_name
       get 'update_notifications'
-
+      get :user_plan
     end
   end
 
@@ -95,7 +97,13 @@ Affluence2::Application.routes.draw do
     collection do
       get 'latest'
     end
-  end  # Sample resource route with sub-resources:
+  end
+
+  resources :orders
+
+
+
+    # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
   #     resource :seller

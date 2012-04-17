@@ -2,7 +2,7 @@
   .well
     %ul.nav.nav-list
       %li.nav-header Account Settings
-      %li.active
+      %li{:class => "#{'active' if profiles?}"}
         %a{:href => '#'}
           %i.icon-home>
           Profile Info
@@ -24,8 +24,8 @@
           %i.icon-lock>
           Privacy
       %li.nav-header Order History
-      %li
-        %a{:href => ""}
+      %li{:class => "#{'active' if orders?}"}
+        %a{:href => orders_path}
           %i.icon-gift>
           Orders
 / span3

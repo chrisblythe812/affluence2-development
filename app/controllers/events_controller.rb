@@ -1,22 +1,80 @@
 class EventsController < ApplicationController
+
+  before_filter :authenticate_user!, :except => [:landing_page_events]
+  before_filter :create_braintree_object, :only =>  [:index, :show]
+
+  #ssl_required :index,:show
+
+
   def index
     @profile_tab = false
+    @events = Event.all
   end
 
-  def new
+
+  def show
+    @profile_tab = false
+    @event = Event.find(params[:id])
   end
 
-  def create
+
+  def register
+    @event = Event.find(params[:id])
+    @payable_promotion = PayablePromotion.new(params[:payable_promotion])
+    @payable_promotion.price_per_ticket = @event.price
+    @payable_promotion.user_id = current_user.id
+    @payable_promotion.promotion_id = @event.promotion.id
+    @payable_promotion.total_amount = calculate_total_amount(params[:payable_promotion][:total_tickets],@event.price)
+
+    if @payable_promotion.save
+      result = BrainTreeTranscation.event_payment(@payable_promotion)
+      if result == 'success'
+      redirect_to orders_path()
+      else
+      redirect_to events_path(@event)
+      end
+    end
+
   end
 
-  def edit
+
+  def calculate_total_amount(total_tickets,price_per_ticket,discount=nil)
+    total_amount = 0
+    if !total_tickets.blank?
+      total_amount = price_per_ticket*total_tickets.to_i
+    end
+    #todo add code for discounts
+    total_amount
   end
 
-  def update
+
+  def create_braintree_object
+    if current_user.plan == 'free'
+      @tr_data = Braintree::TransparentRedirect.
+          create_customer_data(:redirect_url => confirm_events_url())
+    else
+      current_user.with_braintree_data!
+    end
   end
 
-  def delete
-  end
+   def confirm
+     @event = Event.find(params[:event_id])
+     @result = Braintree::TransparentRedirect.confirm(request.query_string)
+     if @result.success?
+       current_user.plan = session[:user_plan]
+       current_user.braintree_customer_id = @result.customer.id
+       current_user.save
+       session[:user_plan]=nil
+       SubscriptionFeeTracker.create(:user_id => current_user.id,:renewal_date => Date.today, :amount => current_user.plan_amount )
+       redirect_to event_path(@event.id)
+     else
+       flash[:notice]= @result.errors._inner_inspect
+       redirect_to event_path(@event.id)
+     end
+   end
+
+
+
 
   def home_page_events
     get_latest

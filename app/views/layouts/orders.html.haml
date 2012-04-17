@@ -4,7 +4,6 @@
     = stylesheet_link_tag 'bootstrap', 'main'
     = javascript_include_tag 'application'
 
-
     :css
       body {
         padding-top: 60px;
@@ -27,10 +26,11 @@
     = render 'shared/header'
     .container
       .row
-        = yield :event_ending_info
-      .row
         = yield
       = render 'shared/footer'
 
 
+    / Placed at the end of the document so the pages load faster
+    / javascript
+    = yield(:accordion)
 

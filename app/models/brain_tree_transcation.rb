@@ -1,5 +1,22 @@
 class BrainTreeTranscation < ActiveRecord::Base
 
+  def self.event_payment(payable_promotion)
+   # todo need to check past payment by this user to event was success or not.
+   # if pastpayment was failure?
+   # if past payment was success?
+   # if user wants to but few more tickets ?
+   # if user wants to cancel the registration?
+    payment = PayablePromotion.pending_payment(payable_promotion)
+    if !payment.blank?
+      result = BrainTreeTranscation.do_payments_by_compare_local_and_remote_trans(payment)
+    else
+      payment = create_payment_object(payable_promotion)
+      result = BrainTreeTranscation.s2s_transaction(payment,payable_promotion)
+      respond_with_result(payment,result)
+
+
+    end
+  end
 
 
   def self.make_payment(subscription)
@@ -19,7 +36,7 @@ class BrainTreeTranscation < ActiveRecord::Base
   def self.make_payments_for_old_transactions(subscription)
     #past_payments.each do |past_payment|
       if  subscription.past_payment.status == 'pending'
-        result = BrainTreeTranscation.do_payments_by_compare_local_and_remote_trans(subscription)
+        result = BrainTreeTranscation.do_payments_by_compare_local_and_remote_trans(subscription.past_payment)
       elsif subscription.past_payment.status == 'failed'
         PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 8 , :log_level => 1 )
         result = BrainTreeTranscation.s2s_transaction(subscription.past_payment,subscription)
@@ -33,20 +50,20 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
 
-  def self.do_payments_by_compare_local_and_remote_trans(subscription)
-    PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 4 , :log_level => 1 )
-    local_bt_trans = self.local_bt_search(subscription.past_payment.uuid)
-    remote_bt_trans = self.remote_bt_search(subscription.past_payment.uuid)
+  def self.do_payments_by_compare_local_and_remote_trans(payment)
+    PaymentLog.create(:payment_id => payment.id, :info=> 4 , :log_level => 1 )
+    local_bt_trans = self.local_bt_search(payment.uuid)
+    remote_bt_trans = self.remote_bt_search(payment.uuid)
     if remote_bt_trans.blank?
-      PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 5 , :log_level => 1 )
-      result = BrainTreeTranscation.s2s_transaction(subscription.past_payment,subscription)
-      respond_with_result(subscription.past_payment,result)
+      PaymentLog.create(:payment_id => payment.id, :info=> 5 , :log_level => 1 )
+      result = BrainTreeTranscation.s2s_transaction(payment,'subscription')
+      respond_with_result(payment,result)
     elsif self.records_differ?(local_bt_trans,remote_bt_trans)
-      PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 6 , :log_level => 1 )
-      self.create_missing_transactions(remote_bt_trans,subscription.past_payment,subscription)
-      respond_with_last_transaction(subscription.past_payment)
+      PaymentLog.create(:payment_id => payment.id, :info=> 6 , :log_level => 1 )
+      self.create_missing_transactions(remote_bt_trans,payment,'subscription')
+      respond_with_last_transaction(payment)
     else
-      respond_with_last_transaction(subscription.past_payment)
+      respond_with_last_transaction(payment)
     end
   end
 
@@ -94,14 +111,14 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
 
-   def self.create_payment_object(subscription)
-     uuid =  "SubscriptionFeeTracker_#{UUID.new.generate}"
+   def self.create_payment_object(payment_object)
+     uuid =  "#{payment_object.class.name}_#{UUID.new.generate}"
      puts "Created new payment transaction with uuid - #{uuid}"
-     payment = Payment.new(:user_id => subscription.user_id,
-                           :braintree_customer_id => subscription.user.braintree_customer_id,
-                           :amount =>  subscription.amount,
-                           :payable_id => subscription.id,
-                           :payable_type => 'SubscriptionFeeTracker',
+     payment = Payment.new(:user_id => payment_object.user_id,
+                           :braintree_customer_id => payment_object.user.braintree_customer_id,
+                           :amount =>  payment_object.amount,
+                           :payable_id => payment_object.id,
+                           :payable_type => payment_object.class.name,
                            :uuid => uuid,
                            :trails_count => 1)
      payment.save
