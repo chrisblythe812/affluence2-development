@@ -1,44 +1,46 @@
-.span8
-  #myCarousel.carousel.slide
-    / Carousel items
-    .carousel-inner
-      .item.active
-        = image_tag('carousel-1.jpg')
-        .carousel-caption
-          %h4 First Thumbnail label
-          %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-      .item
-        = image_tag('carousel-2.jpg')
-        .carousel-caption
-          %h4 Second Thumbnail label
-          %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-      .item
-        = image_tag('carousel-3.jpg')
-        .carousel-caption
-          %h4 Third Thumbnail label
-          %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-    / carousel-inner
-    / Carousel nav
-    %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} ‹
-    %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"} ›
-  / carousel
-/ span8
-.span4
-  %h1 Affluence Events
-  %h6 Unparalleled Access Across The Globe
-  %br/
-  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-  %br/
-  %p
-    %a.btn.btn-primary{"data-toggle" => "modal", :href => "#event-schedule"} See Schedule
-/ span 3
-/ row
+.row
+  .span8
+    #myCarousel.carousel.slide
+      / Carousel items
+      .carousel-inner
+        .item.active
+          = image_tag('carousel-1.jpg')
+          .carousel-caption
+            %h4 First Thumbnail label
+            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+        .item
+          = image_tag('carousel-2.jpg')
+          .carousel-caption
+            %h4 Second Thumbnail label
+            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+        .item
+          = image_tag('carousel-3.jpg')
+          .carousel-caption
+            %h4 Third Thumbnail label
+            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+      / carousel-inner
+      / Carousel nav
+      %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} ‹
+      %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"} ›
+    / carousel
+  / span8
+  .span4
+    %h1 Affluence Events
+    %h6 Unparalleled Access Across The Globe
+    %br/
+    %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+    %br/
+    %p
+      %a.btn.btn-primary{"data-toggle" => "modal", :href => "#event-schedule"} See Schedule
+  / span 3
+  / row
 
 %h1 Current Events
 %br/
 .row
   - display_free_modal = (current_user.plan == 'free' ? true : false)
   - @events.each do |event|
+  - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{event.id}-register")
     .span4
       .thumbnail
         = display_image(event.promotion.photos)
@@ -46,13 +48,14 @@
           %h5 #{event.title}
           %p #{event.description}
           %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "#event#{event.id}-register"}
+            %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
               %i.icon-pencil.icon-white
               Register
             %a.btn.btn-small.btn-info{:href => event_path(event.id)}
               %i.icon-info-sign.icon-white
               More Info
-    = render :partial => 'event_registration', :locals => {:event => event, :display_free_modal => display_free_modal}
+    = render :partial => 'event_registration', :locals => {:event => event,
+    :display_free_modal => display_free_modal,:event_div_id => event_div_id}
     - display_free_modal =  false
 
 %h1 Past Events

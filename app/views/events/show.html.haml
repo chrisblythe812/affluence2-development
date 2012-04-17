@@ -19,8 +19,8 @@
           = image_tag('events-1.jpg')
 / span6 images
 .span6
-  %h1 Grammy Weekend
-  %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+  %h1 #{@event.title}
+  %p  #{@event.description}
   /
     Tabs
     \==================================================
@@ -103,10 +103,11 @@
         %li.span1
           %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
             %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSJXgIHrgms31dM7ZWyYIah0opjvvuccBCHoblNeN2v7hTre-hpQw"}
+  - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{@event.id}-register")
   .row
     .span2
       %p
-        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "#event#{@event.id}-register"}
+        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
           %i.icon-pencil.icon-white
           Register
     .span2
@@ -117,7 +118,7 @@
 
 
 / Register Modal
-= render :partial => 'event_registration', :locals => {:event => @event, :display_free_modal => true}
+= render :partial => 'event_registration', :locals => {:event => @event, :display_free_modal => true,:event_div_id => event_div_id}
 
 :javascript
   $(function () {

@@ -1,5 +1,5 @@
 - if current_user.plan == 'free' && display_free_modal == true
-  .modal.hide.fade{:style => "display: none;", :id => "event#{event.id}-register"}
+  .modal.hide.fade{:style => "display: none;", :id => "#{event_div_id}"}
     .modal-header.well
       %a.close{"data-dismiss" => "modal", :href => "#"} ×
       %h2 Become a Premium Member
@@ -80,7 +80,7 @@
           });
 
 -elsif current_user.plan == 'Yearly' || current_user.plan == 'Monthly'
-  .modal.hide.fade{:style => "display: none;", :id => "event#{event.id}-register"}
+  .modal.hide.fade{:style => "display: none;", :id => "#{event_div_id}"}
     .modal-header
       %a.close{"data-dismiss" => "modal", :href => "#"} ×
       %h3 Register : #{event.title}
