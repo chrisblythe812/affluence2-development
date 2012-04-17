@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
     }
   }
 
-
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -39,7 +38,6 @@ class User < ActiveRecord::Base
 
   validates_presence_of :plan
 
- 
   def superadmin?
     self.role == 'superadmin' 
   end

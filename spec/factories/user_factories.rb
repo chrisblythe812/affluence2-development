@@ -6,8 +6,10 @@ FactoryGirl.define do
   # last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil,
   # created_at: nil, updated_at: nil, status: nil, role: nil, unread_messages_counter: 0,
   # plan: nil, permalink: nil>
+  sequence(:email) {|n| "person-#{n}@example.com" }
+
   factory :user do
-    email 'john+1@gmail.com'
+    email
     password 'password'
     password_confirmation 'password'
     role 'member'

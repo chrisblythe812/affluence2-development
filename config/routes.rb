@@ -25,7 +25,8 @@ Affluence2::Application.routes.draw do
 
 
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"}
-
+ 
+  match "states_of_country", :to => "application#states_of_country"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -65,12 +66,14 @@ Affluence2::Application.routes.draw do
       get :autocomplete_interest_name 
       get :autocomplete_expertise_name
       get :autocomplete_association_name
+      get 'update_notifications'
+
     end
   end
 
 
-  match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
-  match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
+#  match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
+#  match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
 
 
 
