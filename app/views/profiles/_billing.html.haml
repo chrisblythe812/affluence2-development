@@ -38,18 +38,76 @@
               - else
                 = hidden_field_tag :tr_data, Braintree::TransparentRedirect.update_customer_data(:redirect_url => billing_info_update_confirm_profiles_url(),:customer_id => current_user.braintree_customer_id)
                 = hidden_field_tag 'customer[credit_card][options][update_existing_token]', @credit_card.token
+              = hidden_field_tag :user_plan,current_user.plan
               .form-actions
                 %button.btn.btn-primary{:type => "submit"} Save changes
           :javascript
             function validate_card_info(){
             var form_url = $('form.payment_form').attr("action");
-
             var card_number = $('#user_card_number');
+            var user_plan = $('#user_plan');
+            var plans = $("input[name='user_plan']");
+            var user_zip_code = $('#user_zip_code');
+
+            if (user_plan.val()=="free" && !(plans[0].checked))
+            {
+
+                         if (card_number.val()=="")
+                         {
+                            alert("Card can't be blank");
+                            return false
+                         }
+
+                         if (card_number.val().length<12 || card_number.val().length>19)
+                         {
+                           alert("Credit card number must be 12-19 digits");
+                           return false
+                         }
+
+
+                        if (user_zip_code.val()=="")
+                        {
+                          alert("CVV can't be blank");
+                          return false
+                        }
+
+                        if (user_zip_code.val().length<3 || user_zip_code.val().length>4)
+                        {
+                          alert("CVV must be 3 or 4 digits");
+                          return false
+                        }
+
+            }
+
+
+
             if (card_number.val()=="")
             {
             $('form.payment_form').attr("action","/profiles/update_plan");
             return true;
             }
+            else if(card_number.val()!="")
+            {
+                         if (card_number.val().length<12 || card_number.val().length>19)
+                         {
+                           alert("Credit card number must be 12-19 digits");
+                           return false
+                         }
+
+
+                        if (user_zip_code.val()=="")
+                        {
+                          alert("CVV can't be blank");
+                          return false
+                        }
+
+                        if (user_zip_code.val().length<3 || user_zip_code.val().length>4)
+                        {
+                          alert("CVV must be 3 or 4 digits");
+                          return false
+                        }
+            }
+
             return true;
 
             }
