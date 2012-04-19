@@ -131,6 +131,9 @@
 
     validate_userinfo : function(){
 
+                    var valid_text = /[^A-Za-z]/;
+
+
                     var first_name = $('#user_profile_attributes_first_name');
                     if (first_name.val()=="")
                     {
@@ -138,6 +141,15 @@
                     first_name.focus();
                     return false
                     }
+
+                    if ( valid_text.test(first_name.val()))
+                    {
+                     alert("Enter valid First Name");
+                     first_name.focus();
+                     return false
+                    }
+
+
 
 
                     var last_name = $('#user_profile_attributes_last_name');
@@ -147,6 +159,14 @@
                     last_name.focus();
                     return false
                     }
+
+                    if ( valid_text.test(last_name.val()))
+                    {
+                     alert("Enter valid Last Name");
+                     first_name.focus();
+                     return false
+                    }
+
 
                     var country = $('#select01');
                     if (country.val()=="")
