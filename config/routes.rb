@@ -70,6 +70,9 @@ Affluence2::Application.routes.draw do
       get :autocomplete_association_name
       get 'update_notifications'
       get :user_plan
+      get :billing_info_confirm
+      get :billing_info_update_confirm
+      post :update_plan
     end
   end
 

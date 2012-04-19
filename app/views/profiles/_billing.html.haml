@@ -5,63 +5,102 @@
   #collapseTwo.accordion-body.collapse{:style => "height: 0px; "}
     .accordion-inner
       #billing
-        - if @result
-          = h(@result.errors.inspect)
-        - if current_user.has_payment_info?
-          /%form.form-horizontal
-          = form_for :customer,
-              :url => Braintree::TransparentRedirect.url,
-              :params => @result && @result.params[:customer],
-              :builder => ApplicationHelper::BraintreeFormBuilder,
-              :errors => @result && @result.errors.for(:customer),
-              :existing => @credit_card,
-              :html => {:class => 'form-horizontal'} do |f|
+        = form_tag("#{Braintree::TransparentRedirect.url}",:class => "payment_form form-horizontal", :onSubmit => 'return validate_card_info();') do |f|
+          %fieldset
+            .control-group
+              %label.control-label Plan
+              #spinner{:style => "display:none"}
+                = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
+                %p Loading....
+              .controls
+                %label.radio
+                  - if current_user.plan == 'free'
+                    %input#optionsRadios1{:checked => "", :name => "user_plan", :type => "radio", :value => "free"}
+                      Free - limited access
+                %label.radio
+                  %input#optionsRadios2{:name => "user_plan", :type => "radio", :value => "Monthly",:checked => (current_user.plan == 'Monthly' ? true : false)}
+                    Monthly - $50 per Month
+                %label.radio
+                  %input#optionsRadios3{:name => "user_plan", :type => "radio", :value => "Yearly",:checked => (current_user.plan == 'Yearly' ? true : false)}
+                    Yearly - $450 per Year
+                    %em
+                      %strong Save 25%
+            %hr.zero
+              - if current_user.plan != 'free'
+                - content_for :old_card_fields do
+                  .control-group
+                    %label.control-label{:for => "input05"} Old Card Number
+                    .controls
+                      = @credit_card.masked_number#%input.input.span2{:name => "old_card", :size => "30", :type => "text",:value => @credit_card.masked_number}
+              = render :partial => '/registrations/credit_card_fields'
+              - if current_user.plan == 'free'
+                = hidden_field_tag :tr_data, Braintree::TransparentRedirect.create_customer_data(:redirect_url => billing_info_confirm_profiles_url())
+              - else
+                = hidden_field_tag :tr_data, Braintree::TransparentRedirect.update_customer_data(:redirect_url => billing_info_update_confirm_profiles_url(),:customer_id => current_user.braintree_customer_id)
+                = hidden_field_tag 'customer[credit_card][options][update_existing_token]', @credit_card.token
+              .form-actions
+                %button.btn.btn-primary{:type => "submit"} Save changes
+          :javascript
+            function validate_card_info(){
+            var form_url = $('form.payment_form').attr("action");
+
+            var card_number = $('#user_card_number');
+            if (card_number.val()=="")
+            {
+            $('form.payment_form').attr("action","/profiles/update_plan");
+            return true;
+            }
+            return true;
+
+            }
 
 
-            = field_set_tag "Credit Card" do
-              - f.fields_for :credit_card do |cc|
-                = cc.label :old_card, "Old card: #{@credit_card.masked_number}"
-                = cc.label :number, "New Card Number"
-                = cc.text_field :number, :value => @credit_card.masked_number
-                = cc.label :expiration_date, 'Exipration Date (MM/YY)'
-                = cc.text_field :expiration_date
-                = cc.label :cvv, 'CVV'
-                = cc.text_field :cvv
-            = hidden_field_tag :tr_data, @tr_data
 
-            .form-actions
-              %button.btn.btn-primary{:type => "submit"} Save changes
-        - else
-          - if @result
-            = h(@result.errors.inspect)
-          = form_for :customer,
-              :url => Braintree::TransparentRedirect.url,
-              :params => @result && @result.params[:customer],
-              :builder => ApplicationHelper::BraintreeFormBuilder,
-              :errors => @result && @result.errors.for(:customer),
-              :html => {:class => 'form-horizontal'} do |f|
-            /= field_set_tag "Customer" do
-            =# f.label :first_name, 'First Name'
-            = f.hidden_field :first_name, :value => current_user.profile.first_name
-            =# f.label :last_name, 'Last Name'
-            = f.hidden_field :last_name , :value => current_user.profile.last_name
-            =# f.label :phone, 'Phone'
-            = f.hidden_field :phone  , :value => current_user.profile.phone
-            =# f.label :email, 'Email'
-            = f.hidden_field :email,:value => current_user.email
+          :javascript
+                $(function () {
+                  $('#optionsRadios2').click(function(){
+                                  $.ajax({
+                                  type : 'get',
+                                  url : '/profiles/user_plan?plan=Monthly&format=json',
+                                  datatype : 'json',
+                                  async: false,
+                                  //beforeSend: function() {
+                                        //$("#spinner").show();
+                                  //},
+                                  headers: {
+                                       'X-Transaction': 'POST Example',
+                                       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                     },
+                                  success : function(data) {
+                                  //$("#spinner").hide();
 
-            = field_set_tag "Credit Card" do
-              - f.fields_for :credit_card do |cc|
-                = cc.label :number, 'Number'
-                = cc.text_field :number
-                = cc.label :expiration_date, 'Exipration Date (MM/YY)'
-                = cc.text_field :expiration_date
-                = cc.label :cvv, 'CVV'
-                = cc.text_field :cvv
-            = hidden_field_tag :tr_data, @tr_data
+                                  },
+                                  error : function(data){
+                                  //$("#spinner").hide();
+                                  }
+                                });
+                       });
+                  $('#optionsRadios3').click(function(){
+                                  $.ajax({
+                                  type : 'get',
+                                  url : '/profiles/user_plan?plan=Yearly&format=json',
+                                  datatype : 'json',
+                                  async: false,
+                                  headers: {
+                                       'X-Transaction': 'POST Example',
+                                       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                     },
+                                  success : function(data) {
+                                  //alert('success');
 
-            .form-actions
-              %button.btn.btn-primary{:type => "submit"} Save changes
+                                  },
+                                  error : function(data){
+                                  //alert('error');
+                                  }
+                                });
+                       });
+
+                });
       / billing
     / accordion-inner
   / accordion-body

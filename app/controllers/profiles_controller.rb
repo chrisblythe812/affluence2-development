@@ -7,6 +7,7 @@ class ProfilesController < ApplicationController
 
   before_filter :authenticate_user! , :except => [:profile_session, :confirm, :check_avilability]
   before_filter :set_profile_navigation, :except => [:settings,:confirm,:confirm_credit_card_info,:profile_billing]
+  before_filter :create_braintree_object, :only =>  [:edit]
 
   def index
 
@@ -203,6 +204,56 @@ class ProfilesController < ApplicationController
       format.json do
         render :status => 200, :json => {:avilability => avilability} and return
       end
+    end
+  end
+
+  def billing_info_confirm
+    @result = Braintree::TransparentRedirect.confirm(request.query_string)
+    if @result.success?
+      current_user.plan = session[:user_plan]
+      current_user.braintree_customer_id = @result.customer.id
+      current_user.save
+      session[:user_plan]=nil
+      SubscriptionFeeTracker.create(:user_id => current_user.id,:renewal_date => Date.today, :amount => current_user.plan_amount )
+      redirect_to edit_profile_path(current_user.permalink)
+    else
+      flash[:notice]= @result.errors._inner_inspect
+      redirect_to edit_profile_path(current_user.permalink)
+    end
+  end
+
+  def billing_info_update_confirm
+    @result = Braintree::TransparentRedirect.confirm(request.query_string)
+    if @result.success?
+      if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
+         current_user.plan = session[:user_plan]
+         current_user.save
+         session[:user_plan]=nil
+         update_subscription(current_user)
+      end
+    else
+      render :text => @result.errors._inner_inspect and return
+        flash[:notice]= @result.errors._inner_inspect
+    end
+    redirect_to edit_profile_path(current_user.permalink)
+  end
+
+  def update_plan
+    if !params[:user_plan].blank?
+      current_user.plan = params[:user_plan]
+      current_user.save
+      session[:user_plan]=nil
+      update_subscription(current_user)
+      redirect_to edit_profile_path(current_user.permalink)
+    end
+
+  end
+
+
+  def update_subscription(current_user)
+    user_subscription = SubscriptionFeeTracker.where(:user_id => current_user.id).not_completed.last
+    if !user_subscription.blank?
+      user_subscription.update_attributes(:amount => current_user.plan_amount)
     end
   end
 

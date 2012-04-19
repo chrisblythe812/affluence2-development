@@ -5,6 +5,10 @@ class SubscriptionFeeTracker < ActiveRecord::Base
   RETRIES = 3
   INTERVALS = 2
 
+  scope :pending, :conditions => {:status => 'pending'}
+  scope :failed, :conditions => {:status => 'failed'}
+  scope :not_completed, :conditions => ["status like 'pending' OR status like 'failed'"]
+
 
   def self.do_subscriptions(subscriptions)
     if !subscriptions.blank?
