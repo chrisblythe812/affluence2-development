@@ -38,14 +38,14 @@
               - else
                 = hidden_field_tag :tr_data, Braintree::TransparentRedirect.update_customer_data(:redirect_url => billing_info_update_confirm_profiles_url(),:customer_id => current_user.braintree_customer_id)
                 = hidden_field_tag 'customer[credit_card][options][update_existing_token]', @credit_card.token
-              = hidden_field_tag :user_plan,current_user.plan
+              = hidden_field_tag :present_user_plan,current_user.plan
               .form-actions
                 %button.btn.btn-primary{:type => "submit"} Save changes
           :javascript
             function validate_card_info(){
             var form_url = $('form.payment_form').attr("action");
             var card_number = $('#user_card_number');
-            var user_plan = $('#user_plan');
+            var user_plan = $('#present_user_plan');
             var plans = $("input[name='user_plan']");
             var user_zip_code = $('#user_zip_code');
 
