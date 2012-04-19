@@ -32,4 +32,13 @@ class ApplicationController < ActionController::Base
     current_user
   end
 
+  def create_braintree_object
+    if current_user.plan != 'free'
+      current_user.with_braintree_data!
+      @credit_card = current_user.default_credit_card
+    end
+  end
+
+
+
 end

@@ -31,7 +31,8 @@ class EventsController < ApplicationController
       if result == 'success'
       redirect_to orders_path()
       else
-      redirect_to events_path(@event)
+      flash[:notice]= @result.errors._inner_inspect
+      redirect_to event_path(@event.id)
       end
     end
 
@@ -48,14 +49,14 @@ class EventsController < ApplicationController
   end
 
 
-  def create_braintree_object
-    if current_user.plan == 'free'
-      @tr_data = Braintree::TransparentRedirect.
-          create_customer_data(:redirect_url => confirm_events_url())
-    else
-      current_user.with_braintree_data!
-    end
-  end
+  #def create_braintree_object
+    #if current_user.plan == 'free'
+     # @tr_data = Braintree::TransparentRedirect.
+          #create_customer_data(:redirect_url => confirm_events_url())
+    #else
+     # current_user.with_braintree_data!
+    #end
+  #end
 
    def confirm
      @event = Event.find(params[:event_id])
