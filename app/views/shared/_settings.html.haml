@@ -3,19 +3,19 @@
     %ul.nav.nav-list
       %li.nav-header Account Settings
       %li{:class => "#{'active' if profiles?}"}
-        %a{:href => '#'}
+        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#{profiles? ? '#collapseOne':edit_profile_path(current_user.permalink)}" }
           %i.icon-home>
           Profile Info
       %li
-        %a{:href => '#'}
+        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseTwo" }
           %i.icon-shopping-cart>
           Billing Info
       %li
-        %a{:href => '#'}
+        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseThree"}
           %i.icon-envelope>
           Notifications
       %li
-        %a{:href => '#'}
+        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseFour"}
           %i.icon-lock>
           Change Password
       %li.nav-header Privacy Settings

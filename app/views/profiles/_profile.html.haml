@@ -3,7 +3,7 @@
     %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseOne" }
       %h3 Profile Info
   / according-heading
-  #collapseOne.accordion-body.in.collapse{:style => "height: auto; "}
+  #collapseOne.accordion-body.in{:style => "height: auto; "}
     .accordion-inner
       #profile
         = form_for @profile, :html => { :class => "form-horizontal" } do |f|
@@ -14,8 +14,6 @@
                 = f.fields_for :photos, :html => { :multipart => true } do |x|
                   = x.file_field :image, :class => 'input-file', :id => 'fileInput'
                   = x.hidden_field :photoable_type
-                  %br
-                  = x.text_field :title, :placeholder => "Title", :class => "input span2"
   
             %hr
               .control-group
