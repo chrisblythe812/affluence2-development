@@ -70,4 +70,15 @@ Affluence2::Application.configure do
 
   #Ensure you have defined default url options.
   config.action_mailer.default_url_options = { :host => 'affluence.org' }
+
+  ActionMailer::Base.smtp_settings = {
+      :address        => "smtp.sendgrid.net",
+      :port           => "25",
+      :authentication => :plain,
+      :user_name      => "affluence_development",
+      :password       => "password",
+      :domain         => "heroku.com"
+  }
+
+
 end
