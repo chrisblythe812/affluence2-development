@@ -29,10 +29,14 @@ class EventsController < ApplicationController
     if @payable_promotion.save
       result = BrainTreeTranscation.event_payment(@payable_promotion)
       if result == 'success'
-      redirect_to orders_path()
+        NotificationTracker.event_notification_on_successful_registration(current_user,@event)
+        redirect_to orders_path()
+      elsif result == 'failed'
+        flash[:notice]= 'Transaction failed'
+        redirect_to event_path(@event.id)
       else
-      flash[:notice]= @result.errors._inner_inspect
-      redirect_to event_path(@event.id)
+        flash[:notice]= @result.errors._inner_inspect
+        redirect_to event_path(@event.id)
       end
     end
 

@@ -46,8 +46,8 @@ Affluence2::Application.configure do
     :address        => "smtp.sendgrid.net",
     :port           => "25",
     :authentication => :plain,
-    :user_name      => "app1419099@heroku.com",
-    :password       => "e55ljkwa",
+    :user_name      => "affluence_development",
+    :password       => "password",
     :domain         => "heroku.com"
   }
 
