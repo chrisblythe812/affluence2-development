@@ -70,7 +70,7 @@ module ApplicationHelper
   end
 
   def profiles_privacy?
-    params[:controller] == 'profiles' && params[:action] == 'privacy'
+    params[:controller] == 'profiles' && params[:action] == 'edit_privacy'
   end
 
    def orders?

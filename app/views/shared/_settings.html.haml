@@ -20,7 +20,7 @@
             %i.icon-lock>
             Change Password
       - else
-        %li
+        %li{:class => "#{'active' if profiles_edit?}"}
           %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
             %i.icon-home>
             Profile Info
