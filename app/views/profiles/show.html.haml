@@ -45,7 +45,7 @@
     .span9
       %h3 Activity
       %table.table.table-striped
-        - @latest_activities = current_user.activities.last(9)
+        - @latest_activities = current_user.activities.last(9).reverse
         = render :partial => "activities/latest", :object => @latest_activities
     / span9
   / row

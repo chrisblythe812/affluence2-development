@@ -7,22 +7,41 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :promotions
   has_many :connections
   has_many :connections_activities, :class_name => "Activity", :finder_sql => Proc.new {
-    ids=[]
-    ids<<id
-    self.connections.each{|x| ids<<x.id}
-    temp = '' 
-    ids.each_index{|x|
-      temp =   temp + ids[x].to_s
-      temp = temp + ',' unless x==ids.length-1
-    }
-    %Q{
-      SELECT  *
-      FROM activities
-      WHERE user_id IN (#{id})
-      ORDER BY updated_at DESC
-      LIMIT 6 OFFSET 0;
-    }
+#    ids=[]
+#    ids<<id
+#    self.connections.each{|x| ids<<x.friend.id}
+#    temp = ''
+#    ids.each_index{|x|
+#      temp =   temp + ids[x].to_s
+#      temp = temp + ',' unless x==ids.length-1
+#    }
+#    %Q{
+#      SELECT  *
+#      FROM activities
+#      WHERE user_id IN (#{id})
+#      ORDER BY updated_at DESC
+#      LIMIT 6 OFFSET 0;
+#    }
   }
+  def connections_activities
+    ids=[]
+    ids<<self.id
+    self.connections.each{|x| ids<<x.friend.id}
+
+    activities = []
+    begin
+      activity = activity ? Activity.previous(activity).first : Activity.last
+
+      next unless ids.include? activity.user.id
+      privacy =  activity.user.profile.privacy_setting
+
+      activities << activity if [0, 1].include? (privacy.send(Activity::OPTS[activity.resource_type]))
+    end while activities.length < 7
+
+    activities
+  end
+
+
   has_many :payments
 
   # Include default devise modules. Others available are:

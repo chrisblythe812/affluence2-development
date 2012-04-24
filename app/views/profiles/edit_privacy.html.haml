@@ -1,0 +1,82 @@
+= render 'shared/settings'
+.span9
+  #privacy
+    %h2 Privacy Settings
+    %hr.zero
+      #notifications
+        %table.table.table-bordered.table-striped
+          %tbody
+            %tr
+              %td Events I am Attending
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.events == 0 ? 'active':''}", :name => 'events', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.events == 1 ? 'active':''}", :name => 'events', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.events == 2 ? 'active':''}", :name => 'events', :value => '2'} Nobody
+            %tr
+              %td Offers I have Activated
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.offers == 0 ? 'active':''}", :name => 'offers', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.offers == 1 ? 'active':''}", :name => 'offers', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.offers == 2 ? 'active':''}", :name => 'offers', :value => '2'} Nobody
+            %tr
+              %td When I use the Concierge
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.concierge == 0 ? 'active':''}", :name => 'concierge', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.concierge == 1 ? 'active':''}", :name => 'concierge', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.concierge == 2 ? 'active':''}", :name => 'concierge', :value => '2'} Nobody
+            %tr
+              %td My Photo's
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.photos == 0 ? 'active':''}", :name => 'photos', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.photos == 1 ? 'active':''}", :name => 'photos', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.photos == 2 ? 'active':''}", :name => 'photos', :value => '2'} Nobody
+            %tr
+              %td When I send an Invitation
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.invitations == 0 ? 'active':''}", :name => 'invitations', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.invitations == 1 ? 'active':''}", :name => 'invitations', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.invitations == 2 ? 'active':''}", :name => 'invitations', :value => '2'} Nobody
+            %tr
+              %td When I make a new Contact
+              %td
+                .btn-group{"data-toggle" => "buttons-radio"}
+                  %button.btn.btn-success{:class => "#{current_user.profile.privacy_setting.new_contact == 0 ? 'active':''}", :name => 'new_contact', :value => '0'} Everyone
+                  %button.btn.btn-primary{:class => "#{current_user.profile.privacy_setting.new_contact == 1 ? 'active':''}", :name => 'new_contact', :value => '1'} Contacts Only
+                  %button.btn.btn-danger{:class => "#{current_user.profile.privacy_setting.new_contact == 2 ? 'active':''}", :name => 'new_contact', :value => '2'} Nobody
+      / notifications
+
+  :javascript
+    $(function() {
+    $('#notifications td button').click(function(){
+      if(!$(this).hasClass('active')){
+        $.get("#{update_privacy_profiles_path}",
+          { name: $(this).attr('name'), value: $(this).val()},
+          function(data) {
+            if (data.notice != undefined) {
+            console.debug(data.notice);
+            }
+            else if (data.error != undefined) {
+ 
+            }
+            else {
+            console.debug('error');
+ 
+            }
+  
+
+          });
+      }
+    });
+
+    });
+
+
+
+  
+
+

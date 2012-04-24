@@ -24,7 +24,9 @@
         }
   %body
     = render 'shared/header'
+
     .container
+      = render 'shared/flash_message'
       .row
         = yield
       = render 'shared/footer'

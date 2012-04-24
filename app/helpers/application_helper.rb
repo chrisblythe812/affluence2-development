@@ -65,7 +65,15 @@ module ApplicationHelper
     params[:controller] == 'profiles'
   end
 
-  def orders?
+  def profiles_edit?
+    params[:controller] == 'profiles' && params[:action] == 'edit'
+  end
+
+  def profiles_privacy?
+    params[:controller] == 'profiles' && params[:action] == 'privacy'
+  end
+
+   def orders?
     params[:controller] == 'orders'
   end
 

@@ -9,7 +9,7 @@
 images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2.jpg', 'offer-3.jpg', 'profile-1.jpg', 'profile-2.jpg', 'profile-3.jpg', 'profile-4.jpg']
 
 # Events seed data
-#Event.all.each{|event| event.destroy}
+Event.all.each{|event| event.destroy}
 
 #<Event id: nil, title: nil, description: nil, price: nil, created_at: nil, updated_at: nil>
 #<Promotion id: nil, promotionable_id: nil, promotionable_type: "Event", created_at: nil, updated_at: nil>
@@ -76,7 +76,7 @@ if Event.all.blank?
 end  
 
 # Offers seed data
-#Offer.all.each{|offer| offer.destroy}
+Offer.all.each{|offer| offer.destroy}
 
 #<Offer id: nil, title: nil, description: nil, created_at: nil, updated_at: nil>
 #<Promotion id: nil, promotionable_id: nil, promotionable_type: "Offer", created_at: nil, updated_at: nil>
@@ -186,8 +186,8 @@ end
 
  
 # conversation seed data
-Conversation.all.each{|offer| offer.destroy}
-Connection.all.each{|offer| offer.destroy}
+Conversation.all.each{|x| x.destroy}
+Connection.all.each{|x| x.destroy}
 
 subjects = ["The new baby has my old room.",
   "We decorated the room with wallpaper.",
@@ -288,10 +288,7 @@ conversations.each do |conversation|
 
 end
 
-User.members.each do |user|
-  user.profile.city = 'hyderabad'
-  user.save
-end
+
 
 # init tags
 tags=['Golf', 'Paddle', 'Tennis', 'Water Sports', 'Fishing', 'Hunting', 'Swimming',

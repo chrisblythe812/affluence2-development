@@ -52,17 +52,3 @@
     / accordion-inner
   / accordion-body
 / accordion-group
-:javascript
-  $(function(){
-    $('#notifications td button').click(function(){
-      if(!$(this).hasClass('active')){
-        $.get("#{update_notifications_profiles_path}",
-          { name: $(this).attr('name'), value: $(this).val()},
-          function(data) {
-            $("#profile_state").html('');
-            console.debug(  "disabled"  );
-
-          });
-      }
-    });
-  });

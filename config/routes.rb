@@ -73,6 +73,8 @@ Affluence2::Application.routes.draw do
       get :billing_info_confirm
       get :billing_info_update_confirm
       post :update_plan
+      get 'edit_privacy'
+      get 'update_privacy'
     end
   end
 

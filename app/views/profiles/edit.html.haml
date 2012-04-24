@@ -10,12 +10,28 @@
 - content_for :accordion do
   :javascript
     $(function() {
-      $(".nav li").click(function(e){
+    $('#notifications td button').click(function(){
+      if(!$(this).hasClass('active')){
+        $.get("#{update_notifications_profiles_path}",
+          { name: $(this).attr('name'), value: $(this).val()},
+          function(data) {
+            $("#profile_state").html('');
+            console.debug(  "disabled"  );
+
+          });
+      }
+    });
+      $("#settings li").click(function(e){
         console.debug($(this).children('a'));
         if($(this).children('a').data("parent")==="#accordion2") { console.debug($(this).children('a'));e.preventDefault();}
 
-        $(".nav li").removeClass("active");
+        $("#settings li").removeClass("active");
         $(this).addClass("active");
       });
- 
+      $(".accordion-group").click(function(e){
+        console.debug($(this).index());
+
+        $("#settings li").removeClass("active");
+         $("#settings li").eq($(this).index()+1).addClass("active");
+      });
     });

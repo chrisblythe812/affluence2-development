@@ -1,26 +1,44 @@
 .span3
   .well
-    %ul.nav.nav-list
+    %ul.nav.nav-list#settings
       %li.nav-header Account Settings
-      %li{:class => "#{'active' if profiles?}"}
-        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#{profiles? ? '#collapseOne':edit_profile_path(current_user.permalink)}" }
-          %i.icon-home>
-          Profile Info
-      %li
-        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseTwo" }
-          %i.icon-shopping-cart>
-          Billing Info
-      %li
-        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseThree"}
-          %i.icon-envelope>
-          Notifications
-      %li
-        %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseFour"}
-          %i.icon-lock>
-          Change Password
+      - if profiles_edit?
+        %li{:class => "active"}
+          %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseOne" }
+            %i.icon-home>
+            Profile Info
+        %li
+          %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseTwo" }
+            %i.icon-shopping-cart>
+            Billing Info
+        %li
+          %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseThree"}
+            %i.icon-envelope>
+            Notifications
+        %li
+          %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseFour"}
+            %i.icon-lock>
+            Change Password
+      - else
+        %li
+          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+            %i.icon-home>
+            Profile Info
+        %li
+          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+            %i.icon-shopping-cart>
+            Billing Info
+        %li
+          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+            %i.icon-envelope>
+            Notifications
+        %li
+          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+            %i.icon-lock>
+            Change Password
       %li.nav-header Privacy Settings
-      %li
-        %a{:href => ""}
+      %li{:class => "#{'active' if profiles_privacy?}"}
+        %a{:href => "#{edit_privacy_profiles_path}"}
           %i.icon-lock>
           Privacy
       %li.nav-header Order History

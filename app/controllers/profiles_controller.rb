@@ -257,4 +257,19 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def edit_privacy
+
+  end
+
+  def update_privacy
+    begin
+      p params
+      @privacy_setting = current_user.profile.privacy_setting
+      @privacy_setting.update_attributes(params["name"].to_sym => params["value"].to_i)
+      render :json => {'notice' => params["name"] + ' setting updated successfully'}.to_json
+    rescue
+      render :json => {'error' => params["name"] + ' setting not updated successfully'}.to_json
+    end
+  end
+          
 end

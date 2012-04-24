@@ -21,6 +21,9 @@ class Photo < ActiveRecord::Base
       elsif  self.photoable.promotionable_type == 'Offer'
         { :medium => ['210x100#', :png]}
       end
+    elsif self.photoable_type.nil?
+      p "photoable_type is nil "
+      { :medium => ['260x260#', :png], :thumb => ['60x60#', :png] }
     end
   end
     
