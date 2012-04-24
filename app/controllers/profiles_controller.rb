@@ -7,7 +7,7 @@ class ProfilesController < ApplicationController
 
   before_filter :authenticate_user! , :except => [:profile_session, :confirm, :check_avilability]
   before_filter :set_profile_navigation, :except => [:settings,:confirm,:confirm_credit_card_info,:profile_billing]
-  before_filter :create_braintree_object, :only =>  [:edit]
+  before_filter :create_braintree_object, :only =>  [:edit, :update]
 
   def index
 
