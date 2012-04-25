@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
       next unless ids.include? activity.user.id
       privacy =  activity.user.profile.privacy_setting
       if activity.resource_type == 'Profile'
-        activities << activity
+        #activities << activity
       else
         activities << activity if [0, 1].include? (privacy.send(Activity::OPTS[activity.resource_type]))
       end

@@ -32,7 +32,7 @@ def self.all_by_privacy_setting
       privacy =  activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
-        activities << activity
+        #activities << activity
       else
         activities << activity if (privacy.send(OPTS[activity.resource_type]) == 0)
       end
