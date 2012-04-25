@@ -28,12 +28,22 @@ def self.all_by_privacy_setting
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
+      break unless activity
       privacy =  activity.user.profile.privacy_setting
 
       activities << activity if privacy.send(OPTS[activity.resource_type]) == 0
     end while activities.length < 7
 
     activities
+
+end
+
+
+  def self.create_user_event(user,event)
+    create(:user_id  => user.id,
+           :body => "has registered for the #{event.title} Event",
+           :resource_type => 'Event',
+           :resource_id => event.id)
 
   end
   

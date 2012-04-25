@@ -12,6 +12,24 @@ class NotificationTracker < ActiveRecord::Base
   end
 
 
+  def self.subscription_notification_on_failure_payment(subscription)
+    subject = "Payment failure notification"
+    body = "Payment failure notification for the user"
+    params = {:user_id => subscription.user_id, :channel => 'email', }
+   create(:user_id => user, :channel => 'email', :subject => subject, :notifiable_id => subscription.id, :notifiable_type => 'SubscriptionFeeTracker',
+         :status => 'pending',
+         :scheduled_date => Date.today )
+   end
+
+
+  def self.subscription_notification_on_success_payment(subscription)
+    subject = "Payment success notification"
+    body = "Payment success notification for the user"
+    params = {:user_id => subscription.user_id, :channel => 'email', }
+    create(:user_id => user, :channel => 'email', :subject => subject, :notifiable_id => subscription.id, :notifiable_type => 'SubscriptionFeeTracker',
+           :status => 'pending',:scheduled_date => Date.today )
+  end
+
 
   def self.send_email_notification(notifications)
     if !notifications.blank?

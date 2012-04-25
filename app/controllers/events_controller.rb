@@ -29,13 +29,16 @@ class EventsController < ApplicationController
     if @payable_promotion.save
       result = BrainTreeTranscation.event_payment(@payable_promotion)
       if result == 'success'
+        Activity.create_user_event(current_user,@event)
         NotificationTracker.event_notification_on_successful_registration(current_user,@event)
+        flash[:success]= 'Your have successfully registered for the event'
         redirect_to orders_path()
       elsif result == 'failed'
-        flash[:notice]= 'Transaction failed'
+        flash[:error]= 'Your event registration failed due to unsuccessful transaction'
         redirect_to event_path(@event.id)
       else
-        flash[:notice]= @result.errors._inner_inspect
+        flash[:error]= 'Your event registration failed due to unsuccessful transaction'
+        #flash[:error]= @result.errors._inner_inspect
         redirect_to event_path(@event.id)
       end
     end

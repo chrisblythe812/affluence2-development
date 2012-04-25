@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
     activities = []
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
-
+      break unless activity
       next unless ids.include? activity.user.id
       privacy =  activity.user.profile.privacy_setting
 

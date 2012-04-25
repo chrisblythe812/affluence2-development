@@ -19,9 +19,9 @@ class SubscriptionFeeTracker < ActiveRecord::Base
         if result == 'success'
           subscription.update_attribute(:status, "completed")
           create_next_billing_record(subscription)
+          NotificationTracker.subscription_notification_on_success_payment(subscription)
         elsif result == 'failed'
-          # todo need to send email notification to user
-          # todo create record in notification_trackers
+          NotificationTracker.subscription_notification_on_failure_payment(subscription)
           subscription.update_with_number_of_trails_left
         end
 

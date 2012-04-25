@@ -26,6 +26,7 @@
   %body
     = render 'shared/header'
     .container
+      = render 'shared/flash_message'
       .row
         = yield :event_ending_info
       = yield

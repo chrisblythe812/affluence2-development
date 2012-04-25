@@ -26,7 +26,7 @@ namespace :affluence2 do
 
   end
 
-  desc "This will send emails to all the records that were created in notification trackers"
+  desc "This will send emails to all the records that were scheduled in notification trackers"
   task :email_notifications => :environment do
 
    notifications =  NotificationTracker.where(

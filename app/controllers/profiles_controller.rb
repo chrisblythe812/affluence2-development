@@ -215,7 +215,7 @@ class ProfilesController < ApplicationController
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
        change_current_plan(session[:user_plan],@result.customer.id)
-      flash[:notice]= "You have successfully converted to #{current_user.plan} plan."
+       flash[:success]= "You have successfully converted to #{current_user.plan} plan."
       redirect_to edit_profile_path(current_user.permalink)
     else
       @profile = current_user.profile
@@ -240,7 +240,7 @@ class ProfilesController < ApplicationController
       create_braintree_object
       render action: :edit and return
     end
-    flash[:notice]= "Card information was successfully updated."
+    flash[:success]= "Card information was successfully updated."
     redirect_to edit_profile_path(current_user.permalink)
   end
 
@@ -261,7 +261,7 @@ class ProfilesController < ApplicationController
       current_user.save
       session[:user_plan]=nil
       update_subscription(current_user)
-      flash[:notice]= "Your Plan has successfully changed to #{params[:user_plan]}."
+      flash[:success]= "Your Plan has successfully changed to #{params[:user_plan]}."
     end
   end
 
