@@ -31,7 +31,12 @@ def self.all_by_privacy_setting
       break unless activity
       privacy =  activity.user.profile.privacy_setting
 
-      activities << activity if privacy.send(OPTS[activity.resource_type]) == 0
+      if activity.resource_type == 'Profile'
+        activities << activity
+      else
+        activities << activity if (privacy.send(OPTS[activity.resource_type]) == 0)
+      end
+
     end while activities.length < 7
 
     activities
