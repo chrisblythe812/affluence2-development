@@ -4,7 +4,7 @@ class NotificationTracker < ActiveRecord::Base
   belongs_to :notifiable, :polymorphic => true
 
   def self.event_notification_on_successful_registration(user,event)
-   notification_tracker = create(:user_id => user, :channel => 'email', :subject => "Successfull event registration",
+   notification_tracker = create(:user_id => user, :channel => 'email', :subject => "Successfull event registration(Test email)",
           :body => "Successfull event registration",:status => 'pending',
           :notifiable_id => event.id, :notifiable_type => 'Event',
           :scheduled_date => Date.today)

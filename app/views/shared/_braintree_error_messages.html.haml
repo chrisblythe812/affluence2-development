@@ -1,0 +1,9 @@
+- if @result && @result.errors.any?
+  #errorExplanation.alert.alert-error
+    %a.close{"data-dismiss" => "alert"}×
+    %h4.alert-heading
+      = pluralize(@result.errors.for(:customer).for(:credit_card).size, "error")
+      prohibited  from being saved:
+    %ul
+      - @result.errors.for(:customer).for(:credit_card).each do |error|
+        %li= error.message

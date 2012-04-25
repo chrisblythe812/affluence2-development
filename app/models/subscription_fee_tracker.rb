@@ -73,6 +73,11 @@ class SubscriptionFeeTracker < ActiveRecord::Base
     Payment.where(:payable_id => id, :payable_type => 'SubscriptionFeeTracker').last
   end
 
+   def self.schedule(user)
+     create(:user_id => user.id,:renewal_date => Date.today, :amount => user.plan_amount )
+   end
+
+
 
 
 end
