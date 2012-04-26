@@ -1,8 +1,9 @@
 = yield :old_card_fields
+- error_class = (!@result.blank? && @result.errors.for(:customer).for(:credit_card).on(:number)) ? 'error':''
 .control-group
   %label.control-label{:for => "input05"} Card Number
   .controls
-    %input#user_card_number.input.span2{:name => "customer[credit_card][number]", :size => "30", :type => "text"}
+    %input#user_card_number.input.span2{:name => "customer[credit_card][number]", :size => "30", :type => "text", :class => error_class}
 .control-group
   %label.control-label{:for => "select02"} Expiration Date
   .controls
