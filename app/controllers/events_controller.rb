@@ -67,6 +67,7 @@ class EventsController < ApplicationController
 
    def confirm
      @event = Event.find(params[:event_id])
+     begin
      @result = Braintree::TransparentRedirect.confirm(request.query_string)
      if @result.success?
        current_user.plan = session[:user_plan]
@@ -76,7 +77,11 @@ class EventsController < ApplicationController
        SubscriptionFeeTracker.create(:user_id => current_user.id,:renewal_date => Date.today, :amount => current_user.plan_amount )
        redirect_to event_path(@event.id)
      else
-       flash[:notice]= @result.errors._inner_inspect
+       #flash[:notice]= @result.errors._inner_inspect
+       #redirect_to event_path(@event.id)
+       render action: :show
+     end
+     rescue
        redirect_to event_path(@event.id)
      end
    end

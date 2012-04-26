@@ -277,6 +277,14 @@
                    return false
                    }
 
+                   var user_billing_zip_code = $('#user_billing_zip_code');
+                   if (user_billing_zip_code.val()=="")
+                   {
+                     alert("Billing ZIP can't be blank");
+                     return false
+                   }
+
+
                   }
                    var email_avilability = $('#email_avilability');
                    if (email_avilability.val()=="false")
