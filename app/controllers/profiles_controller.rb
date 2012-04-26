@@ -212,6 +212,7 @@ class ProfilesController < ApplicationController
 
 
   def billing_info_confirm
+    begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
        change_current_plan(session[:user_plan],@result.customer.id)
@@ -224,12 +225,17 @@ class ProfilesController < ApplicationController
       create_braintree_object
       render action: :edit and return
     end
+    rescue
+      redirect_to edit_profile_path(current_user.permalink)
+    end
+
   end
 
 
 
 
   def billing_info_update_confirm
+    begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
       change_current_plan(session[:user_plan])
@@ -242,6 +248,9 @@ class ProfilesController < ApplicationController
     end
     flash[:success]= "Card information was successfully updated."
     redirect_to edit_profile_path(current_user.permalink)
+    rescue
+      redirect_to edit_profile_path(current_user.permalink)
+    end
   end
 
 
