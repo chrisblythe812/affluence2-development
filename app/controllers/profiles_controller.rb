@@ -298,5 +298,12 @@ class ProfilesController < ApplicationController
       render :json => {'error' => params["name"] + ' setting not updated successfully'}.to_json
     end
   end
+
+
+  def set_notification_complete
+    notification = NotificationTracker.find(params[:id])
+    notification.update_attributes(:status => 'completed')
+    render :nothing => true
+  end
           
 end

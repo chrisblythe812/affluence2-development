@@ -30,7 +30,7 @@ class EventsController < ApplicationController
       result = BrainTreeTranscation.event_payment(@payable_promotion)
       if result == 'success'
         Activity.create_user_event(current_user,@event)
-        NotificationTracker.event_notification_on_successful_registration(current_user,@event)
+        NotificationTracker.schedule_event_emails(current_user,@event)
         flash[:success]= 'Your have successfully registered for the event'
         redirect_to orders_path()
       elsif result == 'failed'

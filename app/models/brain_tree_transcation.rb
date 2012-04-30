@@ -34,18 +34,13 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
   def self.make_payments_for_old_transactions(subscription)
-    #past_payments.each do |past_payment|
-      if  subscription.past_payment.status == 'pending'
+       if  subscription.past_payment.status == 'pending'
         result = BrainTreeTranscation.do_payments_by_compare_local_and_remote_trans(subscription.past_payment)
       elsif subscription.past_payment.status == 'failed'
         PaymentLog.create(:payment_id => subscription.past_payment.id, :info=> 8 , :log_level => 1 )
         result = BrainTreeTranscation.s2s_transaction(subscription.past_payment,subscription)
         respond_with_result(subscription.past_payment,result)
-      else
-        puts "Do the S2S transcation again"
       end
-
-    #end
   end
 
 

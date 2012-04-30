@@ -5,9 +5,25 @@ class SubscriptionFeeTracker < ActiveRecord::Base
   RETRIES = 3
   INTERVALS = 2
 
+
+  EMAIL_MODES = {1 => 'subscription_success',
+                 2 => 'subscription_failure',
+  }
+
+  EMAIL_MODE_METHODS = { 1 => 'subscription_success',
+                         2 => 'subscription_failure',
+
+
+  }
+
+
+
   scope :pending, :conditions => {:status => 'pending'}
   scope :failed, :conditions => {:status => 'failed'}
   scope :not_completed, :conditions => ["status like 'pending' OR status like 'failed'"]
+
+
+
 
 
   def self.do_subscriptions(subscriptions)
@@ -15,19 +31,25 @@ class SubscriptionFeeTracker < ActiveRecord::Base
       puts "Found #{subscriptions.size} subscriptions "
       subscriptions.each do |subscription|
         puts "Making transaction for subscription : #{subscription.id} "
-        result = BrainTreeTranscation.make_payment(subscription)
-        if result == 'success'
-          subscription.update_attribute(:status, "completed")
-          create_next_billing_record(subscription)
-          NotificationTracker.subscription_notification_on_success_payment(subscription)
-        elsif result == 'failed'
-          NotificationTracker.subscription_notification_on_failure_payment(subscription)
-          subscription.update_with_number_of_trails_left
-        end
-
+        make_payment_for_subscription(subscription)
       end
     end
   end
+
+
+  def self.make_payment_for_subscription(subscription)
+    result = BrainTreeTranscation.make_payment(subscription)
+    if result == 'success'
+      subscription.update_attribute(:status, "completed")
+      create_next_billing_record(subscription)
+      NotificationTracker.subscription_notification_on_success_payment(subscription)
+    elsif result == 'failed'
+      subscription.update_with_number_of_trails_left
+      NotificationTracker.subscription_notification_on_failure_payment(subscription)
+    end
+    return result
+  end
+
 
 
   def update_with_number_of_trails_left

@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
 
 
   has_many :payments
+  has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
+
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -61,6 +63,8 @@ class User < ActiveRecord::Base
   attr_accessor :card_number, :expiry_month, :expiry_year, :zip_code
 
   validates_presence_of :plan
+
+
 
   def superadmin?
     self.role == 'superadmin' 

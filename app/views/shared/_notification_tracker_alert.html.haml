@@ -1,0 +1,34 @@
+- notifications = current_user.pending_alert_notifications
+- if !notifications.blank?
+  - notifications.each do |notification|
+    .alert{:class => "alert-info"}
+      %a.close{"data-dismiss" => "alert", :id=> "notification_tracker_#{notification}"}×
+      = content_tag :div, notification.subject, :class => ["info", " message"], :id => "notice_info"
+
+
+    :javascript
+      $(function () {
+        $("#notification_tracker_#{notification}").click(function(){
+        var notification_id = #{notification};
+          alert('hai');
+
+               $.ajax({
+                      type : 'get',
+                      url : '/profiles/'+notification_id+'/set_notification_complete',
+                      datatype : 'json',
+                      //data : email,
+                      headers: {
+                           'X-Transaction': 'POST Example',
+                           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                         },
+                      success : function(data) {
+
+                      },
+                      error : function(data){
+
+                      }
+                    });
+           });
+
+      });
+

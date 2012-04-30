@@ -76,6 +76,10 @@ Affluence2::Application.routes.draw do
       get 'edit_privacy'
       get 'update_privacy'
     end
+
+    member do
+      get :set_notification_complete
+    end
   end
 
 

@@ -30,7 +30,8 @@ namespace :affluence2 do
   task :email_notifications => :environment do
 
    notifications =  NotificationTracker.where(
-       :scheduled_date => (Date.today-6)..(Date.today),
+       :scheduled_date => (Date.today-3)..(Date.today),
+       :channel => 'email',
        :status => 'pending'
    )
    NotificationTracker.send_email_notification(notifications)
