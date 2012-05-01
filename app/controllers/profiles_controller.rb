@@ -325,16 +325,10 @@ class ProfilesController < ApplicationController
     end
   end
 
-<<<<<<< HEAD
-   
-
-=======
-
   def set_notification_complete
     notification = NotificationTracker.find(params[:id])
     notification.update_attributes(:status => 'completed')
     render :nothing => true
   end
           
->>>>>>> c1310b4985107425b7ef083227e66003265dcd6a
 end
