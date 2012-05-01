@@ -4,6 +4,8 @@
     %span.pull-right
       %i.icon-time
       %strong SALE ENDS
+      %em= @event.sale_ends_at.methods.sort
+      %em= @event.sale_ends_at.class
       %em= @event.sale_ends_at.strftime("%B %d, %Y")
 
 .row
