@@ -4,7 +4,7 @@
     .span7
       %h1= current_user.profile.name.capitalize
       %h5
-        %strong CTO
+        %strong= current_user.profile.title.capitalize
         %em=" at #{current_user.profile.company}"
       %h6
         %i.icon-map-marker>

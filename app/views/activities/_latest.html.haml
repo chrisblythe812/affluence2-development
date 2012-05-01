@@ -6,7 +6,9 @@
     %td
       %h5= activity.user.profile.name
       %p
-        = activity.body 
+        = activity.body
+    %td
+      %p= time_ago_in_words(activity.updated_at) + " ago"
 
 :javascript
   $(function () {

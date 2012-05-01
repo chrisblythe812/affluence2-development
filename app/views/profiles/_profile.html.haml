@@ -50,19 +50,20 @@
                   .control-group
                     %label.control-label{:for => "textarea"} Associations
                     .controls
-                      = f.text_area :association_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
+                      = f.text_area :association_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input', "data-url" => "#{autocomplete_association_name_profiles_path}"
                       %p.help-block Associations are comma seperated.
                   .control-group
                     %label.control-label{:for => "textarea"} Interests
                     .controls
-                      = f.text_area :interest_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
+                      = f.text_area :interest_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input', "data-url" => "#{autocomplete_interest_name_profiles_path}"
                       %p.help-block Interests are comma seperated.
                   .control-group
                     %label.control-label{:for => "textarea"} Expertise
                     .controls
-                      = f.text_area :expertise_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input'
+                      = f.text_area :expertise_list, :rows => '3', :class => '.input-xlarge ui-autocomplete-input', "data-url" => "#{autocomplete_expertise_name_profiles_path}"
                       %p.help-block Expertise are comma seperated.
                   .form-actions
+                    = hidden_field_tag :value, 'profile info'
                     = f.submit "Save changes", :class => "btn btn-primary"
 
   :javascript
@@ -74,10 +75,11 @@
       function extractLast( term ) {
         return split( term ).pop();
       }
-      var url = null;
+      var url = "#{autocomplete_interest_name_profiles_path}";
       $( ".ui-autocomplete-input" )
         // don't navigate away from the field on tab when selecting an item
         .bind( "keydown", function( event ) {
+          url = $( this ).data('url');
           if ( event.keyCode === $.ui.keyCode.TAB &&
               $( this ).data( "autocomplete" ).menu.active ) {
             event.preventDefault();
@@ -85,7 +87,7 @@
         })
         .autocomplete({
           source: function( request, response ) {
-            $.getJSON( "#{autocomplete_interest_name_profiles_path}", {
+            $.getJSON( url, {
               term: extractLast( request.term )
             }, response );
           },

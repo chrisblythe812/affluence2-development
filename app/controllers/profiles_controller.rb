@@ -1,7 +1,20 @@
 class ProfilesController < ApplicationController
-  autocomplete :interest, :name, :class_name => 'ActsAsTaggableOn::Tag'
   autocomplete :expertise, :name, :class_name => 'ActsAsTaggableOn::Tag'
-  autocomplete :association, :name, :class_name => 'ActsAsTaggableOn::Tag'
+  autocomplete :interest, :name, :class_name => 'ActsAsTaggableOn::Tag'
+
+  def autocomplete_association_name
+       term = params[:term]
+
+      if term && !term.blank?
+        items =  ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
+            "left outer join taggings on tags.id=taggings.tag_id where tags.name LIKE '%" +
+            term + "%' and taggings.context = 'associations' order by tags.id desc limit 10")
+      else
+        items = {}
+      end    
+        render :json => json_for_autocomplete(items, 'name', [])
+  end
+        
 
   ssl_required :confirm, :check_avilability, :profile_session
 
@@ -14,12 +27,25 @@ class ProfilesController < ApplicationController
   end
 
   def edit
+    session['menu_link'] = params["value"]
+
     @profile = current_user.profile
-    @profile.photos.build if @profile.photos.blank? 
+      p @profile.photos
+    if @profile.photos.blank?
+      @profile.photos.build
+    elsif @profile.photos.size > 1
+      @profile.photos.each do |photo|
+        p photo
+        photo.destroy if @profile.photos.size > 1
+        p photo 
+      end
+
+    end
     @user = @profile.user
   end 
 
   def update
+    session['menu_link'] = params["value"]
     @user = resource
     @profile = resource.profile
     @profile.photos.build
@@ -28,7 +54,7 @@ class ProfilesController < ApplicationController
 
       respond_to do |format|
         if @profile.update_attributes(params[:profile])
-#          @profile.photos.first.delete
+          #          @profile.photos.first.delete
           format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
           format.json { head :ok }
         else
@@ -39,14 +65,14 @@ class ProfilesController < ApplicationController
     elsif  params[:user]
       resource = User.to_adapter.get!(send(:"current_#{resource_name}").to_key)
       if resource.update_with_password(params[resource_name])
-          if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
-            flash_key = :update_needs_confirmation
-          end
-          sign_in resource_name, resource, :bypass => true
-          respond_to do |format|
-            format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
-            format.json { head :ok }
-          end
+        if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
+          flash_key = :update_needs_confirmation
+        end
+        sign_in resource_name, resource, :bypass => true
+        respond_to do |format|
+          format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
+          format.json { head :ok }
+        end
       else
         respond_to do |format|
           @user = resource  
@@ -226,14 +252,14 @@ class ProfilesController < ApplicationController
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
       if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
-         current_user.plan = session[:user_plan]
-         current_user.save
-         session[:user_plan]=nil
-         update_subscription(current_user)
+        current_user.plan = session[:user_plan]
+        current_user.save
+        session[:user_plan]=nil
+        update_subscription(current_user)
       end
     else
       render :text => @result.errors._inner_inspect and return
-        flash[:notice]= @result.errors._inner_inspect
+      flash[:notice]= @result.errors._inner_inspect
     end
     redirect_to edit_profile_path(current_user.permalink)
   end
@@ -271,5 +297,7 @@ class ProfilesController < ApplicationController
       render :json => {'error' => params["name"] + ' setting not updated successfully'}.to_json
     end
   end
-          
+
+   
+
 end

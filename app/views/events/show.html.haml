@@ -4,24 +4,22 @@
     %span.pull-right
       %i.icon-time
       %strong SALE ENDS
-      %em April 3, 2010
+      %em= @event.sale_ends_at.strftime("%B %d, %Y")
 
 .row
   .span6
     .well
-      = image_tag('carousel-3.jpg')
+      = display_image(@event.promotion.photos)
+
       %hr
         .row
-          .span1
-            = image_tag('events-1.jpg')
-          .span1
-            = image_tag('events-1.jpg')
-          .span1
-            = image_tag('events-1.jpg')
+          - @event.promotion.photos.each do |photo|
+            .span1
+              = image_tag photo.image
   / span6 images
   .span6
-    %h1 #{@event.title}
-    %p  #{@event.description}
+    %h1= @event.title
+    %p= @event.description
     /
       Tabs
       \==================================================
@@ -33,10 +31,8 @@
     #myTabContent.tab-content
       #includes.tab-pane.active
         %ul
-          %li 2 tickets to the Grammys
-          %li 2 night stay at W hotel
-          %li Limo to and from Grammys
-          %li 2 tickets to P. Diddy after event party
+          - @event.includes.each do |include|
+            %li= include.title
       / includes
       #schedule.tab-pane
         %table.table.table-striped
@@ -46,30 +42,11 @@
               %th Time
               %th Description
           %tbody
-            %tr
-              %td 3/10/2012
-              %td 11:00am
-              %td Check into the W Hotel
-            %tr
-              %td 3/10/2012
-              %td 7:00pm
-              %td Limo to Pick you up at your hotel
-            %tr
-              %td 3/10/2012
-              %td 7:30pm
-              %td Arrive at the Grammys - walk the red carpet
-            %tr
-              %td 3/10/2012
-              %td 8:00pm - 11:00pm
-              %td Enjoy the show
-            %tr
-              %td 3/10/2012
-              %td 11:30pm
-              %td Get Back into the Limo
-            %tr
-              %td 3/10/2012
-              %td 11:45pm - ???
-              %td W hotel for P.Diddy after party
+            - @event.schedules.each do |schedule|
+              %tr
+                %td= schedule.date
+                %td= schedule.time
+                %td= schedule.title
       / schedule
     / tab-content
     %div

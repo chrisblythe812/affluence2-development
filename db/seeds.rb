@@ -42,8 +42,43 @@ if Event.all.blank?
   end
 
   promotions = []
+  includes = ["2 tickets to the Grammys", "2 night stay at W hotel",
+    "Limo to and from Grammys", "2 tickets to P. Diddy after event party"
+  ]
+  titles = ["Check into the W Hotel",
+    "Limo to Pick you up at your hotel",
+    "Arrive at the Grammys - walk the red carpet",
+   	"Enjoy the show",
+    "Get Back into the Limo",
+ 	  "W hotel for P.Diddy after party"    
+  ]
+  ran = Random.new
+
+  
   events.each do |event|
     event.build_promotion
+    event.price =   (ran.rand(100) * ran.rand(20)) * 1000
+
+    ran.rand(2..8).times do
+
+      day = ran.rand(30)
+      month = ran.rand(12)
+      year = ran.rand(60)
+      date = "#{day}/#{month}/20#{year}"
+      ends_at = "#{day + ran.rand(30 - day)}/#{month}/20#{year}"
+
+      event.sale_ends_at = ends_at
+      event.save!
+
+      event.schedules.build({
+      date: date,
+      time: "#{ran.rand(12)}:#{ran.rand(9)}#{ran.rand(9)}#{['am', 'pm'].sample}",
+      title: titles.sample
+      })
+    end
+    ran.rand(2..8).times do
+      event.includes.build({title: titles.sample})
+    end
     event.save!
     promotions << event.promotion
   end
