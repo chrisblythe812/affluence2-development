@@ -37,10 +37,10 @@ module ApplicationHelper
         if @braintree_existing.kind_of?(Braintree::CreditCard)
 
           case method
-            when :number
-              method = :masked_number
-            when :cvv
-              return nil
+          when :number
+            method = :masked_number
+          when :cvv
+            return nil
           end
         end
 
@@ -73,7 +73,7 @@ module ApplicationHelper
     params[:controller] == 'profiles' && params[:action] == 'edit_privacy'
   end
 
-   def orders?
+  def orders?
     params[:controller] == 'orders'
   end
 
@@ -124,5 +124,14 @@ module ApplicationHelper
     @devise_mapping ||= Devise.mappings[:user]
   end
 
+  def clicked
+    temp = session['menu_link']
+    session['menu_link'] = nil
+
+    menu = ['profile info', 'billing info', 'notifications', 'change password']
+    temp =  menu.index(temp)
+    temp.nil? ? 1 : temp + 1
+  end
 end
+ 
  

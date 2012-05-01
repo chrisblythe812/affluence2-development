@@ -3,21 +3,12 @@
     #myCarousel.carousel.slide
       / Carousel items
       .carousel-inner
-        .item.active
-          = image_tag('carousel-1.jpg')
-          .carousel-caption
-            %h4 First Thumbnail label
-            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-        .item
-          = image_tag('carousel-2.jpg')
-          .carousel-caption
-            %h4 Second Thumbnail label
-            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-        .item
-          = image_tag('carousel-3.jpg')
-          .carousel-caption
-            %h4 Third Thumbnail label
-            %p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+        - @events.each do |event|
+          .item{:class => "#{'active' if (@events.index(event) == 0)}"}
+            = display_image(event.promotion.photos)
+            .carousel-caption
+              %h4= event.title
+              %p= event.description
       / carousel-inner
       / Carousel nav
       %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} ‹
@@ -45,8 +36,8 @@
       .thumbnail
         = display_image(event.promotion.photos)
         .caption
-          %h5 #{event.title}
-          %p #{event.description}
+          %h5= "#{event.title}"
+          %p= "#{event.description}"
           %p
             %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
               %i.icon-pencil.icon-white
@@ -90,18 +81,11 @@
           %p Front row at Rolling Stones NYC concert - plus backstage passes.
   / span3
 / row
-/
-  \-------------------------------------
-  End Body
-  \--------------------------------------
 %hr
-  /
-    Modals
-    \==================================================
   / Register Modal
   #premium-sign-up.modal.hide.fade{:style => "display: none; "}
     .modal-header.well
-      %a.close{"data-dismiss" => "modal", :href => "#"} ×
+      %a.close{"data-dismiss" => "modal", :href => ""} ×
       %h2 Become a Premium Member
       %p
         Make Connections, Send Messages, Post Photo's, take advantage of
@@ -170,36 +154,12 @@
             %th Event
             %th
         %tbody
+        - @events.each do |event|
           %tr
-            %td 3/10/2012
-            %td Masters Golf Event
+            %td= event.schedules.first.date
+            %td= event.title
             %td
-              %a.btn.btn-primary{:href => "#"} Learn More
-          %tr
-            %td 3/21/2012
-            %td Dinner with Adam Sandler
-            %td
-              %a.btn.btn-primary{:href => "#"} Learn More
-          %tr
-            %td 3/21/2012
-            %td Dinner with Adam Sandler
-            %td
-              %a.btn.btn-primary{:href => "#"} Learn More
-          %tr
-            %td 3/21/2012
-            %td Dinner with Adam Sandler
-            %td
-              %a.btn.btn-primary{:href => "#"} Learn More
-          %tr
-            %td 3/21/2012
-            %td Dinner with Adam Sandler
-            %td
-              %a.btn.btn-primary{:href => "#"} Learn More
-          %tr
-            %td 3/21/2012
-            %td Dinner with Adam Sandler
-            %td
-              %a.btn.btn-primary{:href => "#"} Learn More
+              %a.btn.btn-primary{:href => event_path(event.id)} Learn More
     .modal-footer
   / event scheudle modal
 -content_for :javascripts do

@@ -35,4 +35,11 @@
         $("#settings li").removeClass("active");
          $("#settings li").eq($(this).index()+1).addClass("active");
       });
+
+      var clicked = "#{clicked}";
+      $('#settings li').eq(clicked).addClass('active');
+      if (clicked != 1) {
+        $('#settings li:eq('+clicked+') a').click();
+      } 
+ 
     });

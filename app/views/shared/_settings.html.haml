@@ -3,7 +3,7 @@
     %ul.nav.nav-list#settings
       %li.nav-header Account Settings
       - if profiles_edit?
-        %li{:class => "active"}
+        %li
           %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseOne" }
             %i.icon-home>
             Profile Info
@@ -21,19 +21,19 @@
             Change Password
       - else
         %li{:class => "#{'active' if profiles_edit?}"}
-          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+          %a{ :href => "#{edit_profile_path(current_user.permalink, :value => 'profile info')}" }
             %i.icon-home>
             Profile Info
         %li
-          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+          %a{ :href => "#{edit_profile_path(current_user.permalink, :value => 'billing info')}" }
             %i.icon-shopping-cart>
             Billing Info
         %li
-          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+          %a{ :href => "#{edit_profile_path(current_user.permalink, :value => 'notifications')}" }
             %i.icon-envelope>
             Notifications
         %li
-          %a{ :href => "#{edit_profile_path(current_user.permalink)}" }
+          %a{ :href => "#{edit_profile_path(current_user.permalink, :value => 'change password')}" }
             %i.icon-lock>
             Change Password
       %li.nav-header Privacy Settings
