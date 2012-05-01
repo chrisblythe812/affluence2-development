@@ -58,20 +58,19 @@ if Event.all.blank?
   events.each do |event|
     event.build_promotion
     event.price =   (ran.rand(100) * ran.rand(20)) * 1000
+    event.tickets = ran.rand(30)
 
+    temp_date ="20#{ran.rand(60)}/#{ran.rand(12)}/#{ ran.rand(30)}"
+    event.sale_ends_at = temp_date
+    p 'ddddddddddddddddddddddd'
+    p event.sale_ends_at
+    p temp_date
+    temp_date = Date.strptime(temp_date, '%Y/%m/%d')
+    p temp_date
+    days = ran.rand(5).days
     ran.rand(2..8).times do
-
-      day = ran.rand(30)
-      month = ran.rand(12)
-      year = ran.rand(60)
-      date = "#{day}/#{month}/20#{year}"
-      ends_at = "#{day + ran.rand(30 - day)}/#{month}/20#{year}"
-
-      event.sale_ends_at = ends_at
-      event.save!
-
       event.schedules.build({
-      date: date,
+      date: temp_date + days,
       time: "#{ran.rand(12)}:#{ran.rand(9)}#{ran.rand(9)}#{['am', 'pm'].sample}",
       title: titles.sample
       })

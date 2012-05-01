@@ -15,5 +15,8 @@ class Event < ActiveRecord::Base
   }
 
   EMAIL_REMINDER_SCHEDULE_INTERVAL_DAYS = [1,2] # days before the event starts
+
+  validates :sale_ends_at, :presence => true
+  validates :tickets, :presence => true
 end
  
