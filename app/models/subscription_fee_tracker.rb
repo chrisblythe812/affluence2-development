@@ -23,7 +23,9 @@ class SubscriptionFeeTracker < ActiveRecord::Base
   scope :not_completed, :conditions => ["status like 'pending' OR status like 'failed'"]
 
 
-
+   def self.create_subscription(user,date)
+   create(:user_id => user.id,:renewal_date => date, :amount => user.plan_amount )
+   end
 
 
   def self.do_subscriptions(subscriptions)

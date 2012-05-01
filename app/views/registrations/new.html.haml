@@ -51,10 +51,7 @@
             = render :partial => '/registrations/credit_card_fields'
             = hidden_field_tag :tr_data, @tr_data
             = hidden_field_tag :session_info_status, false
-          /= text_field_tag :submition_status, false
-          /%iframe{:src => "http://localhost:3000/profile/profile_billing", :height => 300, :width => 500}
           .form-actions
-            /%a{:href => "./free/home.html"}
             %button.btn.btn-primary{:type => "submit"} Register
   .span4
     %h2 This is a Benefit
@@ -65,77 +62,17 @@
     %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
 %hr/
 -content_for :javascripts do
-  :javascript
-    $(function () {
-      $('form.user_fields_form111').submit(function(){
-              var form = $(this)
-               var userdata = form.find('.user_fields').serialize();
-               alert(userdata);
-              //var status = false;
-               $.ajax({
-                    type : 'post',
-                    url : '/users?format=json',
-                    datatype : 'json',
-                    data : userdata,
-                   headers: {
-                         'X-Transaction': 'POST Example',
-                         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                       },
-                    success : function(data) {
-                    //status = true;
-                     alert('success');
-                    },
-                    error : function(data){
-                    //status = false;
-                    alert('error');
-                    }
-                  });
 
-           return false;
-      });
-
-    });
 
   :javascript
     var Userregistration = {
-      set_userinfo : function(number){
-      alert('set_userinfo');
-                     $.ajax({
-                          type : 'get',
-                          url : '/profile/profile_session?format=json',
-                          datatype : 'json',
-                          data : userdata,
-                         headers: {
-                               'X-Transaction': 'GET Example',
-                               'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                             },
-                          success : function(data) {
-                           //status = true;
-                           alert('success');
-
-                          },
-                          error : function(data){
-                          //status = false;
-                          alert('error');
-
-                          }
-                        });
-
-       alert('sdfs');
-      },
-
-
-
-
-
-
     validate_userinfo : function(){
 
-                    var valid_text = /[^A-Za-z]/;
+                    var valid_text = /[^A-Za-z ]/;
 
 
                     var first_name = $('#user_profile_attributes_first_name');
-                    if (first_name.val()=="")
+                    if (first_name.val()=="" || first_name.val().trim() == "")
                     {
                     alert("First Name field can't be blank");
                     first_name.focus();
@@ -153,7 +90,7 @@
 
 
                     var last_name = $('#user_profile_attributes_last_name');
-                    if (last_name.val()=="")
+                    if (last_name.val()=="" || last_name.val().trim() == "")
                     {
                     alert("Last Name field can't be blank");
                     last_name.focus();
@@ -163,7 +100,7 @@
                     if ( valid_text.test(last_name.val()))
                     {
                      alert("Enter valid Last Name");
-                     first_name.focus();
+                     last_name.focus();
                      return false
                     }
 
@@ -178,7 +115,7 @@
 
 
                     var city = $('#user_profile_attributes_city');
-                    if (city.val()=="")
+                    if (city.val()=="" || city.val().trim() == "")
                     {
                     alert("City field can't be blank");
                     city.focus();
@@ -197,7 +134,7 @@
                    var password = $('#user_password');
                    var confirm_password = $('#user_password_confirmation');
 
-                   if (password.val()=="")
+                   if (password.val()=="" || password.val().trim() == "")
                    {
                    alert("Password field can't be blank");
                    password.focus();
@@ -214,7 +151,7 @@
 
 
 
-                   if (confirm_password.val()=="")
+                   if (confirm_password.val()=="" || confirm_password.val().trim() == "" )
                    {
                    alert("Confirmation Password field can't be blank");
                    confirm_password.focus();
@@ -248,7 +185,7 @@
                    if(plans[0].checked == false) {
 
                    var user_card_number = $('#user_card_number');
-                   if (user_card_number.val()=="")
+                   if (user_card_number.val()=="" || user_card_number.val().trim() == "")
                    {
                    alert("Card can't be blank");
                    user_card_number.focus();
@@ -263,7 +200,7 @@
                    }
 
                    var user_zip_code = $('#user_zip_code');
-                   if (user_zip_code.val()=="")
+                   if (user_zip_code.val()=="" || user_zip_code.val().trim() == "")
                    {
                    alert("CVV can't be blank");
                    user_zip_code.focus();
@@ -278,9 +215,10 @@
                    }
 
                    var user_billing_zip_code = $('#user_billing_zip_code');
-                   if (user_billing_zip_code.val()=="")
+                   if (user_billing_zip_code.val()=="" || user_billing_zip_code.val().trim() == "")
                    {
                      alert("Billing ZIP can't be blank");
+                     user_billing_zip_code.focus();
                      return false
                    }
 
@@ -303,72 +241,6 @@
 
     };
 
-  :javascript
-    $(function () {
-      $('form.braintree_form123').submit(function(){
-      //alert('bt');
-
-
-               var form = $(this);
-               var userdata = form.find('.user_fields').serialize();
-               //alert(userdata);
-
-               //validations
-
-               if(Userregistration.validate_userinfo()){
-
-                                     $.ajax({
-                                          type : 'get',
-                                          url : '/profiles/profile_session?format=json',
-                                          datatype : 'json',
-                                          data : userdata,
-                                         headers: {
-                                               'X-Transaction': 'GET Example',
-                                               'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                                             },
-                                          success : function(data) {
-                                           //status = true;
-                                           alert('success');
-
-                                          },
-                                          error : function(data){
-                                          //status = false;
-                                          alert('error');
-
-                                          }
-                                        });
-                   alert('set_userinfo');
-                   return true
-               }
-               else
-               {
-               return false
-               }
-
-
-
-            // alert('after getmethod');
-
-
-               //var email = $('#user_email').val();
-               //var password = $('#user_password');
-               //var password_confirmation = $('#user_password_confirmation');
-
-               //var brain_form = $('#tr_data').val();
-              //var status = false;
-              //alert(password_confirmation.val());
-              //&time=
-               //var myarray = brain_form.split('&time=');
-               //alert(myarray[0]);
-              //var form_data = myarray[0]+'?user[:email]='+email+'&time='+myarray[1];
-              //var form_data = brain_form+'?'+userdata;
-              //alert(form_data);
-              //$('#tr_data').val(form_data);
-              //alert($('#tr_data').val());
-           return false;
-      });
-
-    });
   :javascript
     function validate_user_info(){
 
@@ -404,24 +276,8 @@
                    var session_info_status = $('#session_info_status');
                    if (session_info_status.val()=="false")
                    {
-                   // alert("Please cross check the information before you submit");
                      return false
                    }
-
-           //var plans = $("input[name='user[plan]']");
-          // if(plans[0].checked == false)
-          // {
-           //alert('false');
-           //$("#braintree_form").attr("action", 'https://sandbox.braintreegateway.com:443/merchants/m6fnnb5fmshx6r8y/transparent_redirect_requests');
-           //}
-           //else
-           //{
-           //alert('true');
-           //$("#braintree_form").attr("action",'/users');
-           //}
-          //alert('inside validate_user_info');
-
-
      return true;
      }
      else return false;
@@ -462,7 +318,6 @@
   :javascript
   $(function (){
     $('.plan_free').click(function(){
-
       $('.credit_card').hide();
       $('.zero').hide();
     });

@@ -125,23 +125,6 @@ class BrainTreeTranscation < ActiveRecord::Base
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   def self.save_transcation(transaction,payment,result='success')
     if result == 'success'
     local_bt_transcation = BrainTreeTranscation.create(

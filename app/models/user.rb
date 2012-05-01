@@ -100,6 +100,40 @@ class User < ActiveRecord::Base
   end
 
 
+  def self.create_user_with_braintree_id(user,braintree_customer_id)
+    user[:braintree_customer_id] = braintree_customer_id
+    user = User.new(user)
+    user.save
+    create_or_update_subscription
+    user
+  end
+
+  def update_user_with_plan_and_braintree_id(plan,braintree_customer_id)
+    self.plan = !plan.blank? ? plan : 'Monthly'
+    self.braintree_customer_id = braintree_customer_id if !braintree_customer_id.blank?
+    self.save
+    create_or_update_subscription
+  end
+
+
+
+  def change_current_plan(new_plan,braintree_customer_id=nil)
+    update_user_with_plan_and_braintree_id(new_plan,braintree_customer_id)
+  end
+
+
+  def create_or_update_subscription
+    user_subscription = SubscriptionFeeTracker.where(:user_id => self.id).not_completed.last
+    if !user_subscription.blank?
+      user_subscription.update_attributes(:amount => self.plan_amount)
+    else
+      SubscriptionFeeTracker.schedule(self)
+    end
+  end
+
+
+
+
 
   FIELDS = [:first_name, :last_name, :phone, :website, :company, :fax, :addresses, :credit_cards, :custom_fields]
   attr_accessor *FIELDS

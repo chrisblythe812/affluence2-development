@@ -12,8 +12,10 @@ class NotificationTracker < ActiveRecord::Base
 
   def self.schedule_event_reminders(user,event)
     Event::EMAIL_REMINDER_SCHEDULE_INTERVAL_DAYS.each do |day|
-    schedule_date = event.start_date+day
-    create_event_notification(user,event,schedule_date,2)
+      if (event.start_date-day) > Date.today
+        schedule_date = event.start_date-day
+        create_event_notification(user,event,schedule_date,2)
+      end
     end
   end
 

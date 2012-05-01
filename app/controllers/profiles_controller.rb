@@ -72,13 +72,22 @@ class ProfilesController < ApplicationController
     rescue   
       render :json => {'notice' => 'not updated successfully'}.to_json
     end
-
   end
+
+
+  def create_user(user)
+    user = User.new(user)
+    user.save
+    sign_in user
+  end
+
+
 
   def confirm
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
 
     if !session[:user_info].blank? && session[:user_info][:user][:plan] == 'free'
+      #create_user(session[:user_info][:user])
       @user = User.new(session[:user_info][:user])
       if @user.save
         sign_in @user
@@ -86,72 +95,28 @@ class ProfilesController < ApplicationController
         redirect_to profile_path(current_user.permalink) and return
       else
         session[:user_info] = nil
-
         redirect_to new_user_registration_path and return
         #render 'registrations/new' and return
       end
     end
 
 
-
     if @result.success?
-      @user = User.new(session[:user_info][:user])
-      if @user.save
-        @user.braintree_customer_id = @result.customer.id
-        @user.save
-        SubscriptionFeeTracker.create(:user_id => @user.id,:renewal_date => Date.today, :amount => @user.plan_amount )
-        #@user.with_braintree_data!
-        #@credit_card = @user.default_credit_card
-        #subscription_result = Braintree::Subscription.create(
-        #:payment_method_token => @credit_card.token,
-        #:plan_id => 'AFLNCE-M'
-        #)
-
-        #if subscription_result.success?
-        #puts subscription_result.subscription.id
-        # puts subscription_result.subscription.transactions[0].id
-        #render :text => "subscription_result.subscription.id-----#{subscription_result.subscription.id}---subscription_result.subscription.transactions[0].id-----#{subscription_result.subscription.transactions[0].id}" and return
-        #else
-        #puts subscription_result.transaction.status
-        #render :text => "subscription_result.transaction.status---#{subscription_result.transaction.status}" and return
-        #end
-
-
-
-
-
-        sign_in @user
-        session[:user_info] = nil
-        #todo : set the user as logged in
-        #todo : do the subscription
-        redirect_to profile_path(current_user.permalink) #and return
+      if User.new(session[:user_info][:user]).valid?
+      user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
+      sign_in user
+      session[:user_info] = nil
+      redirect_to profile_path(current_user.permalink)
       else
-        customer_delete_result = Braintree::Customer.delete(@result.customer.id)
-        #if customer_delete_result.success?
-        #render :text=> "vault was deleted successfully"  and return
-        #else
-        #render :text=> "unable to delete vault" and return
-        #end
-        #todo : render the registration new page with validations and delete the vault in braintree
-        session[:user_info] = nil
-        redirect_to new_user_registration_path
+      session[:user_info] = nil
+      #todo need to populate the fields with user data.
+      redirect_to new_user_registration_path
       end
-
     else
-      @user = User.new(session[:user_info][:user])
-      #if @user.valid?
       #todo : render the registration new page with validations
-      #else
-      #todo : render the registration new page with validations
-      #end
       session[:user_info] = nil
       flash[:notice]= @result.errors._inner_inspect
       redirect_to new_user_registration_path
-      #render :text => @result.errors._inner_inspect and return
-
-      #@tr_data = Braintree::TransparentRedirect.
-      #create_customer_data(:redirect_url => confirm_profile_url)
-      #render :action => "settings"
     end
   end
 
@@ -161,10 +126,6 @@ class ProfilesController < ApplicationController
     if @result.success?
       redirect_to :action => "settings"
     else
-      #@credit_card = Braintree::CreditCard.find(@result.params[:payment_method_token])
-      #@tr_data = Braintree::TransparentRedirect.
-      #update_credit_card_data(:redirect_url => confirm_credit_card_info_profile_url,
-      #:payment_method_token => @credit_card.token)
       render :text => "settings"
     end
   end
@@ -215,9 +176,9 @@ class ProfilesController < ApplicationController
     begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
-       change_current_plan(session[:user_plan],@result.customer.id)
+       current_user.change_current_plan(session[:user_plan],@result.customer.id)
        flash[:success]= "You have successfully converted to #{current_user.plan} plan."
-      redirect_to edit_profile_path(current_user.permalink)
+       redirect_to edit_profile_path(current_user.permalink)
     else
       @profile = current_user.profile
       @profile.photos.build if @profile.photos.blank?
@@ -228,7 +189,6 @@ class ProfilesController < ApplicationController
     rescue
       redirect_to edit_profile_path(current_user.permalink)
     end
-
   end
 
 
@@ -238,7 +198,9 @@ class ProfilesController < ApplicationController
     begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
-      change_current_plan(session[:user_plan])
+      if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
+       current_user.change_current_plan(session[:user_plan])
+      end
     else
       @profile = current_user.profile
       @profile.photos.build if @profile.photos.blank?
@@ -255,34 +217,13 @@ class ProfilesController < ApplicationController
 
 
   def update_plan
-    if !params[:user_plan].blank?
-      change_current_plan(params[:user_plan])
-      #flash[:notice]= "Your Plan has been successfully updated to #{params[:user_plan]}."
+      if !params[:user_plan].blank? && (current_user.plan !=  params[:user_plan])
+        current_user.change_current_plan(params[:user_plan])
+        flash[:success]= "Your Plan has been successfully updated to #{params[:user_plan]}."
+      end
       redirect_to edit_profile_path(current_user.permalink)
-    end
   end
 
-
-  def change_current_plan(new_plan,braintree_customer_id=nil)
-    if !new_plan.blank? && (current_user.plan !=  new_plan)
-      current_user.plan = new_plan
-      current_user.braintree_customer_id = braintree_customer_id if !braintree_customer_id.blank?
-      current_user.save
-      session[:user_plan]=nil
-      update_subscription(current_user)
-      flash[:success]= "Your Plan has successfully changed to #{params[:user_plan]}."
-    end
-  end
-
-
-  def update_subscription(current_user)
-    user_subscription = SubscriptionFeeTracker.where(:user_id => current_user.id).not_completed.last
-    if !user_subscription.blank?
-      user_subscription.update_attributes(:amount => current_user.plan_amount)
-    else
-      SubscriptionFeeTracker.schedule(current_user)
-    end
-  end
 
   def edit_privacy
 
