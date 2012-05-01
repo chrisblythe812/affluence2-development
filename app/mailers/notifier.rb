@@ -3,6 +3,25 @@ class Notifier < ActionMailer::Base
 
   def event_registration(notification_tracker)
     mail( :to => notification_tracker.user.email,
-          :subject => notification_tracker.subject )
+          :subject => 'event registration' )
   end
+
+
+  def event_reminder(notification_tracker)
+    mail( :to => notification_tracker.user.email,
+          :subject => 'event reminder' )
+  end
+
+
+  def subscription_success(subscription)
+    mail( :to => notification_tracker.user.email,
+          :subject => 'subscription success' )
+  end
+
+
+  def subscription_failure(subscription)
+    mail( :to => notification_tracker.user.email,
+          :subject => 'subscription failure' )
+  end
+
 end

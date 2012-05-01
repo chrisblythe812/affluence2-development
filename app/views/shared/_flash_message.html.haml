@@ -1,6 +1,6 @@
 - flash.each do |key, msg|
-  .alert.alert-success
+  .alert{:class => "alert-#{key} flash"}
     %a.close{"data-dismiss" => "alert"}×
     = content_tag :div, msg, :class => [key, " message"], :id => "notice_#{key}"
     = content_tag :script, :type => "text/javascript" do
-      setTimeout(function() { $('.alert-success').fadeOut(1600); }, 5000);
+      setTimeout(function() { $('.flash').fadeOut(1600); }, 5000);

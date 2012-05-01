@@ -26,6 +26,8 @@
   %body
     = render 'shared/header'
     .container
+      = render 'shared/flash_message'
+      = render "shared/braintree_error_messages", :target => @result
       .row
         = yield :event_ending_info
       = yield

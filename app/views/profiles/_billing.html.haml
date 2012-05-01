@@ -29,7 +29,7 @@
               - if current_user.plan != 'free'
                 - content_for :old_card_fields do
                   .control-group
-                    %label.control-label{:for => "input05"} Old Card Number
+                    %label.control-label{:for => "input05"} Current Card Number
                     .controls
                       = @credit_card.masked_number#%input.input.span2{:name => "old_card", :size => "30", :type => "text",:value => @credit_card.masked_number}
               = render :partial => '/registrations/credit_card_fields'
@@ -48,6 +48,7 @@
             var user_plan = $('#present_user_plan');
             var plans = $("input[name='user_plan']");
             var user_zip_code = $('#user_zip_code');
+            var user_billing_zip_code = $('#user_billing_zip_code');
 
             if (user_plan.val()=="free" && !(plans[0].checked))
             {
@@ -106,6 +107,14 @@
                           alert("CVV must be 3 or 4 digits");
                           return false
                         }
+
+                        if (user_billing_zip_code.val()=="")
+                        {
+                          alert("Billing ZIP can't be blank");
+                          return false
+                        }
+
+
             }
 
             return true;

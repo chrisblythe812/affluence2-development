@@ -31,11 +31,15 @@ class User < ActiveRecord::Base
     activities = []
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
-
+      break unless activity
       next unless ids.include? activity.user.id
       privacy =  activity.user.profile.privacy_setting
+      if activity.resource_type == 'Profile'
+        #activities << activity
+      else
+        activities << activity if [0, 1].include? (privacy.send(Activity::OPTS[activity.resource_type]))
+      end
 
-      activities << activity if [0, 1].include? (privacy.send(Activity::OPTS[activity.resource_type]))
     end while activities.length < 7
 
     activities
@@ -43,6 +47,8 @@ class User < ActiveRecord::Base
 
 
   has_many :payments
+  has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
+
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -57,6 +63,8 @@ class User < ActiveRecord::Base
   attr_accessor :card_number, :expiry_month, :expiry_year, :zip_code
 
   validates_presence_of :plan
+
+
 
   def superadmin?
     self.role == 'superadmin' 

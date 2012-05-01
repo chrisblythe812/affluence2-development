@@ -3,6 +3,7 @@
   #accordion2.accordion
     = render 'shared/error_messages', :target => @profile
     = render "shared/error_messages", :target => @user
+    = render "shared/braintree_error_messages", :target => @result
     = render 'profile'
     = render 'billing'
     = render 'email_notifications'

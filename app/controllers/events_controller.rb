@@ -29,13 +29,16 @@ class EventsController < ApplicationController
     if @payable_promotion.save
       result = BrainTreeTranscation.event_payment(@payable_promotion)
       if result == 'success'
-        NotificationTracker.event_notification_on_successful_registration(current_user,@event)
+        Activity.create_user_event(current_user,@event)
+        NotificationTracker.schedule_event_emails(current_user,@event)
+        flash[:success]= 'Your have successfully registered for the event'
         redirect_to orders_path()
       elsif result == 'failed'
-        flash[:notice]= 'Transaction failed'
+        flash[:error]= 'Your event registration failed due to unsuccessful transaction'
         redirect_to event_path(@event.id)
       else
-        flash[:notice]= @result.errors._inner_inspect
+        flash[:error]= 'Your event registration failed due to unsuccessful transaction'
+        #flash[:error]= @result.errors._inner_inspect
         redirect_to event_path(@event.id)
       end
     end
@@ -64,6 +67,7 @@ class EventsController < ApplicationController
 
    def confirm
      @event = Event.find(params[:event_id])
+     begin
      @result = Braintree::TransparentRedirect.confirm(request.query_string)
      if @result.success?
        current_user.plan = session[:user_plan]
@@ -73,7 +77,11 @@ class EventsController < ApplicationController
        SubscriptionFeeTracker.create(:user_id => current_user.id,:renewal_date => Date.today, :amount => current_user.plan_amount )
        redirect_to event_path(@event.id)
      else
-       flash[:notice]= @result.errors._inner_inspect
+       #flash[:notice]= @result.errors._inner_inspect
+       #redirect_to event_path(@event.id)
+       render action: :show
+     end
+     rescue
        redirect_to event_path(@event.id)
      end
    end
