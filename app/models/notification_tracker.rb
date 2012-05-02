@@ -25,7 +25,7 @@ class NotificationTracker < ActiveRecord::Base
 
 
   def self.create_event_notification(user,event,date,mode)
-    create(:user_id => user,:channel => 'email', :subject => "Event",
+    create(:user_id => user.id,:channel => 'email', :subject => "Event",
            :status => 'pending',:notifiable_id => event.id, :notifiable_type => 'Event',
            :notifiable_mode => mode,:scheduled_date => date)
   end
