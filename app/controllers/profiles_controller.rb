@@ -199,6 +199,7 @@ class ProfilesController < ApplicationController
 
 
   def billing_info_confirm
+
     begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
@@ -210,6 +211,7 @@ class ProfilesController < ApplicationController
       @profile.photos.build if @profile.photos.blank?
       @user = @profile.user
       create_braintree_object
+      session['menu_link'] = 'billing info'
       render action: :edit and return
     end
     rescue
@@ -221,6 +223,7 @@ class ProfilesController < ApplicationController
 
 
   def billing_info_update_confirm
+
     begin
     @result = Braintree::TransparentRedirect.confirm(request.query_string)
     if @result.success?
@@ -232,6 +235,7 @@ class ProfilesController < ApplicationController
       @profile.photos.build if @profile.photos.blank?
       @user = @profile.user
       create_braintree_object
+      session['menu_link'] = 'billing info'
       render action: :edit and return
     end
     flash[:success]= "Card information was successfully updated."
