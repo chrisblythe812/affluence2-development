@@ -2,9 +2,9 @@
 .span9
   .row
     .span7
-      %h1= current_user.profile.name.capitalize
+      %h1= current_user.profile.name.capitalize if !current_user.profile.name.blank?
       %h5
-        %strong= current_user.profile.title.capitalize
+        %strong= current_user.profile.title.capitalize  if !current_user.profile.title.blank?
         %em=" at #{current_user.profile.company}"
       %h6
         %i.icon-map-marker>
