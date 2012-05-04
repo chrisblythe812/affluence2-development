@@ -50,7 +50,7 @@
       / schedule
     / tab-content
     %div
-      - if @event.promotion.registered_members.blank?
+      - if !@event.promotion.registered_members.blank?
         %h3 #{@event.promotion.registered_members.size} Members Attending
         %hr.zero
           %ul.thumbnails
