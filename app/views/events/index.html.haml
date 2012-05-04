@@ -156,7 +156,7 @@
         %tbody
         - @events.each do |event|
           %tr
-            %td= event.schedules.first.date
+            %td= event.schedules.first.date if !event.schedules.first.blank?
             %td= event.title
             %td
               %a.btn.btn-primary{:href => event_path(event.id)} Learn More

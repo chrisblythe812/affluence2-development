@@ -4,7 +4,7 @@
     %span.pull-right
       %i.icon-time
       %strong SALE ENDS
-      %em= @event.sale_ends_at.strftime("%B %d, %Y")
+      %em= @event.sale_ends_at.strftime("%B %d, %Y") if !@event.sale_ends_at.blank?
 
 .row
   .span6
@@ -50,37 +50,15 @@
       / schedule
     / tab-content
     %div
-      %h3 9 Members Attending
-      %hr.zero
-        %ul.thumbnails
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSxBfHGvjZb68NVLOrTAqlXXdnGZUQrjcnndSd8w5qvMM1CX6taAw"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSJXgIHrgms31dM7ZWyYIah0opjvvuccBCHoblNeN2v7hTre-hpQw"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSdhiqivyBt7osZ9wW9WmML47uveFdWfhKe-Y-jwo1pEfbbT3WK"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcQ821DgmCba9tROpeuz1GibDBWgS-i_yS3OruOHG0JfS5u_Sj-iMg"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn2.google.com/images?q=tbn:ANd9GcToyZ2iwLHPYahed5W-PNFcXODYN-dGat4ePxvhO9LzJFre_xlQtA"}
-        %ul.thumbnails
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSxBfHGvjZb68NVLOrTAqlXXdnGZUQrjcnndSd8w5qvMM1CX6taAw"}
-          %li.span1
-            %a{"rel" => "tooltip", "data-original-title" => "John Doe","data-placement" => "bottom","class" => "thumbnail",:href => "#"}
-              %img{:src => "https://encrypted-tbn0.google.com/images?q=tbn:ANd9GcSJXgIHrgms31dM7ZWyYIah0opjvvuccBCHoblNeN2v7hTre-hpQw"}
+      - if !@event.promotion.registered_members.blank?
+        %h3 #{@event.promotion.registered_members.size} Members Attending
+        %hr.zero
+          %ul.thumbnails
+            - @event.promotion.registered_members.each do |registered_member|
+              = render :partial => 'shared/member', :locals => {:member => registered_member.user}
+      - else
+        %h3 0 Members Attending
+        %hr.zero
     - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{@event.id}-register")
     .row
       .span2

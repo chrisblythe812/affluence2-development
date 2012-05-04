@@ -19,22 +19,26 @@ if Event.all.blank?
     {
       title: 'Grammy Event & Party',
       description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-      price: '1800'
+      price: '1800',
+      start_date: Date.today+3
     },
     {
       title: 'Weekend at the Masters',
       description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-      price: '2200'
+      price: '2200',
+      start_date: Date.today+4
     },
     {
       title: '2012 Oscars Party',
       description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-      price: '1100'
+      price: '1100',
+      start_date: Date.today+5
     },
     {
       title: '2012 New Year Party',
       description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-      price: '180000'
+      price: '180000',
+      start_date: Date.today+6
     }]
   events=[]
   events_seed.each do |event|
