@@ -10,4 +10,5 @@
   .controls
     = f.country_select(:country, ['United States'],{}, {:class => "span2 user_fields", :id => "select01"})
     = f.text_field :city, :class => 'input span2 user_fields', :placeholder => "City"
+    = f.hidden_field :invitation_source, :value => params[:invitation_source],:class => 'input span2 user_fields'
 
