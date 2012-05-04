@@ -4,6 +4,9 @@ class Event < ActiveRecord::Base
   has_many :schedules, :dependent => :destroy
   has_many :includes, :dependent => :destroy
 
+
+
+
   EMAIL_NOTIFICATIONS = {1 => 'registraion',
                  2 => 'schedule',
   }
