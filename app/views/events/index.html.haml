@@ -52,34 +52,13 @@
 %h1 Past Events
 %br/
 .row
-  .span3
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-past-1.jpg"}
-        .caption
-          %h5 Rolling Stones NYC
-          %p Front row at Rolling Stones NYC concert - plus backstage passes.
-  / span3
-  .span3
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-past-1.jpg"}
-        .caption
-          %h5 Rolling Stones NYC
-          %p Front row at Rolling Stones NYC concert - plus backstage passes.
-  / span3
-  .span3
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-past-1.jpg"}
-        .caption
-          %h5 Rolling Stones NYC
-          %p Front row at Rolling Stones NYC concert - plus backstage passes.
-  / span3
-  .span3
-    .thumbnail
-      %img{:alt => "", :src => "/assets/events-past-1.jpg"}
-        .caption
-          %h5 Rolling Stones NYC
-          %p Front row at Rolling Stones NYC concert - plus backstage passes.
-  / span3
+  - @past_events.each do |event|
+    .span3
+      .thumbnail
+        %img{:alt => "", :src => "#{event.promotion.photos.first.image.url(:medium)}"}
+          .caption
+            %h5= event.title
+            %p= event.description
 / row
 %hr
   / Register Modal
