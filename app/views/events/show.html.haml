@@ -9,7 +9,7 @@
 .row
   .span6
     .well
-      = display_image(@event.promotion.photos)
+      = display_image(@event.promotion.photos,'carousel')
 
       %hr
         .row
@@ -44,8 +44,8 @@
           %tbody
             - @event.schedules.each do |schedule|
               %tr
-                %td= schedule.date.strftime("%d/%m/%Y")
-                %td= schedule.time
+                %td= event_date_time_format(schedule)
+                %td= event_date_time_format(schedule,'time')
                 %td= schedule.title
       / schedule
     / tab-content

@@ -4,3 +4,10 @@
 
 // To customize the Active Admin interfaces, add your
 // styles here:
+
+.index #active_admin_content #index_footer {
+  color: white;  // Hides the 'Download text'. Pagination links are styled on their own
+  a {
+  display: none; // Hides the CSV .. links
+  }
+}

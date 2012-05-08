@@ -17,7 +17,7 @@ class Photo < ActiveRecord::Base
     elsif self.photoable_type == 'Promotion'
       p "promotionable_type #{self.photoable.promotionable_type}"
       if self.photoable.promotionable_type == 'Event'
-        { :medium => ['360x268#', :png]}
+        { :medium => ['360x268#', :png], :carousel => ['870x400#', :png]}
       elsif  self.photoable.promotionable_type == 'Offer'
         { :medium => ['210x100#', :png]}
       end
