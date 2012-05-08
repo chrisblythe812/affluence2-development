@@ -160,11 +160,9 @@
               %label.control-label # of Tickets
               .controls
                 %select.span1{:name => 'payable_promotion[total_tickets]'}
-                  %option 1
-                  %option 2
-                  %option 3
-                  %option 4
-                  %option 5
+                  - event.tickets.times do |x|
+                    %option= x+1
+
                 %span{:style => "margin-left:40px"}
                   Total cost:
                   %strong $#{event.price}

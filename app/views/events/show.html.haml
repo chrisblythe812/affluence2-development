@@ -63,9 +63,12 @@
     .row
       .span2
         %p
+        - unless (@event.tickets == 0)
           %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
             %i.icon-pencil.icon-white
             Register
+        - else
+          %em All tickets sold out
       .span2
         %h4 $ #{@event.price}
         %i.icon-tags
@@ -74,7 +77,8 @@
 
 
   / Register Modal
-  = render :partial => 'event_registration', :locals => {:event => @event, :display_free_modal => true,:event_div_id => event_div_id}
+  - unless (@event.tickets == 0)
+    = render :partial => 'event_registration', :locals => {:event => @event, :display_free_modal => true,:event_div_id => event_div_id}
 
 :javascript
   $(function () {

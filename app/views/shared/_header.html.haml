@@ -16,6 +16,9 @@
             %a{:href => "./offers.html"} Offers
           %li{:class => "#{'active' if gives?}"}
             %a{:href => "./gives.html"} Gives
+          - if current_user.superadmin?
+            %li{:class => "#{'active' if gives?}"}
+              %a{:href => "#{admin_dashboard_path}"} Dashboard
         %ul.nav.pull-right
           %li#menu1.dropdown
             %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#menu1"}

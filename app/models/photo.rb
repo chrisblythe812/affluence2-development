@@ -3,12 +3,24 @@ class Photo < ActiveRecord::Base
   attr_accessor :parent_type
   attr_accessible :image, :title, :description, :photoable_type  
   
-  has_attached_file :image,
-    :storage => :s3,
-    :s3_credentials => "#{Rails.root}/config/s3.yml",
-    :path => "/:id/:style/:basename.:extension",
-    :styles => Proc.new { |clip| clip.instance.styles }
-  #  has_attached_file :avatar, :styles => lambda { |attachment| { :thumb => (attachment.instance.boss? ? "300x300>" : "100x100>") }  }
+  paperclip_opts = {
+    :styles => Proc.new { |clip| clip.instance.styles },
+  }
+
+  unless Rails.env.development?
+    paperclip_opts.merge! :storage => :s3,
+      :s3_credentials => "#{Rails.root}/config/s3.yml",
+      :path => "/:id/:style/:basename.:extension",
+      :styles => Proc.new { |clip| clip.instance.styles }
+  end
+
+  has_attached_file :image, paperclip_opts
+
+  #  has_attached_file :image,
+  #    :storage => :s3,
+  #    :s3_credentials => "#{Rails.root}/config/s3.yml",
+  #    :path => "/:id/:style/:basename.:extension",
+  #    :styles => Proc.new { |clip| clip.instance.styles }
 
   def styles
     p "photoable_type #{self.photoable_type}"

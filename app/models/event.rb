@@ -5,6 +5,8 @@ class Event < ActiveRecord::Base
   has_many :includes, :dependent => :destroy
 
 
+  scope :past, where('sale_ends_at <= ?', Date.today)
+
 
   EMAIL_NOTIFICATIONS = {1 => 'registraion',
                  2 => 'schedule',
