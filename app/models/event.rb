@@ -29,11 +29,12 @@ class Event < ActiveRecord::Base
   after_create :create_promotion_with_images
   after_update :update_image
 
+
   attr_accessor :image, :time
 
   def create_promotion_with_images
     self.build_promotion
-    set_start_date
+    self.start_date = self.schedules.first.date.to_date #unless  self.schedules
     save
     create_image
   end
@@ -58,10 +59,6 @@ class Event < ActiveRecord::Base
       promotion.photos.build(photo)
       promotion.save
     end
-
-   def set_start_date
-     self.start_date = self.schedules.first.date.to_date unless  self.schedules
-   end
 
 end
  
