@@ -3,7 +3,7 @@
     .thumbnail
       = display_image(promotion.photos)
       .caption
-        %h5= promotion.promotionable.title
-        %p= promotion.promotionable.description
+        %h5= promotion.promotionable.title if !promotion.promotionable.blank?
+        %p= promotion.promotionable.description  if !promotion.promotionable.blank?
 
 
