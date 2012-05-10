@@ -6,6 +6,7 @@ class Event < ActiveRecord::Base
 
 
   scope :past, where('sale_ends_at <= ?', Date.today)
+  scope :up_comming, where('sale_ends_at >= ?', Date.today)
 
 
   EMAIL_NOTIFICATIONS = {1 => 'registraion',
@@ -26,8 +27,8 @@ class Event < ActiveRecord::Base
 
   has_permalink :title, :update => true
 
-  after_create :create_promotion_with_images
-  after_update :update_image
+#  after_create :create_promotion_with_images
+#  after_update :update_image
 
 
   attr_accessor :image, :time

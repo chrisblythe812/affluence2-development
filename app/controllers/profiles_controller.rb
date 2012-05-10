@@ -67,6 +67,8 @@ class ProfilesController < ApplicationController
       if resource.update_with_password(params[resource_name])
         if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
           flash_key = :update_needs_confirmation
+        else
+
         end
         sign_in resource_name, resource, :bypass => true
         respond_to do |format|

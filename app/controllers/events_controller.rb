@@ -8,7 +8,7 @@ class EventsController < ApplicationController
 
   def index
     @profile_tab = false
-    @events = Event.last(6)
+    @events = Event.up_comming.last(6)
     @past_events = Event.past.last(3) 
   end
 

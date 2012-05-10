@@ -17,32 +17,28 @@ Event.all.each{|event| event.destroy}
 if Event.all.blank?
   events_seed =[
     {
-      title: 'Grammy Event & Party',
+      title: 'Grammy Event & Party', 
       description: 'Join Affluence for an all access pass to the 2012 Grammys. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-      price: '1800',
-      start_date: Date.today+3
+      price: '1800'
     },
     {
       title: 'Weekend at the Masters',
       description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-      price: '2200',
-      start_date: Date.today+4
+      price: '2200'
     },
     {
       title: '2012 Oscars Party',
       description: 'Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party.',
-      price: '1100',
-      start_date: Date.today+5
+      price: '1100'
     },
     {
       title: '2012 New Year Party',
       description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.',
-      price: '180000',
-      start_date: Date.today+6
+      price: '180000'
     }]
   events=[]
   events_seed.each do |event|
-    events << Event.create(event)
+    events << Event.new(event)
   end
 
   promotions = []
@@ -58,31 +54,30 @@ if Event.all.blank?
   ]
   ran = Random.new
 
-  
+#  event=events.first
   events.each do |event|
     event.build_promotion
-    event.price =   (ran.rand(100) * ran.rand(20)) * 1000
-    event.tickets = ran.rand(30)
+    event.price = ran.rand(1...100) + 100
+    event.tickets = ran.rand(1...30)
 
-    temp_date ="20#{ran.rand(60)}/#{ran.rand(12)}/#{ ran.rand(30)}"
-    event.sale_ends_at = temp_date
+    temp_datetime = DateTime.parse("#{2000 + ran.rand(1...60)}/#{ran.rand(1...12)}/#{ ran.rand(1...28)} #{ran.rand(24)}:#{ran.rand(60)}:#{ran.rand(60)}")
+    event.sale_ends_at = temp_datetime.to_date
     p 'ddddddddddddddddddddddd'
     p event.sale_ends_at
-    p temp_date
-    temp_date = Date.strptime(temp_date, '%Y/%m/%d')
-    p temp_date
+    p temp_datetime
     days = ran.rand(5).days
     ran.rand(2..8).times do
       event.schedules.build({
-      date: temp_date + days,
-      time: "#{ran.rand(12)}:#{ran.rand(9)}#{ran.rand(9)}#{['am', 'pm'].sample}",
+      date: temp_datetime + ran.rand(5).days + ran.rand(24).hours + ran.rand(60).minutes,
+#      time: "#{ran.rand(12)}:#{ran.rand(9)}#{ran.rand(9)}#{['am', 'pm'].sample}",
       title: titles.sample
       })
     end
     ran.rand(2..8).times do
       event.includes.build({title: titles.sample})
     end
-    event.save!
+    event.save
+    p event.errors
     promotions << event.promotion
   end
 
@@ -121,7 +116,7 @@ Offer.all.each{|offer| offer.destroy}
 #<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
 
 if Offer.all.blank?
-          
+
   offers_seed =[
     {
       title: '60% Off Flying Private',
@@ -184,7 +179,7 @@ end
 User.all.each {|user| user.destroy unless user.role == 'superadmin'}
 states = ['Alabama', 'Alaska', 'Arkansas', 'California', 'Colorado', 'Illinois',
   'Indiana', 'Kansas', 'North Carolina'
-]    
+]
 bios = ['Duis autem vel eum iriure dolor in hendrerit in
 vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis
  at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril
@@ -222,7 +217,7 @@ while i < 30
   profile.save!
 end
 
- 
+
 # conversation seed data
 Conversation.all.each{|x| x.destroy}
 Connection.all.each{|x| x.destroy}
