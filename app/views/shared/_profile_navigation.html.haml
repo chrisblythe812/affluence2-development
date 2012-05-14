@@ -13,8 +13,8 @@
         %a{:href => "#{profile_path(current_user.permalink)}"}
           %i.icon-home>
           Profile
-      %li
-        %a{:href => "#{members_path}"}  
+      %li{:class => "#{(params[:controller] == 'members') ? 'active':''}"}
+        %a{:href => "#{search_members_path}"}
           %i.icon-user>
           Members
       %li

@@ -5,10 +5,8 @@ class Event < ActiveRecord::Base
   has_many :includes, :dependent => :destroy
 
 
-  #has_many :photos, :through => :promotion
-
-
   scope :past, where('sale_ends_at <= ?', Date.today)
+  scope :up_comming, where('sale_ends_at >= ?', Date.today)
 
 
   EMAIL_NOTIFICATIONS = {1 => 'registraion',
@@ -28,68 +26,12 @@ class Event < ActiveRecord::Base
   validates :sale_ends_at, :presence => true
   validates :tickets, :presence => true
 
-  #validate :ensure_schedule_exists
-
-  #def ensure_schedule_exists
-    #if self.schedules.blank?
-      #schedules_attributes = [{:date => "", :title => ""}]
-      #self.schedules.build(schedules_attributes)
-     #errors.add('schedules', 'Please add schedule for this event') unless !self.schedules
-    #end
-  #end
 
   has_permalink :title, :update => true
 
-  #before_create :setup_promotion_schedules_photos
 
-  #after_create :create_promotion_with_images
-  #after_update :update_image
+  attr_accessor :image, :time
 
-
-  attr_accessor :image#, :time
-
-  #def setup_promotion_schedules_photos
-    #promotion = self.build_promotion
-    #self.start_date = self.schedules.first.date.to_date  if !self.schedules.blank?
-    #photo = {
-        #title: self.title,
-        #description: self.description,
-        #image: self.image
-    #}
-    #promotion.photos.build(photo)
-  #end
-
-
-
-
-  #def create_promotion_with_images
-    #self.build_promotion
-    #puts self.schedules.inspect
-    #self.start_date = self.schedules.first.date.to_date #unless  self.schedules
-    #save
-    #create_image
-  #end
-
-  #def update_image
-   #if !self.image.blank?
-      #img = promotion.photos.first
-      #if !img.blank?
-        #img.update_attributes(:image => self.image)
-      #else
-        #create_image
-      #end
-    #end
-   #end
-
-    #def create_image
-      #photo = {
-         # title: self.title,
-          #description: self.description,
-         ## image: self.image
-     # }
-      #promotion.photos.build(photo)
-      #promotion.save
-    #end
 
 end
  
