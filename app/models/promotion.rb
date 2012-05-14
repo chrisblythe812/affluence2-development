@@ -4,4 +4,7 @@ class Promotion < ActiveRecord::Base
   has_and_belongs_to_many :users
 
   has_many :registered_members,  :class_name => 'PayablePromotion'
+
+
+
 end

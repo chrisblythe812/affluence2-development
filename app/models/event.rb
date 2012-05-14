@@ -19,16 +19,15 @@ class Event < ActiveRecord::Base
   }
   EMAIL_REMINDER_SCHEDULE_INTERVAL_DAYS = [1,2] # days before the event starts
 
-  accepts_nested_attributes_for :schedules
+  accepts_nested_attributes_for :schedules, :includes
 
   validates_presence_of :title, :description, :price
+  validates_presence_of :image, :on => :create
   validates :sale_ends_at, :presence => true
   validates :tickets, :presence => true
 
-  has_permalink :title, :update => true
 
-#  after_create :create_promotion_with_images
-#  after_update :update_image
+  has_permalink :title, :update => true
 
 
   attr_accessor :image, :time

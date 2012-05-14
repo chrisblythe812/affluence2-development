@@ -1,17 +1,19 @@
 class Photo < ActiveRecord::Base
   belongs_to :photoable, :polymorphic => true
   attr_accessor :parent_type
-  attr_accessible :image, :title, :description, :photoable_type  
+  attr_accessible :image, :title, :description, :photoable_type
   
-  paperclip_opts = {
-    :styles => Proc.new { |clip| clip.instance.styles },
-  }
 
-  unless Rails.env.development?
-    paperclip_opts.merge! :storage => :s3,
+
+  if Rails.env.development?
+    paperclip_opts = { :storage => :s3,
       :s3_credentials => "#{Rails.root}/config/s3.yml",
       :path => "/:id/:style/:basename.:extension",
-      :styles => Proc.new { |clip| clip.instance.styles }
+      :styles => Proc.new { |clip| p (clip.instance.inspect); clip.instance.styles }    }
+  else
+    paperclip_opts = {
+        :styles => Proc.new { |clip| clip.instance.styles },
+    }
   end
 
   has_attached_file :image, paperclip_opts
