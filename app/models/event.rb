@@ -50,7 +50,6 @@ class Event < ActiveRecord::Base
       end
     end
    end
-
     def create_image
       photo = {
           title: self.title,

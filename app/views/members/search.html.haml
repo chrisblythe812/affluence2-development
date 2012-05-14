@@ -9,111 +9,28 @@
   %div
     %h2
       Results
-      %small 97
+      %small= @profile_size
     %hr.zero
-      %ul.thumbnails
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-      %ul.thumbnails
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-      %ul.thumbnails
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
-        %li.span3
-          .thumbnail
-            %img{:alt => "", :src => "http://quitenormal.files.wordpress.com/2011/08/joe-bit-me-biden-550x382.jpg?w=210&h=146"}
-              %h5 Bill James
-              %h6 CEO at Real Cool Company
-              %p
-                %i.icon-map-marker>
-                Chicago, IL.
-                %small United States
+    - unless @profiles.blank?
+      - temp_profiles = ary_to_arys(@profiles, 3)
+      - temp_profiles.each do |x|
+        %ul.thumbnails
+          - x.each do |profile|
+            %li.span3
+              .thumbnail
+                %img{:alt => "", :src => "#{profile.photos.first.image.url(:medium) unless profile.photos.blank?   }"}
+                %h5
+                  = profile.first_name + " " + profile.last_name
+                %h6
+                  = profile.title
+                %p
+                  %i.icon-map-marker>
+                  = "#{profile.city}, #{profile.state}."
+                  %small= profile.country
+
+
+
   / Results
-  .pagination
-    %ul
-      %li
-        %a{:href => "#"} Prev
-      %li.active
-        %a{:href => "#"} 1
-      %li
-        %a{:href => "#"} 2
-      %li
-        %a{:href => "#"} 3
-      %li
-        %a{:href => "#"} 4
-      %li.disabled
-        %a{:href => "#"} ...
-      %li
-        %a{:href => "#"} 10
-      %li
-        %a{:href => "#"} 11
-      %li
-        %a{:href => "#"} Next
-  / pagination
+
+  = paginate @profiles, theme: "bootstrap"
+  

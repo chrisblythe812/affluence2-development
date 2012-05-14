@@ -203,6 +203,7 @@ delenit augue duis dolore te feugait nulla facilisi.Lorem ipsum dolor sit amet, 
 aliquip ex ea commodo consequat. '
 ]
 companies = ['affluence', 'seneca global', 'fox productions', 'minipolis']
+title = ['Test Engineer', 'Technical Analyst', 'Software Engineer', 'Team Leader']
 i=0
 while i < 30
   i = i + 1
