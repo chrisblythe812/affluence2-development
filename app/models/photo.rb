@@ -43,6 +43,7 @@ class Photo < ActiveRecord::Base
   private
 
   def reprocess
+    #todo add condition for events
     self.image.reprocess!
   end
 
