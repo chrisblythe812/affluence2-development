@@ -136,7 +136,7 @@ module ApplicationHelper
   def event_date_time_format(event,format='date')
    return "" if event.date.blank?
    return (event.date.strftime("%d/%m/%Y") unless event.date.blank?) if format=='date'
-   return (event.date.strftime("%k:%M") unless event.date.blank?) if format=='time'
+   return (event.date.strftime("%l:%M %p") unless event.date.blank?) if format=='time'
   end
 end
  
