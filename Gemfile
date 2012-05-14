@@ -22,6 +22,8 @@ gem 'permalink_fu'
 gem 'bartt-ssl_requirement', '~>1.4.0', :require => 'ssl_requirement'
 gem 'uuid'
 gem 'carmen', :git => 'git://github.com/jim/carmen.git'
+gem 'kaminari'
+gem 'bootstrap_kaminari', :git => 'git://github.com/dleavitt/bootstrap_kaminari.git'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

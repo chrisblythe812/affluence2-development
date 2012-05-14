@@ -134,9 +134,20 @@ module ApplicationHelper
   end
 
   def event_date_time_format(event,format='date')
-   return "" if event.date.blank?
-   return (event.date.strftime("%d/%m/%Y") unless event.date.blank?) if format=='date'
-   return (event.date.strftime("%l:%M %p") unless event.date.blank?) if format=='time'
+    return "" if event.date.blank?
+    return (event.date.strftime("%d/%m/%Y") unless event.date.blank?) if format=='date'
+    return (event.date.strftime("%k:%M") unless event.date.blank?) if format=='time'
+  end
+
+  def ary_to_arys(ary, split_size)
+    temp=[]
+    ary.size.times do |x|
+      if (x%split_size == 0)
+        temp << ary[x, split_size]
+      end
+    end
+    temp
+
   end
 end
  

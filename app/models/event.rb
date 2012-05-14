@@ -33,5 +33,6 @@ class Event < ActiveRecord::Base
   attr_accessor :image, :time
 
 
+
 end
  

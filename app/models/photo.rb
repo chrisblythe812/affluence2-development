@@ -5,11 +5,11 @@ class Photo < ActiveRecord::Base
   
 
 
-  if Rails.env.development?
+  unless Rails.env.development?
     paperclip_opts = { :storage => :s3,
       :s3_credentials => "#{Rails.root}/config/s3.yml",
       :path => "/:id/:style/:basename.:extension",
-      :styles => Proc.new { |clip| p (clip.instance.inspect); clip.instance.styles }    }
+      :styles => Proc.new { |clip| clip.instance.styles }    }
   else
     paperclip_opts = {
         :styles => Proc.new { |clip| clip.instance.styles },

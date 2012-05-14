@@ -62,7 +62,7 @@ if Event.all.blank?
 
     temp_datetime = DateTime.parse("#{2000 + ran.rand(1...60)}/#{ran.rand(1...12)}/#{ ran.rand(1...28)} #{ran.rand(24)}:#{ran.rand(60)}:#{ran.rand(60)}")
     event.sale_ends_at = temp_datetime.to_date
-    p 'ddddddddddddddddddddddd'
+    p '-----------------------------------------'
     p event.sale_ends_at
     p temp_datetime
     days = ran.rand(5).days
@@ -203,6 +203,7 @@ delenit augue duis dolore te feugait nulla facilisi.Lorem ipsum dolor sit amet, 
 aliquip ex ea commodo consequat. '
 ]
 companies = ['affluence', 'seneca global', 'fox productions', 'minipolis']
+title = ['Test Engineer', 'Technical Analyst', 'Software Engineer', 'Team Leader']
 i=0
 while i < 30
   i = i + 1

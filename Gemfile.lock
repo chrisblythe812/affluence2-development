@@ -6,6 +6,15 @@ GIT
       rails (~> 3.0)
 
 GIT
+  remote: git://github.com/dleavitt/bootstrap_kaminari.git
+  revision: 5ca99e2bcde6793a6044f2ea0cdb690bb111e1cb
+  specs:
+    bootstrap_kaminari (0.0.2)
+      haml (>= 3.1.0)
+      kaminari (>= 0.12.4)
+      rails (>= 3.1.0)
+
+GIT
   remote: git://github.com/jim/carmen.git
   revision: 4670647caed4c570545ec0f8a6e816355284e404
   specs:
@@ -286,6 +295,7 @@ DEPENDENCIES
   aws-s3
   aws-sdk
   bartt-ssl_requirement (~> 1.4.0)
+  bootstrap_kaminari!
   braintree
   carmen!
   coffee-rails (~> 3.2.1)
@@ -300,6 +310,7 @@ DEPENDENCIES
   haml
   haml-rails
   jquery-rails
+  kaminari
   launchy
   paperclip (~> 2.3)
   permalink_fu

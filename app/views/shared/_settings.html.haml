@@ -2,7 +2,7 @@
   .well
     %ul.nav.nav-list#settings
       %li.nav-header Account Settings
-      - if profiles?
+      - if profiles? &&  !profiles_privacy?
         %li
           %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapseOne" }
             %i.icon-home>
