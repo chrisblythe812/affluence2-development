@@ -54,7 +54,7 @@ ActiveAdmin.register Event do
   sidebar "Image", :only => :show do
 
     div do
-      image_tag event.promotion.photos.first.image.url(:thumb)
+      image_tag(event.promotion.photos.first.image.url(:medium), :style => "height:200px;width:200px;")
     end
   end
 
@@ -88,18 +88,11 @@ ActiveAdmin.register Event do
   member_action :update,  :method => :post do
     @event = Event.find(params[:id])
     update_event_photo(params[:event][:image]) unless params[:event][:image].blank?
-    if !@event.schedules.first.date.blank?
-      @event.start_date = @event.schedules.first.date.to_date
-    if @event.update_attributes(params[:event])
+    if event_start_date_set? && @event.update_attributes(params[:event])
       redirect_to :action => :show, :id => @event.id
     else
       render :edit
     end
-    else
-      render :edit
-    end
-
-
   end
 
   member_action :create, :method => :post do
