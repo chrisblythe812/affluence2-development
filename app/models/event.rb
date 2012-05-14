@@ -32,32 +32,7 @@ class Event < ActiveRecord::Base
 
   attr_accessor :image, :time
 
-  def create_promotion_with_images
-    self.build_promotion
-    self.start_date = self.schedules.first.date.to_date #unless  self.schedules
-    save
-    create_image
-  end
 
-  def update_image
-   if !self.image.blank?
-      img = promotion.photos.first
-      if !img.blank?
-        img.update_attributes(:image => self.image)
-      else
-        create_image
-      end
-    end
-   end
-    def create_image
-      photo = {
-          title: self.title,
-          description: self.description,
-          image: self.image
-      }
-      promotion.photos.build(photo)
-      promotion.save
-    end
 
 end
  
