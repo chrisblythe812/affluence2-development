@@ -18,11 +18,7 @@ class Photo < ActiveRecord::Base
 
   has_attached_file :image, paperclip_opts
 
-  #  has_attached_file :image,
-  #    :storage => :s3,
-  #    :s3_credentials => "#{Rails.root}/config/s3.yml",
-  #    :path => "/:id/:style/:basename.:extension",
-  #    :styles => Proc.new { |clip| clip.instance.styles }
+  after_create  :reprocess
 
   def styles
     p "photoable_type #{self.photoable_type}"
@@ -40,8 +36,15 @@ class Photo < ActiveRecord::Base
       { :medium => ['260x260#', :png], :thumb => ['60x60#', :png] }
     end
   end
-    
 
+
+
+
+  private
+
+  def reprocess
+    self.image.reprocess!
+  end
 
 
 end
