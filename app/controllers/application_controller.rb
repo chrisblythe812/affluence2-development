@@ -11,7 +11,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || '/home'
+    stored_location_for(resource) || current_user_home_page
+  end
+
+  def current_user_home_page
+  current_user.superadmin? ? '/admin' :  '/home'
   end
 
   def set_profile_navigation
