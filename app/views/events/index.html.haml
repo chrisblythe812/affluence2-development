@@ -55,10 +55,10 @@
   - @past_events.each do |event|
     .span3
       .thumbnail
-        %img{:alt => "", :src => "#{event.promotion.photos.first.image.url(:medium)}"}
-          .caption
-            %h5= event.title
-            %p= event.description
+        = event_image(event.promotion, :normal)
+        .caption
+          %h5= event.title
+          %p= event.description
 / row
 %hr
   / Register Modal
