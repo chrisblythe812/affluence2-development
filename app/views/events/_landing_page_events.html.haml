@@ -1,4 +1,5 @@
-- @promotion_events.each do |promotion|
+- @promotion_events.each do |event|
+  - promotion = event.promotion
   .span4
     .thumbnail
       = event_image(promotion, :normal)#display_image(promotion.photos)

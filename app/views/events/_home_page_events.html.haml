@@ -1,6 +1,6 @@
 - display_free_modal = (current_user.plan == 'free' ? true : false)
-- @promotion_events.each do |promotion|
-
+- @promotion_events.each do |event|
+  - promotion = event.promotion
   - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{promotion.promotionable.id}-register")
   %li.span3
     .thumbnail

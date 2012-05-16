@@ -7,9 +7,6 @@ class Promotion < ActiveRecord::Base
 
   accepts_nested_attributes_for :photos
 
-
-
-
   def normal_image
     photos.find(:first, :conditions => " image_type = 'normal'")
   end

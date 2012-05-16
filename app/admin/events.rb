@@ -5,8 +5,10 @@ ActiveAdmin.register Event do
   #config.per_page = 5
 
   scope :all, :default => true
-  scope :up_comming
+  #scope :up_comming
   scope :past
+  scope :active
+  scope :draft
 
   filter :title
 
@@ -91,6 +93,7 @@ ActiveAdmin.register Event do
       f.input :price
       f.input :tickets, :label => "Number of Tickets"
       f.input :sale_ends_at, :label => "Sale Ends"
+      f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
     end
 
     f.has_many :schedules do |schedule|

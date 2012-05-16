@@ -6,7 +6,8 @@ class Event < ActiveRecord::Base
 
 
 
-
+  scope :active, where(:status => true)
+  scope :draft, where(:status => false)
   scope :past, where('sale_ends_at <= ?', Date.today)
   scope :up_comming, where('sale_ends_at >= ?', Date.today)
 
