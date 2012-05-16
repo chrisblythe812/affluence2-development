@@ -1,9 +1,17 @@
 ActiveAdmin.register Event do
 
+  menu :label => "Events"
+  config.sort_order = "start_date_desc"
+  #config.per_page = 5
 
+  scope :all, :default => true
+  scope :up_comming
+  scope :past
+
+  filter :title
 
   index do
-    column("Date",:sortable => false) {|event| event.start_date.strftime("%m-%d-%y") unless event.start_date.blank?}
+    column("Start Date",:sortable => false) {|event| event.start_date.strftime("%m-%d-%y") unless event.start_date.blank?}
     column('Event',  :title,:sortable => false)
     column('Total Tickets',:tickets,:sortable => false)
     column('Tickets Remaining',:tickets,:sortable => false)
