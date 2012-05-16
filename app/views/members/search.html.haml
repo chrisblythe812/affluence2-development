@@ -8,8 +8,8 @@
       = submit_tag "Search", :class => 'btn btn-primary'
   %div
     %h2
-      Results
-      %small= @profile_size
+      = @connections ? "Connections" : "Results"
+      %small= @size
     %hr.zero
     - unless @profiles.blank?
       - temp_profiles = ary_to_arys(@profiles, 3)

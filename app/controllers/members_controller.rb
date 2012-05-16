@@ -4,7 +4,7 @@ class MembersController < ApplicationController
   def search
     logger.info "Called Members#search ..."
     profiles = search_profile
-    @profile_size = profiles.size
+    @size = profiles.size
     @profiles = Kaminari.paginate_array(profiles).page(params[:page]).per(9)
   end
 
@@ -21,7 +21,12 @@ class MembersController < ApplicationController
     unless params[:query].blank?
       Profile.member_search(params[:query]).reverse
     else
-      Profile.all.reverse
+      @connections = true
+      profiles = []
+      current_user.connections.each do |connection|
+        profiles <<  connection.friend.profile
+      end
+      profiles  
     end
   end
 end
