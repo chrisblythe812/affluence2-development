@@ -1,7 +1,7 @@
 class Photo < ActiveRecord::Base
   belongs_to :photoable, :polymorphic => true
   attr_accessor :parent_type
-  attr_accessible :image, :title, :description, :photoable_type
+  attr_accessible :image, :title, :description, :photoable_type, :image_type
   
 
 
@@ -18,11 +18,7 @@ class Photo < ActiveRecord::Base
 
   has_attached_file :image, paperclip_opts
 
-  #  has_attached_file :image,
-  #    :storage => :s3,
-  #    :s3_credentials => "#{Rails.root}/config/s3.yml",
-  #    :path => "/:id/:style/:basename.:extension",
-  #    :styles => Proc.new { |clip| clip.instance.styles }
+  after_create  :reprocess
 
   def styles
     if self.photoable_type == 'Profile'
@@ -37,8 +33,16 @@ class Photo < ActiveRecord::Base
       { :medium => ['260x260#', :png], :thumb => ['60x60#', :png] }
     end
   end
-    
 
+
+
+
+  private
+
+  def reprocess
+    #todo add condition for events
+    self.image.reprocess!
+  end
 
 
 end

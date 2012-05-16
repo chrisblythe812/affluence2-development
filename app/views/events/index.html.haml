@@ -5,7 +5,7 @@
       .carousel-inner
         - @events.each do |event|
           .item{:class => "#{'active' if (@events.index(event) == 0)}"}
-            = display_image(event.promotion.photos)
+            = event_image(event.promotion,:carousel) #display_image(event.promotion.photos)
             .carousel-caption
               %h4= event.title
               %p= event.description
@@ -34,7 +34,7 @@
   - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{event.id}-register")
     .span4
       .thumbnail
-        = display_image(event.promotion.photos)
+        = event_image(event.promotion, :normal)#display_image(event.promotion.photos)
         .caption
           %h5= "#{event.title}"
           %p= "#{event.description}"
@@ -55,10 +55,10 @@
   - @past_events.each do |event|
     .span3
       .thumbnail
-        %img{:alt => "", :src => "#{event.promotion.photos.first.image.url(:medium)}"}
-          .caption
-            %h5= event.title
-            %p= event.description
+        = event_image(event.promotion, :normal)
+        .caption
+          %h5= event.title
+          %p= event.description
 / row
 %hr
   / Register Modal

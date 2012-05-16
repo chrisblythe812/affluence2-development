@@ -1,9 +1,19 @@
 ActiveAdmin.register Event do
 
+  menu :label => "Events"
+  config.sort_order = "start_date_desc"
+  #config.per_page = 5
 
+  scope :all, :default => true
+  #scope :up_comming
+  scope :past
+  scope :active
+  scope :draft
+
+  filter :title
 
   index do
-    column("Date",:sortable => false) {|event| event.start_date.strftime("%m-%d-%y") unless event.start_date.blank?}
+    column("Start Date",:sortable => false) {|event| event.start_date.strftime("%m-%d-%y") unless event.start_date.blank?}
     column('Event',  :title,:sortable => false)
     column('Total Tickets',:tickets,:sortable => false)
     column('Tickets Remaining',:tickets,:sortable => false)
@@ -14,6 +24,22 @@ ActiveAdmin.register Event do
   end
 
   config.clear_sidebar_sections!
+
+  #action_item :only => [:show] do
+    #link_to('Add Images', edit_admin_promotion_path(event.promotion))
+  #end
+
+  member_action :add_images,  :method => :get do
+    @event = Event.find(params[:id])
+    @promotion = @event.promotion
+    render "add_images"
+  end
+
+  member_action :update_images, :method => :post do
+   @event = Event.find(params[:id])
+   @promotion = @event.promotion
+
+  end
 
   show :title => "Event - #{:title}" do |event|
       attributes_table_for event do
@@ -54,7 +80,7 @@ ActiveAdmin.register Event do
   sidebar "Image", :only => :show do
 
     div do
-      image_tag event.promotion.photos.first.image.url(:thumb)
+      image_tag(event.promotion.normal_image.image.url(:medium), :style => "height:200px;width:200px;")
     end
   end
 
@@ -62,10 +88,12 @@ ActiveAdmin.register Event do
     f.inputs "Create New Event" do
       f.input :title , :label => "Event Title"
       f.input :description , :label => "Event Description"
-      f.input :image, :as => :file , :label =>"Add Pictures"
+      f.input :carousel_image, :as => :file , :label =>"Add Pictures(carousel image)"
+      f.input :normal_image, :as => :file , :label =>"Add Pictures(normal image)"
       f.input :price
       f.input :tickets, :label => "Number of Tickets"
       f.input :sale_ends_at, :label => "Sale Ends"
+      f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
     end
 
     f.has_many :schedules do |schedule|
@@ -87,19 +115,14 @@ ActiveAdmin.register Event do
 
   member_action :update,  :method => :post do
     @event = Event.find(params[:id])
-    update_event_photo(params[:event][:image]) unless params[:event][:image].blank?
-    if !@event.schedules.first.date.blank?
-      @event.start_date = @event.schedules.first.date.to_date
-    if @event.update_attributes(params[:event])
+    update_event_photo(params[:event][:carousel_image], :carousel) unless params[:event][:carousel_image].blank?
+    update_event_photo(params[:event][:normal_image]) unless params[:event][:normal_image].blank?
+
+    if event_start_date_set? && @event.update_attributes(params[:event])
       redirect_to :action => :show, :id => @event.id
     else
       render :edit
     end
-    else
-      render :edit
-    end
-
-
   end
 
   member_action :create, :method => :post do
@@ -121,7 +144,7 @@ ActiveAdmin.register Event do
     end
 
     def construct_event_photo
-      {title: @event.title, description: @event.description, image: @event.image}
+      [{title: @event.title, description: @event.description, image: @event.carousel_image, image_type: 'carousel'},{title: @event.title, description: @event.description, image: @event.normal_image, image_type: 'normal'}]
     end
 
     def event_start_date_set?
@@ -133,8 +156,12 @@ ActiveAdmin.register Event do
       end
     end
 
-    def update_event_photo(image)
-        @event.promotion.photos.first.update_attributes(:image => image)
+    def update_event_photo(image,type = :normal)
+       if type == :normal
+         @event.promotion.normal_image.update_attributes(:image => image)
+       else
+         @event.promotion.carousel_image.update_attributes(:image => image)
+       end
     end
 
   end

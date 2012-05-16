@@ -8,19 +8,19 @@ class EventsController < ApplicationController
 
   def index
     @profile_tab = false
-    @events = Event.up_comming.last(6)
-    @past_events = Event.past.last(3) 
+    @events = Event.active.up_comming.last(6)
+    @past_events = Event.active.past.last(3)
   end
 
 
   def show
     @profile_tab = false
-    @event = Event.find(params[:id])
+    @event = Event.active.find(params[:id])
   end
 
 
   def register
-    @event = Event.find(params[:id])
+    @event = Event.active.find(params[:id])
     payable_promotion = PayablePromotion.create_event_promotion(params[:payable_promotion],@event,current_user)
     if !payable_promotion.blank?
       result = BrainTreeTranscation.event_payment(payable_promotion)
@@ -44,7 +44,7 @@ class EventsController < ApplicationController
 
   # will be called when free user tries to subscribe before event registration.
    def confirm
-     @event = Event.find(params[:event_id])
+     @event = Event.active.find(params[:event_id])
      begin
      @result = Braintree::TransparentRedirect.confirm(request.query_string)
      if @result.success?
@@ -75,6 +75,6 @@ class EventsController < ApplicationController
   end
 
   def get_latest(max=3)
-    @promotion_events = Promotion.find_all_by_promotionable_type('Event', :limit => max)
+    @promotion_events = Event.active.limit(max)
   end
 end

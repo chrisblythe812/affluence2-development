@@ -9,13 +9,13 @@
 .row
   .span6
     .well
-      = display_image(@event.promotion.photos,'carousel')
+      = event_image(@event.promotion,:carousel) #display_image(@event.promotion.photos,'carousel')
 
       %hr
         .row
           - @event.promotion.photos.each do |photo|
             .span1
-              = image_tag photo.image
+              =# image_tag photo.image
   / span6 images
   .span6
     %h1= @event.title

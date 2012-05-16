@@ -5,6 +5,9 @@ class Event < ActiveRecord::Base
   has_many :includes, :dependent => :destroy
 
 
+
+  scope :active, where(:status => true)
+  scope :draft, where(:status => false)
   scope :past, where('sale_ends_at <= ?', Date.today)
   scope :up_comming, where('sale_ends_at >= ?', Date.today)
 
@@ -21,8 +24,9 @@ class Event < ActiveRecord::Base
 
   accepts_nested_attributes_for :schedules, :includes
 
+
   validates_presence_of :title, :description, :price
-  validates_presence_of :image, :on => :create
+  validates_presence_of :carousel_image, :normal_image, :on => :create
   validates :sale_ends_at, :presence => true
   validates :tickets, :presence => true
 
@@ -30,8 +34,7 @@ class Event < ActiveRecord::Base
   has_permalink :title, :update => true
 
 
-  attr_accessor :image, :time
-
+  attr_accessor :carousel_image, :normal_image
 
 
 end
