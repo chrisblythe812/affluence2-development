@@ -15,12 +15,9 @@ ActiveAdmin.register Event do
 
   config.clear_sidebar_sections!
 
-  action_item :only => [:show] do
-    # New link
-   # if controller.current_ability.can?( :create, active_admin_config.resource_class ) and controller.action_methods.include?('new')
-      link_to('Add Images', edit_admin_promotion_path(event.promotion))
-    #end
-  end
+  #action_item :only => [:show] do
+    #link_to('Add Images', edit_admin_promotion_path(event.promotion))
+  #end
 
   member_action :add_images,  :method => :get do
     @event = Event.find(params[:id])
