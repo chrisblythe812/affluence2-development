@@ -5,6 +5,18 @@ class Promotion < ActiveRecord::Base
 
   has_many :registered_members,  :class_name => 'PayablePromotion'
 
+  accepts_nested_attributes_for :photos
+
+
+
+
+  def normal_image
+    photos.find(:first, :conditions => " image_type = 'normal'")
+  end
+
+  def carousel_image
+    photos.find(:first, :conditions => " image_type = 'carousel'")
+  end
 
 
 end

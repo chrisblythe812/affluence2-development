@@ -1,7 +1,7 @@
 class Photo < ActiveRecord::Base
   belongs_to :photoable, :polymorphic => true
   attr_accessor :parent_type
-  attr_accessible :image, :title, :description, :photoable_type
+  attr_accessible :image, :title, :description, :photoable_type, :image_type
   
 
 

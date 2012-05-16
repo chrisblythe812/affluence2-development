@@ -1,7 +1,7 @@
 - @promotion_events.each do |promotion|
   .span4
     .thumbnail
-      = display_image(promotion.photos)
+      = event_image(promotion, :normal)#display_image(promotion.photos)
       .caption
         %h5= promotion.promotionable.title if !promotion.promotionable.blank?
         %p= promotion.promotionable.description  if !promotion.promotionable.blank?

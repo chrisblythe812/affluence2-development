@@ -93,6 +93,20 @@ module ApplicationHelper
     params[:controller] == 'gives'
   end
 
+  def event_image(promotion,format=:normal)
+
+    photo = promotion.carousel_image unless format == :normal
+    photo = promotion.normal_image unless format == :carousel
+    if photo.blank?
+      temp = (format == :thumb) ? 'aff-user-small.png':'aff-user-large.png'
+      img = temp
+    else
+      temp = (format == :normal) ? :medium : :carousel
+     img = photo.image.url(temp)
+    end
+    image_tag img
+  end
+
 
 
   def display_image(photos, format = :medium)
