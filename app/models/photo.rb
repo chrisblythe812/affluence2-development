@@ -12,7 +12,7 @@ class Photo < ActiveRecord::Base
       :styles => Proc.new { |clip| clip.instance.styles }    }
   else
     paperclip_opts = {
-        :styles => Proc.new { |clip| clip.instance.styles },
+      :styles => Proc.new { |clip| clip.instance.styles },
     }
   end
 
@@ -25,18 +25,15 @@ class Photo < ActiveRecord::Base
   #    :styles => Proc.new { |clip| clip.instance.styles }
 
   def styles
-    p "photoable_type #{self.photoable_type}"
     if self.photoable_type == 'Profile'
       { :medium => ['260x260#', :png], :thumb => ['60x60#', :png] }
     elsif self.photoable_type == 'Promotion'
-      p "promotionable_type #{self.photoable.promotionable_type}"
       if self.photoable.promotionable_type == 'Event'
         { :medium => ['360x268#', :png], :carousel => ['870x400#', :png]}
       elsif  self.photoable.promotionable_type == 'Offer'
         { :medium => ['210x100#', :png]}
       end
     elsif self.photoable_type.nil?
-      p "photoable_type is nil "
       { :medium => ['260x260#', :png], :thumb => ['60x60#', :png] }
     end
   end

@@ -30,16 +30,12 @@ class ProfilesController < ApplicationController
     session['menu_link'] = params["value"]
 
     @profile = current_user.profile
-      p @profile.photos
     if @profile.photos.blank?
       @profile.photos.build
     elsif @profile.photos.size > 1
       @profile.photos.each do |photo|
-        p photo
         photo.destroy if @profile.photos.size > 1
-        p photo 
       end
-
     end
     @user = @profile.user
   end 
@@ -93,7 +89,6 @@ class ProfilesController < ApplicationController
 
   def update_notifications
     begin
-      p params
       @notication_settings = current_user.profile.notification_setting
       @notication_settings.update_attributes(params["name"].to_sym => params["value"])
       render :json => {'notice' => 'updated successfully'}.to_json
@@ -263,7 +258,6 @@ class ProfilesController < ApplicationController
 
   def update_privacy
     begin
-      p params
       @privacy_setting = current_user.profile.privacy_setting
       @privacy_setting.update_attributes(params["name"].to_sym => params["value"].to_i)
       render :json => {'notice' => params["name"] + ' setting updated successfully'}.to_json

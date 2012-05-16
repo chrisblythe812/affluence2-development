@@ -36,7 +36,7 @@
          $("#settings li").eq($(this).index()+1).addClass("active");
       });
 
-      var clicked = "#{clicked}";
+      var clicked = "#{account_settings_menu_clicked}";
       $('#settings li').eq(clicked).addClass('active');
       if (clicked != 1) {
         $('#settings li:eq('+clicked+') a').click();

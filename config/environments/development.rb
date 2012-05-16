@@ -53,6 +53,8 @@ Affluence2::Application.configure do
 
   SslRequirement.disable_ssl_check = true
 
+
+
 end
 
 

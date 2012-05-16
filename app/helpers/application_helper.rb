@@ -124,7 +124,7 @@ module ApplicationHelper
     @devise_mapping ||= Devise.mappings[:user]
   end
 
-  def clicked
+  def account_settings_menu_clicked
     temp = session['menu_link']
     session['menu_link'] = nil
 

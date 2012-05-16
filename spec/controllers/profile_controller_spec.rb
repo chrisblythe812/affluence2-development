@@ -28,7 +28,6 @@ describe ProfilesController do
       @profile.update_attributes({:city=>"hyd", :first_name => ''}).should be false
       post :update, :id => @profile.id, :profile => {:first_name => ''}
   
-     p  @profile.errors
  
       @profile.should have(1).errors_on(:first_name)
       response.should render_template('edit')
