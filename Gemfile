@@ -24,7 +24,7 @@ gem 'uuid'
 gem 'carmen', :git => 'git://github.com/jim/carmen.git'
 gem 'kaminari'
 gem 'bootstrap_kaminari', :git => 'git://github.com/dleavitt/bootstrap_kaminari.git'
-
+gem "formtastic", "~> 2.1.1"
 
 
 
