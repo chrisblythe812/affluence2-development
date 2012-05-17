@@ -7,7 +7,7 @@ ActiveAdmin.register Event do
   scope :all, :default => true
   #scope :up_comming
   scope :past
-  scope :active
+  #scope :active #todo it should also include the upcoming events. ex: active.up_coming
   scope :draft
 
   filter :title
