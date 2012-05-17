@@ -75,6 +75,6 @@ class EventsController < ApplicationController
   end
 
   def get_latest(max=3)
-    @promotion_events = Event.active.limit(max)
+    @promotion_events = Event.active.up_comming.limit(max)
   end
 end

@@ -7,13 +7,13 @@ ActiveAdmin.register Event do
   scope :all, :default => true
   #scope :up_comming
   scope :past
-  scope :active
+  #scope :active #todo it should also include the upcoming events. ex: active.up_coming
   scope :draft
 
   filter :title
 
   index do
-    column("Start Date",:sortable => false) {|event| event.start_date.strftime("%m-%d-%y") unless event.start_date.blank?}
+    column("Start Date",:sortable => false) {|event| global_date_format(event.start_date)}
     column('Event',  :title,:sortable => false)
     column('Total Tickets',:tickets,:sortable => false)
     column('Tickets Remaining',:tickets,:sortable => false)
@@ -54,8 +54,8 @@ ActiveAdmin.register Event do
       section "Schedules for this event" do
         table_for event.schedules do |schedule|
           column("Title") { |schedule| schedule.title }
-          column("Date") { |schedule| event_date_time_format(schedule) }
-          column("Time") { |schedule| event_date_time_format(schedule,'time') }
+          column("Date") { |schedule| global_date_format(schedule.date) }
+          column("Time") { |schedule| global_time_format(schedule.date) }
         end
 
 
@@ -69,7 +69,7 @@ ActiveAdmin.register Event do
         table_for event.promotion.registered_members do |registered_member|
           column("Name") { |registered_member| registered_member.user.profile.first_name }
           column("profile"){|registered_member| display_image(registered_member.user.profile.photos, :thumb)}
-          column("Date"){|registered_member| registered_member.created_at.strftime("%d/%m/%Y")}
+          column("Date"){|registered_member| global_date_format(registered_member.created_at)}
           column("Tickets booked"){|registered_member| registered_member.total_tickets}
           column("Total price"){|registered_member| "$#{registered_member.total_amount}" }
         end
@@ -88,9 +88,9 @@ ActiveAdmin.register Event do
     f.inputs "Create New Event" do
       f.input :title , :label => "Event Title"
       f.input :description , :label => "Event Description"
-      f.input :carousel_image, :as => :file , :label =>"Add Pictures(carousel image)"
-      f.input :normal_image, :as => :file , :label =>"Add Pictures(normal image)"
-      f.input :price
+      f.input :carousel_image, :as => :file , :label =>"Upload Image(size : 870x400)"
+      f.input :normal_image, :as => :file , :label =>"Upload Image(size : 360x268)"
+      f.input :price, :label => "Price ($)"
       f.input :tickets, :label => "Number of Tickets"
       f.input :sale_ends_at, :label => "Sale Ends"
       f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
@@ -108,7 +108,6 @@ ActiveAdmin.register Event do
         include.input :title
       end
     end
-
 
     f.buttons
   end
