@@ -90,7 +90,7 @@ end
          recursive_count == 0 ? query_text << "  INTERSECT  " : query_text << "  UNION  "
          query_text  << "select * from profiles
            where (user_id is not null)
-           and id in ( select distinct taggable_id profile_id
+           and id in ( select distinct taggable_id 
                        from taggings
                        where taggable_type='Profile'
                        and (context = 'interests' or context = 'expertises')
