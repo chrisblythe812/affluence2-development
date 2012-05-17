@@ -19,7 +19,7 @@ class MembersController < ApplicationController
   def search_profile
     logger.info "Called Members#search_profile ..."
     unless params[:query].blank?
-      Profile.member_search(params[:query]).reverse
+      Profile.get_by_matching_name(params[:query])
     else
       @connections = true
       profiles = []
