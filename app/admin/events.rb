@@ -67,11 +67,11 @@ ActiveAdmin.register Event do
 
       section "Members registered for this event" do
         table_for event.promotion.registered_members do |registered_member|
-          column("Name") { |registered_member| registered_member.user.profile.first_name }
-          column("profile"){|registered_member| display_image(registered_member.user.profile.photos, :thumb)}
-          column("Date"){|registered_member| global_date_format(registered_member.created_at)}
-          column("Tickets booked"){|registered_member| registered_member.total_tickets}
-          column("Total price"){|registered_member| "$#{registered_member.total_amount}" }
+          column("Name") { |registered_member| registered_member.user_id }
+          #column("profile"){|registered_member| display_image(registered_member.user.profile.photos, :thumb)}
+          #column("Date"){|registered_member| global_date_format(registered_member.created_at)}
+          #column("Tickets booked"){|registered_member| registered_member.total_tickets}
+          #column("Total price"){|registered_member| "$#{registered_member.total_amount}" }
         end
       end
       end
