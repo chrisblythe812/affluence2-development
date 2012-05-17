@@ -94,7 +94,6 @@ module ApplicationHelper
   end
 
   def event_image(promotion,format=:normal)
-
     photo = promotion.carousel_image unless format == :normal
     photo = promotion.normal_image unless format == :carousel
     if photo.blank?
@@ -149,7 +148,7 @@ module ApplicationHelper
 
   def event_date_time_format(event,format='date')
     return "" if event.date.blank?
-    return (event.date.strftime("%d/%m/%Y") unless event.date.blank?) if format=='date'
+    return global_date_format(event.date) if format=='date'
     return (event.date.strftime("%l:%M %p") unless event.date.blank?) if format=='time'
   end
 
@@ -161,7 +160,16 @@ module ApplicationHelper
       end
     end
     temp
+  end
 
+  def global_date_format(date)
+    return "" if date.blank?
+    date.strftime("%b %d, %Y")
+  end
+
+  def global_time_format(date)
+    return "" if date.blank?
+    date.strftime("%l:%M %p")
   end
 end
  

@@ -15,7 +15,7 @@
         - @orders.each_with_index do |order,i|
           %tr
             %td #{i+1}
-            %td #{order.created_at.strftime("%d/%m/%Y")}
+            %td #{global_date_format(order.created_at)}
             %td
               = order_type(order.payable_type)
               = order_content(order)

@@ -4,7 +4,7 @@
     %span.pull-right
       %i.icon-time
       %strong SALE ENDS
-      %em= @event.sale_ends_at.strftime("%B %d, %Y") if !@event.sale_ends_at.blank?
+      %em= global_date_format(@event.sale_ends_at)
 
 .row
   .span6
@@ -44,8 +44,8 @@
           %tbody
             - @event.schedules.each do |schedule|
               %tr
-                %td= event_date_time_format(schedule)
-                %td= event_date_time_format(schedule,'time')
+                %td= global_date_format(schedule.date)
+                %td= global_time_format(schedule.date)
                 %td= schedule.title
       / schedule
     / tab-content
