@@ -37,6 +37,15 @@ class Event < ActiveRecord::Base
 
   attr_accessor :carousel_image, :normal_image
 
+  def has_tickets?
+    (!tickets_remaining.blank?) && (tickets_remaining.to_i > 0)
+  end
+
+  def has_more_than_10_tickets?
+    has_tickets? && tickets_remaining > 10
+  end
+
+
 
   def self.process_tickets(event,tickets,state)
     if state == 'initial'
