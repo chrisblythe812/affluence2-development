@@ -38,5 +38,39 @@ class Event < ActiveRecord::Base
   attr_accessor :carousel_image, :normal_image
 
 
+  def self.process_tickets(event,tickets,state)
+    if state == 'initial'
+    initial_process(event,tickets)
+    elsif state = 'success'
+      success_process(event,tickets)
+    elsif state == 'failure'
+      failure_process(event,tickets)
+    end
+  end
+
+
+  def self.initial_process(event,tickets)
+    event = Event.find(event.id)
+    if event.tickets_remaining > 0 &&  event.tickets_remaining.to_i >= tickets.to_i
+      tickets_remaining = event.tickets_remaining.to_i - tickets.to_i
+      in_progress = event.inprogress.to_i + tickets.to_i
+      event.update_attributes(:tickets_remaining => tickets_remaining, :inprogress => in_progress)
+    end
+  end
+
+  def self.success_process(event,tickets)
+    event = Event.find(event.id)
+    in_progress = event.inprogress.to_i - tickets.to_i
+    event.update_attributes(:inprogress => in_progress)
+  end
+
+
+  def self.failure_process(event,tickets)
+    event = Event.find(event.id)
+    tickets_remaining = event.tickets_remaining.to_i + tickets.to_i
+    in_progress = event.inprogress.to_i - tickets.to_i
+    event.update_attributes(:tickets_remaining => tickets_remaining, :inprogress => in_progress)
+  end
+
 end
  
