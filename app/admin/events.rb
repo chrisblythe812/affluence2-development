@@ -92,7 +92,11 @@ ActiveAdmin.register Event do
       f.input :carousel_image, :as => :file , :label =>"Upload Image(size : 870x400)"
       f.input :normal_image, :as => :file , :label =>"Upload Image(size : 360x268)"
       f.input :price, :label => "Price ($)"
-      f.input :tickets, :label => "Number of Tickets"
+      if f.object.new_record?
+        f.input :tickets, :label => "Number of Tickets"
+      else
+        f.input :tickets_remaining, :label => "Number of Tickets Remaining"
+      end
       f.input :sale_ends_at, :label => "Sale Ends"
       f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
     end
