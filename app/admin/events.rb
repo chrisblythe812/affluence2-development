@@ -4,7 +4,7 @@ ActiveAdmin.register Event do
   config.sort_order = "start_date_desc"
   #config.per_page = 5
 
-  scope :all, :default => true
+  scope :up_comming, :default => true
   #scope :up_comming
   scope :past
   #scope :active #todo it should also include the upcoming events. ex: active.up_coming
@@ -130,7 +130,7 @@ ActiveAdmin.register Event do
   end
 
   member_action :create, :method => :post do
-    Event.transaction do
+    #Event.transaction do
     @event = Event.new(params[:event])
     construct_event
       if event_start_date_set? && @event.save
@@ -138,7 +138,7 @@ ActiveAdmin.register Event do
       else
         render :new
       end
-     end
+     #end
 
   end
 
