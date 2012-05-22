@@ -1,0 +1,16 @@
+- message = conversation.messages.first
+- profile = (message.sender == current_user) ? message.recipient.profile : message.sender.profile
+%tr{:class => "#{'unread' unless conversation.read?(current_user)}" }
+  %td.span1{:data => {:conversation_id => conversation.id}}
+    = link_to image_tag(profile.photos.first.image.url(:thumb)), profile_path(profile.user), :class => "thumbnail"
+  %td
+    -if conversation.messages.length > 1
+      %h5{:class => "#{'unread_msg' unless conversation.read?(current_user)} tk-ff-tisa-web-pro" }
+        Last reply by <span>#{last_reply_name(conversation.messages.first.sender)}:</span>
+    -else
+      %span{:class => "#{'unread_msg' unless conversation.read?(current_user)} last-reply tk-ff-tisa-web-pro" }=link_to truncate(message.subject, :length => 45), user_conversation_path(current_user, conversation), :class => "desc"
+    %br/
+    %p
+      %a.summary{:href => user_conversation_path(current_user, conversation) }
+        =truncate(message.body.gsub(/<\/?[^>]*>/, ""), :length => 90)
+  %td= time_ago_in_words(message.updated_at) + " ago"

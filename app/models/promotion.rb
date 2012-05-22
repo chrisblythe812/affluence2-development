@@ -6,7 +6,7 @@ class Promotion < ActiveRecord::Base
   has_many :registered_members,  :class_name => 'PayablePromotion'
 
   accepts_nested_attributes_for :photos
-
+  validates_presence_of :promotionable
   def normal_image
     photos.find(:first, :conditions => " image_type = 'normal'")
   end

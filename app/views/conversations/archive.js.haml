@@ -1,0 +1,6 @@
+-unless @conversation.read?(current_user)
+  -session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
+  var count = "#{session[:unread_messages_count]}";
+
+  $("nav .msg_counter").html(count);
+  $(".inbox .count").html(count);

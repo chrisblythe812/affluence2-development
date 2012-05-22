@@ -1,0 +1,44 @@
+#page-header
+  -if controller.action_name == "new"
+    %header#title
+      =link_to "message", user_conversations_path(current_user), :class=>"msg"
+      %h1= 'New Message'
+  -if controller.action_name == "show"
+    %header#title.conversations-header
+      =link_to "message", user_conversations_path(current_user), :class=>"msg view_msg"
+      %h1 View Messages
+      - convo_index = @other_conversations.index(@conversation)
+      -if convo_index > 0 && @other_conversations[convo_index - 1]
+        =link_to "up", user_conversation_path(current_user, @other_conversations[convo_index - 1]), :class=>"up"
+      -else
+        %a{:href => "#", :class => "up disabled"} up
+      -if @other_conversations[convo_index + 1]
+        =link_to "down", user_conversation_path(current_user,@other_conversations[convo_index + 1]), :class=>"down"
+      -else
+        %a{:href => "#",:class => "down disabled"} down
+      .clear
+  -else
+    %h3.page-title{:class => @page_header.downcase}
+      =@page_header
+    -unless controller.action_name == "new"
+      .new-message
+        = link_to 'New Message', new_user_conversation_path(current_user)
+
+-unless controller.action_name == "show" || controller.action_name == "new"
+  .messages-tabs
+    = tabs_tag :open_tabs => { :class => "section #{current_tab}", :role => 'navigation' }, :namespace => :messages do |tab|
+      = tab.inbox "Inbox", user_conversations_path(current_user, :tab_page => "inbox"), :class=> "inbox"
+      %a.msg_counter{:class => "#{'doubledigit' if unread_messages_count > 9}"}=unread_messages_count
+      = tab.archive "Archive", user_conversations_path(current_user, :tab_page => "archive"), :class=> "archive"
+    .archive
+      %p.select
+        Select
+        %a{:href => "#"} All
+        %a{:href => "#"} None
+      %img{:src => "/images/archive_seperator.png"}
+      %p.archive_text With selected:
+      - if params[:tab_page] == "archive"
+        %a{:href => "#", :class => "unarchive_btn"} Unarchive
+      - else
+        %a{:href => "#", :class => "archive_btn"} Archive
+      .clear

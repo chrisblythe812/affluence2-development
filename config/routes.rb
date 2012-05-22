@@ -2,6 +2,8 @@ Affluence2::Application.routes.draw do
 
 
 
+  
+
   get "activities/index"
 
   get "activities/connections"
@@ -42,18 +44,26 @@ Affluence2::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
+  resources :users, :only => :show do
+    resources :conversations, :only => [:index, :show, :new, :create, :update] do
+      get :archive
+      get :unarchive
+    end
+  end
+
+
   # Sample resource route with options:
-     resources :events do
-       member do
-         post :register
-       end
-  #
-       collection do
-         get 'home_page_events'
-         get 'landing_page_events'
-         get 'confirm'
-       end
-     end
+  resources :events do
+    member do
+      post :register
+    end
+    #
+    collection do
+      get 'home_page_events'
+      get 'landing_page_events'
+      get 'confirm'
+    end
+  end
 
   resources :home do
 
@@ -83,8 +93,8 @@ Affluence2::Application.routes.draw do
   end
 
 
-#  match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
-#  match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
+  #  match 'profile/confirm' => 'profile#confirm', :as => :confirm_profile
+  #  match 'profile/confirm_credit_card_info' => 'profile#confirm_credit_card_info', :as => :confirm_credit_card_info_profile
 
 
 
@@ -93,7 +103,7 @@ Affluence2::Application.routes.draw do
       get 'latest'
       get 'find_members'
       get 'search'
-#      get 'index'
+      #      get 'index'
     end
   end
 
@@ -113,7 +123,7 @@ Affluence2::Application.routes.draw do
 
 
 
-    # Sample resource route with sub-resources:
+  # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales
   #     resource :seller

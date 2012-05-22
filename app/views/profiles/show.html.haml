@@ -2,14 +2,14 @@
 .span9
   .row
     .span7
-      %h1= current_user.profile.name.capitalize if !current_user.profile.name.blank?
+      %h1= @profile.name.capitalize if !@profile.name.blank?
       %h5
-        %strong= current_user.profile.title.capitalize  if !current_user.profile.title.blank?
-        %em=" at #{current_user.profile.company}"
+        %strong= @profile.title.capitalize  if !@profile.title.blank?
+        %em=" at #{@profile.company}"
       %h6
         %i.icon-map-marker>
-        = "#{current_user.profile.city}, #{current_user.profile.state}"
-        %small= current_user.profile.country
+        = "#{@profile.city}, #{@profile.state}"
+        %small= @profile.country
     .span2
       %p.pull-right
         %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
@@ -20,25 +20,25 @@
     .span9
       %h3 About
       %hr.zero
-        %p= current_user.profile.bio
+        %p= @profile.bio
     / span9
   / row
   .row
     .span3
       %h5 Associations
       %hr.zero
-        - current_user.profile.association_list.each do |x|
+        - @profile.association_list.each do |x|
           %span= x
           %br/
     .span3
       %h5 Expertise
       %hr.zero
-        - current_user.profile.expertise_list.each do |x|
+        - @profile.expertise_list.each do |x|
           %span.label.label-success= x
     .span3
       %h5 Interest
       %hr.zero
-        - current_user.profile.interest_list.each do |x|
+        - @profile.interest_list.each do |x|
           %span.label.label-info= x
   / row
   .row
@@ -79,3 +79,20 @@
     / span9
   / row
 / span9
+#new-message.modal.hide.fade{:style => "display: none;"}
+  .modal-header
+    %a.close{"data-dismiss" => "modal", :href => "#"} ×
+    %h3 New Message
+  .modal-body
+    %form.form-horizontal
+      %fieldset
+        .control-group
+          %label.control-label{:for => "input01"} To
+          .controls
+            <input type="text" profita"]"="" stukel","michael="" macleod","doug="" blake="" data-source="[" data-input="5" data-provide="typeahead" id="input01" class="input-xlarge">
+        .control-group
+          %label.control-label{:for => "textarea"} Message
+          .controls
+            %textarea#textarea.input-xlarge{:rows => "3"}
+        .form-actions
+          %button.btn.btn-primary{:type => "submit"} Send
