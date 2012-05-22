@@ -25,9 +25,9 @@ class Event < ActiveRecord::Base
 
   accepts_nested_attributes_for :schedules, :includes, :promotion
 
-  before_validation :set_start_date
+  #before_validation :set_start_date
   validates_presence_of :title, :description, :price
-#  validates_presence_of :carousel_image, :normal_image, :on => :create
+  validates_presence_of :carousel_image, :normal_image, :on => :create
   validates :sale_ends_at, :presence => true
   validates :tickets, :presence => true
   validate :compare_with_start_date
