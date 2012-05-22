@@ -2,8 +2,10 @@ class Photo < ActiveRecord::Base
   belongs_to :photoable, :polymorphic => true
   attr_accessor :parent_type
   attr_accessible :image, :title, :description, :photoable_type, :image_type
-  
 
+  validates_attachment_presence :image
+  validates_attachment_size :image, :less_than=>5.megabyte
+  validates_attachment_content_type :image, :content_type=>['image/jpeg', 'image/png', 'image/gif']
 
   unless Rails.env.development?
     paperclip_opts = { :storage => :s3,

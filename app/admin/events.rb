@@ -16,7 +16,7 @@ ActiveAdmin.register Event do
     column("Start Date",:sortable => false) {|event| global_date_format(event.start_date)}
     column('Event',  :title,:sortable => false)
     column('Total Tickets',:tickets,:sortable => false)
-    column('Tickets Remaining',:tickets,:sortable => false)
+    column('Tickets Remaining',:tickets_remaining,:sortable => false)
     column('Price',:sortable => false){|event| "$#{event.price}"}
     column('Actions',:sortable => false) do |event|
       link_to 'details', admin_event_path(event)
@@ -49,6 +49,7 @@ ActiveAdmin.register Event do
         row :start_date
         row :sale_ends_at
         row :tickets
+        row :tickets_remaining
       end
 
       section "Schedules for this event" do
@@ -91,7 +92,11 @@ ActiveAdmin.register Event do
       f.input :carousel_image, :as => :file , :label =>"Upload Image(size : 870x400)"
       f.input :normal_image, :as => :file , :label =>"Upload Image(size : 360x268)"
       f.input :price, :label => "Price ($)"
-      f.input :tickets, :label => "Number of Tickets"
+      if f.object.new_record?
+        f.input :tickets, :label => "Number of Tickets"
+      else
+        f.input :tickets_remaining, :label => "Number of Tickets Remaining"
+      end
       f.input :sale_ends_at, :label => "Sale Ends"
       f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
     end
@@ -125,6 +130,7 @@ ActiveAdmin.register Event do
   end
 
   member_action :create, :method => :post do
+    Event.transaction do
     @event = Event.new(params[:event])
     construct_event
       if event_start_date_set? && @event.save
@@ -132,6 +138,8 @@ ActiveAdmin.register Event do
       else
         render :new
       end
+     end
+
   end
 
 
@@ -139,6 +147,7 @@ ActiveAdmin.register Event do
 
     def construct_event
       promotion = @event.build_promotion
+      @event.tickets_remaining = @event.tickets
       promotion.photos.build(construct_event_photo)
     end
 

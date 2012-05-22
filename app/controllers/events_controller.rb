@@ -22,14 +22,17 @@ class EventsController < ApplicationController
   def register
     @event = Event.active.find(params[:id])
     payable_promotion = PayablePromotion.create_event_promotion(params[:payable_promotion],@event,current_user)
+    Event.process_tickets(@event,params[:payable_promotion][:total_tickets],'initial')
     if !payable_promotion.blank?
       result = BrainTreeTranscation.event_payment(payable_promotion)
       if result == 'success'
+        Event.process_tickets(@event,params[:payable_promotion][:total_tickets],'success')
         Activity.create_user_event(current_user,@event)
         NotificationTracker.schedule_event_emails(current_user,@event)
         flash[:success]= 'Your have successfully registered for the event'
         redirect_to orders_path()
       elsif result == 'failed'
+        Event.process_tickets(@event,params[:payable_promotion][:total_tickets],'failure')
         flash[:error]= 'Your event registration failed due to unsuccessful transaction'
         redirect_to event_path(@event.id)
       else
