@@ -7,8 +7,8 @@ class ProfilesController < ApplicationController
 
       if term && !term.blank?
         items =  ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
-            "left outer join taggings on tags.id=taggings.tag_id where tags.name LIKE '%" +
-            term + "%' and taggings.context = 'associations' order by tags.id desc limit 10")
+            "left outer join taggings on tags.id=taggings.tag_id where lower(tags.name) LIKE lower('%" +
+            term + "%') and taggings.context = 'associations' order by tags.id desc limit 10")
       else
         items = {}
       end    
@@ -84,7 +84,7 @@ class ProfilesController < ApplicationController
   end
 
   def show
-
+    @profile = Profile.find(params[:id])
   end
 
   def update_notifications

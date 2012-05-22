@@ -1,0 +1,11 @@
+-if message.sender
+  .reply{ :id => "message_#{message.id}" }
+    .margin
+      = link_to image_tag(message.sender.profile.photos.first.image.url(:avatar)), profile_path(message.sender), :class => "avatar small"
+      %span.spinner= image_tag("ajax-loader.gif")
+    .main
+      .entry-title
+        = link_to message.sender.profile.name, profile_path(message.sender), :class => "author vcard fn url"
+      .comment-content= message_with_links_and_paragraphs(message.body).html_safe
+      .byline
+        %abbr.published= time_ago_in_words(message.created_at) + " ago"

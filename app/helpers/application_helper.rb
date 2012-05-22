@@ -171,6 +171,27 @@ module ApplicationHelper
     return "" if date.blank?
     date.strftime("%l:%M %p")
   end
+  def unread_messages_count
+    session[:unread_messages_count] || 0
+  end
+  def message_with_links_and_paragraphs(body)
+    formated_paragraphs = []
+    body.split("\n").each do |paragraph|
+        x = []
+        #unless paragraph.empty?
+          paragraph.split(" ").each do |word|
+            if (word =~ URI::regexp).nil?
+              x << word
+            else
+              x << "<a href="+word+">"+word+"</a>"
+            end
+          end
+          formated_paragraphs << "<p>" + x.join(" ") + "</p>"
+        #end
+    end
+    return formated_paragraphs.join
+  end
+
 end
  
  

@@ -23,19 +23,24 @@ class Event < ActiveRecord::Base
   }
   EMAIL_REMINDER_SCHEDULE_INTERVAL_DAYS = [1,2] # days before the event starts
 
-  accepts_nested_attributes_for :schedules, :includes
+  accepts_nested_attributes_for :schedules, :includes, :promotion
 
-
+  before_validation :set_start_date
   validates_presence_of :title, :description, :price
-  validates_presence_of :carousel_image, :normal_image, :on => :create
+#  validates_presence_of :carousel_image, :normal_image, :on => :create
   validates :sale_ends_at, :presence => true
   validates :tickets, :presence => true
-
+  validate :compare_with_start_date
 
   has_permalink :title, :update => true
 
 
   attr_accessor :carousel_image, :normal_image
+
+    private
+  def set_start_date
+    self.start_date = self.schedules.first.date.to_date
+  end
 
   def has_tickets?
     (!tickets_remaining.blank?) && (tickets_remaining.to_i > 0)
@@ -81,5 +86,8 @@ class Event < ActiveRecord::Base
     event.update_attributes(:tickets_remaining => tickets_remaining, :inprogress => in_progress)
   end
 
+  def compare_with_start_date
+    self.errors = "'sale end' date should be before 'event start' date" unless self.start_date >= self.sale_ends_at
+  end
 end
- 
+  

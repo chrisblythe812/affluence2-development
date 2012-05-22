@@ -1,0 +1,72 @@
+-content_for :javascripts do
+  =javascript_include_tag("tag-it/tag-it")
+  :javascript
+    $(function() {
+      var to_member = #{params[:to].present?};
+      var recipient_name = "#{@recipient ? @recipient.profile.name : ''}"
+      var recipient_profile_id = "#{@recipient? @recipient.profile.id : ''}"
+      var profile_id;
+      $("#msg_to").tagit({
+        itemName: 'conversation',
+        tagSource: function(request,response){
+          $.ajax({
+            url: "#{autocomplete_friend_full_name_user_friendships_path}",
+            dataType: "json",
+
+            data: {
+              term: request.term
+            },
+            beforeSend: function(jqXHR, settings){
+              $(".new_msg_form").find(".ajax-loader").fadeIn();
+            },
+            success: function( data ) {
+              $(".new_msg_form").find(".ajax-loader").fadeOut();
+              response($.map(data, function(item){
+                profile_id = item.id
+                if($("#msg_to").children().length < 2){
+                  return {
+                    label: item.value,
+                    value: item.value,
+                    profile_id: item.id
+
+                  }
+                }
+              }))
+            }
+          });
+        },
+        fieldName: 'recipient_profile_id',
+        onTagAdded: function(el) {
+          $(el).find('input').val($(el).attr('data-profile_id'));
+          var user_name = el.text().substring(0, el.text().length-1);
+          $("#msgRecip").val(user_name);
+          $("#msg_to .tagit-new input").attr("disabled", "true");
+          $("#conversation_messages_attributes_0_subject").focus();
+        },
+        onTagRemoved: function(el) {
+          $("#msg_to .tagit-new input").removeAttr("disabled");
+        },
+        select: true,
+        allowSpaces: true,
+        caseSensitive: false
+      });
+      if(to_member){
+        $("#msg_to").prepend("<li class=\"tagit-choice\">"+recipient_name +"<a class=\"close\">x</a><input type=\"hidden\" style=\"display:none;\" value=\""+recipient_profile_id+"\" name=\"conversation[recipient_profile_id][]\"></li>")
+      }
+    });
+
+- content_for :left_column do
+  .new_msg_form
+    = semantic_form_for(@conversation, :url => user_conversations_path) do |f|
+      = f.inputs do
+        = f.fields_for(:messages) do |m|
+          %li.string.input.msg-input
+            %label To:
+            .recepients
+              %ul#msg_to{:name => "recipient_profile_id"}
+            .ajax-loader Searching Members...
+          = m.input :subject, :input_html => { :class => 'send_msg_input' }
+          = m.input :body, :label => "Message", :input_html => {:rows => 10}
+          = m.input :recipient_name, :as => :hidden, :input_html =>{:id => "msgRecip", :value => "#{@recipient.profile.name if @recipient}"}
+      = f.buttons do
+        = f.commit_button "Send Message", :button_html => {:class => "new_msg_send"}

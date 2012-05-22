@@ -10,7 +10,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_in_path_for(resource)
+  def set_unread_messages_count
+    session[:unread_messages_count] = current_user.unread_messages_counter
+  end
+
+ def after_sign_in_path_for(resource)
     stored_location_for(resource) || current_user_home_page
   end
 

@@ -1,0 +1,18 @@
+.span9
+  .row
+    .span5
+      %h2 Messages
+    .span4
+      %p.pull-right
+        %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message"}
+          %i.icon-pencil.icon-white
+          New Message
+
+
+  -unless @conversations.blank?
+    %table.table.table-striped
+      %tbody
+        =render :partial => "conversations/last_message", :collection => @conversations, :as => :conversation
+    = paginate(@conversations, :theme => "bootstrap")
+  -else
+    %p.no-messages No Messages
