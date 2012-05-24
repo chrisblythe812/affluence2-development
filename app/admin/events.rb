@@ -25,20 +25,36 @@ ActiveAdmin.register Event do
 
   config.clear_sidebar_sections!
 
-  #action_item :only => [:show] do
-    #link_to('Add Images', edit_admin_promotion_path(event.promotion))
-  #end
+  action_item :only => [:show] do
+    link_to('View/Add Images', add_images_admin_event_path(event.id))
+  end
 
   member_action :add_images,  :method => :get do
     @event = Event.find(params[:id])
     @promotion = @event.promotion
+    @upload = Photo.new
+    @photos = @event.promotion.gallery_images
     render "add_images"
   end
 
   member_action :update_images, :method => :post do
    @event = Event.find(params[:id])
-   @promotion = @event.promotion
+   @upload = Photo.new(params[:upload])
+   @upload.photoable_id = @event.promotion.id
+   @upload.photoable_type = 'Promotion'
+   if @upload.save
+     render :json => { :id => @upload.id, :pic_path => @upload.image.url.to_s , :name => @upload.image.url(:medium) }, :content_type => 'text/html'
+   else
+     #todo handle error
+     #render :json => { :result => 'error'}, :content_type => 'text/html'
+   end
+  end
 
+
+  member_action :delete_image, :method => :get do
+   photo = Photo.find(params[:id]).destroy
+   event = photo.photoable.promotionable.id
+   redirect_to add_images_admin_event_path(event)
   end
 
   show :title => "Event - #{:title}" do |event|
@@ -79,7 +95,6 @@ ActiveAdmin.register Event do
   end
 
   sidebar "Image", :only => :show do
-
     div do
       image_tag(event.promotion.normal_image.image.url(:medium), :style => "height:200px;width:200px;")
     end

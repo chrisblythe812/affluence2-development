@@ -17,5 +17,7 @@ class Promotion < ActiveRecord::Base
     photos.find(:first, :conditions => " image_type = 'carousel'")
   end
 
-
+  def gallery_images
+    photos.find(:all, :conditions => " image_type is null")
+  end
 end
