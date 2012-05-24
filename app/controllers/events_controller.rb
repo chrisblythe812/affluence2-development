@@ -8,14 +8,17 @@ class EventsController < ApplicationController
 
   def index
     @profile_tab = false
-    @events = Event.active.up_comming.last(6)
-    @past_events = Event.active.past.last(3)
+    @events = get_latest(6)
+    @past_events = Event.past.limit(3).order("sale_ends_at DESC")
   end
 
 
   def show
     @profile_tab = false
-    @event = Event.active.find(params[:id])
+    unless @event = Event.active.find_by_id(params[:id])
+      flash[:notice]= "Event doesn't exists"
+      redirect_to events_path
+    end
   end
 
 
@@ -78,6 +81,6 @@ class EventsController < ApplicationController
   end
 
   def get_latest(max=3)
-    @promotion_events = Event.active.up_comming.limit(max)
+    @promotion_events = Event.up_comming.limit(max).order("sale_ends_at DESC")
   end
 end
