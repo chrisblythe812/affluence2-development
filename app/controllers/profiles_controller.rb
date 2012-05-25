@@ -84,7 +84,9 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    @profile = Profile.find(params[:id])
+    user = User.find_by_permalink(params[:id])
+    @profile = user.profile unless user.blank?
+
   end
 
   def update_notifications
@@ -129,7 +131,7 @@ class ProfilesController < ApplicationController
       user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
       sign_in user
       session[:user_info] = nil
-      redirect_to profile_path(current_user.profile.id)
+      redirect_to profile_path(current_user.permalink)
       else
       session[:user_info] = nil
       #todo need to populate the fields with user data.
