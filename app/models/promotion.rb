@@ -26,6 +26,6 @@ class Promotion < ActiveRecord::Base
   end
 
   def active_registered_members
-    registered_members.find(:all, :joins => "right join users on users.id = payable_promotions.user_id" )
+    registered_members.find(:all, :conditions => " users.id is not null",  :joins => "left join users on users.id = payable_promotions.user_id" )
   end
 end
