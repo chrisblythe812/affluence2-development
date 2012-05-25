@@ -3,7 +3,7 @@ class Promotion < ActiveRecord::Base
   belongs_to :promotionable, :polymorphic => true, :dependent => :destroy
   has_and_belongs_to_many :users
 
-  has_many :registered_members,  :class_name => 'PayablePromotion'
+  has_many :registered_members,  :class_name => 'PayablePromotion', :include => :user
 
   accepts_nested_attributes_for :photos
 
