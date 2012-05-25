@@ -83,7 +83,7 @@ ActiveAdmin.register Event do
       end
 
       section "Members registered for this event" do
-        table_for event.promotion.registered_members do |registered_member|
+        table_for event.promotion.active_registered_members do |registered_member|
           column("Name") { |registered_member| registered_member.user.profile.first_name }
           column("profile"){|registered_member| display_image(registered_member.user.profile.photos, :thumb)}
           column("Date"){|registered_member| global_date_format(registered_member.created_at)}
