@@ -20,4 +20,8 @@ class Promotion < ActiveRecord::Base
   def gallery_images
     photos.find(:all, :conditions => " image_type is null")
   end
+
+  def offer_image
+    photos.find(:first)
+  end
 end
