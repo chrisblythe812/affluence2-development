@@ -129,7 +129,7 @@ class ProfilesController < ApplicationController
       user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
       sign_in user
       session[:user_info] = nil
-      redirect_to profile_path(current_user.permalink)
+      redirect_to profile_path(current_user.profile.id)
       else
       session[:user_info] = nil
       #todo need to populate the fields with user data.
