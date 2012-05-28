@@ -33,7 +33,7 @@
   - @events.each do |event|
   - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{event.id}-register")
     .span4
-      .thumbnail{:style => "height:385px; margin-bottom:30px;"}
+      .thumbnail{:style => "height:370px; margin-bottom:30px;"}
         = event_image(event.promotion, :normal)#display_image(event.promotion.photos)
         .caption
           %h5= event.title
