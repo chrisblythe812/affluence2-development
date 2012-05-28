@@ -17,7 +17,7 @@
         %ul.thumbnails
           - x.each do |profile|
             %li.span3#members_search_profile
-              %a{:href => "#{profile_path(profile)}"}
+              %a{:href => "#{profile_path(profile.user.permalink)}"}
                 .thumbnail
                   %img{:alt => "", :src => "#{profile.photos.first.image.url(:medium) unless profile.photos.blank?   }"}
                   %h5

@@ -10,7 +10,7 @@
           %i.icon-star>
           What's New
       %li{:class => "#{'active' if profiles?}"}
-        %a{:href => "#{profile_path(current_user.profile)}"}
+        %a{:href => "#{profile_path(current_user.permalink)}"}
           %i.icon-home>
           Profile
       %li{:class => "#{(params[:controller] == 'members') ? 'active':''}"}
