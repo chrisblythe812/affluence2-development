@@ -35,12 +35,12 @@ class ConversationsController < ApplicationController
     @other_conversations = Conversation.for_user(current_user).archived?(status)
     @first_message = @conversation.messages.first
     @replies = @conversation.messages
-    @replies.shift
+#    @replies.shift
 
 #    authorize!(:view, @conversation)
     @conversation.messages.build
     unless @conversation.read?(current_user)
-#      session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
+      session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
     end
   end
 
@@ -52,7 +52,7 @@ class ConversationsController < ApplicationController
       @conversation.messages.first.sender = current_user
       @conversation.messages.first.recipient = recipient_user
 
-      authorize!(:create, @conversation.messages.first)
+#      authorize!(:create, @conversation.messages.first)
 
       if @conversation.save
         redirect_to user_conversations_path(current_user), :flash => {:notice => "Your message has been sent."}
@@ -68,8 +68,9 @@ class ConversationsController < ApplicationController
   def update
     @conversation = Conversation.find(params[:id])
 
-    authorize! :edit, @conversation
-
+#    authorize! :edit, @conversation
+    logger.debug '-----------------------------'
+    logger.debug params[:conversation]
     previous_message = @conversation.messages.last
     new_message_attrs = {}
     new_message_attrs[:body] = params[:message][:body]
@@ -78,7 +79,7 @@ class ConversationsController < ApplicationController
     new_message_attrs[:recipient_id] = @conversation.recipient_for(current_user).id
     new_message_attrs[:conversation_id] = @conversation.id
 
-    authorize!(:create, Message)
+#    authorize!(:create, Message)
 
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message

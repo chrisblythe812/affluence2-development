@@ -16,7 +16,7 @@
       - temp_profiles.each do |x|
         %ul.thumbnails
           - x.each do |profile|
-            %li.span3#profile
+            %li.span3#members_search_profile
               %a{:href => "#{profile_path(profile)}"}
                 .thumbnail
                   %img{:alt => "", :src => "#{profile.photos.first.image.url(:medium) unless profile.photos.blank?   }"}
@@ -24,9 +24,10 @@
                     = profile.first_name + " " + profile.last_name
                   %h6
                     = profile.title
-                  %p
+                  %div
                     %i.icon-map-marker>
                     = "#{profile.city}, #{profile.state}."
+                  %div
                     %small= profile.country
 
 

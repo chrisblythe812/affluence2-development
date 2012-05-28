@@ -16,3 +16,20 @@
     = paginate(@conversations, :theme => "bootstrap")
   -else
     %p.no-messages No Messages
+#new-message.modal.hide.fade.in{:style => "display: none;"}
+  .modal-header
+    %a.close{"data-dismiss" => "modal", :href => "#"} ×
+    %h3 New Message
+  .modal-body
+    %form.form-horizontal
+      %fieldset
+        .control-group
+          %label.control-label{:for => "input01"} To
+          .controls
+            <input type="text" profita"]"="" stukel","michael="" macleod","doug="" blake="" data-source="[" data-input="5" data-provide="typeahead" id="input01" class="input-xlarge">
+        .control-group
+          %label.control-label{:for => "textarea"} Message
+          .controls
+            %textarea#textarea.input-xlarge{:rows => "3"}
+        .form-actions
+          %button.btn.btn-primary{:type => "submit"} Send

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_unread_messages_count, :if => :current_user?
   include SslRequirement
   
   def authenticate_admin_user!
@@ -22,6 +23,9 @@ class ApplicationController < ActionController::Base
   current_user.superadmin? ? '/admin' :  '/home'
   end
 
+  def current_user?
+    current_user
+  end
   def set_profile_navigation
     @profile_navigation = true
   end
