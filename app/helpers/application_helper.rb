@@ -106,7 +106,9 @@ module ApplicationHelper
     image_tag img
   end
 
-
+  def event_description(description,length=130)
+    description[0..length] unless description.nil?
+  end
 
   def display_image(photos, format = :medium)
     if photos.blank?

@@ -33,11 +33,11 @@
   - @events.each do |event|
   - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{event.id}-register")
     .span4
-      .thumbnail
+      .thumbnail{:style => "height:415px; margin-bottom:30px;"}
         = event_image(event.promotion, :normal)#display_image(event.promotion.photos)
         .caption
-          %h5= "#{event.title}"
-          %p= "Let Affluence treat you to a Masters like you have never experienced before. Enjoy Saturday and Sunday event passes with all access to every tent and party."
+          %h5= event.title
+          %p= event_description(event.description)
           %p
             %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
               %i.icon-pencil.icon-white
