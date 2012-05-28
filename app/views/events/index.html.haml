@@ -133,7 +133,7 @@
             %th Event
             %th
         %tbody
-        - @events.each do |event|
+        - @event_schedules.each do |event|
           %tr
             %td= global_date_format(event.start_date)
             %td= event.title

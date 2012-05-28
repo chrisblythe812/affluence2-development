@@ -8,6 +8,7 @@ class EventsController < ApplicationController
 
   def index
     @profile_tab = false
+    @event_schedules = Event.up_comming.order("sale_ends_at DESC").select("id,start_date,title")
     @events = get_latest(6)
     @past_events = Event.past.limit(3).order("sale_ends_at DESC")
   end
