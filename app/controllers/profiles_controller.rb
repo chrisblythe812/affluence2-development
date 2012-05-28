@@ -84,9 +84,7 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    user = User.find_by_permalink(params[:id])
-    @profile = user.profile unless user.blank?
-
+    @profile = Profile.find(params[:id])
   end
 
   def update_notifications
