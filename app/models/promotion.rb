@@ -17,5 +17,15 @@ class Promotion < ActiveRecord::Base
     photos.find(:first, :conditions => " image_type = 'carousel'")
   end
 
+  def gallery_images
+    photos.find(:all, :conditions => " image_type is null")
+  end
 
+  def offer_image
+    photos.find(:first)
+  end
+
+  def active_registered_members
+    registered_members.find(:all, :conditions => " users.id is not null",  :joins => "left join users on users.id = payable_promotions.user_id" )
+  end
 end

@@ -33,242 +33,116 @@
       %h2 Featured Offers
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @featured_offers.length >= 1
+            - @featured_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "/offers"}
+                        %i.icon-ok.icon-white
+                        Ativate          
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @featured_offers.length > 3
+            - @featured_offers[3..5].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Featured
     #travel
       %h2 Travel
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @travel_offers.length >= 1
+            - @travel_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Travel
     #services
       %h2 Services
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @services_offers.length >= 1
+            - @services_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Services
     #financial
       %h2 Financial
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @financial_offers.length >= 1
+            - @financial_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Financial
     #shopping
       %h2 Shopping
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @shopping_offers.length >= 1
+            - @shopping_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Shopping
     #dinning
       %h2 Dinning
       %hr.zero
         %ul.thumbnails
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-1.jpg"}
-                .caption
-                  %h5 60% Off Flying Private
-                  %p Fly private for as little as $3,000/hr.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-2.jpg"}
-                .caption
-                  %h5 Small Luxury Hotel Upgrades
-                  %p Free room upgrade, late checkout & more.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
-          %li.span3
-            .thumbnail
-              %img{:alt => "", :src => "../img/offer-3.jpg"}
-                .caption
-                  %h5 30% Off Lifelock
-                  %p Protect your identity for less than $7 a month.
-                  %p
-                    %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                      %i.icon-ok.icon-white
-                      Ativate
+          - if @dinning_offers.length >= 1
+            - @dinning_offers[0..2].each do |offer|
+              %li.span3
+                .thumbnail
+                  = image_tag offer.promotion.offer_image.image.url(:medium)
+                  .caption
+                    %h5= "#{offer.title[0..30]}"
+                    %p= "#{offer.description[0..48]}..."
+                    %p
+                      %a.btn.btn-info{"data-toggle" => "modal", :href => "#{offer.link}"}
+                        %i.icon-ok.icon-white
+                        Ativate
     / Dinning
   / span9
 - content_for :javascript

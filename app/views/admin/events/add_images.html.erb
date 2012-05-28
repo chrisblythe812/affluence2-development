@@ -1,0 +1,51 @@
+
+  <%= stylesheet_link_tag('jquery.fileupload-ui') %>
+  <%= stylesheet_link_tag "jcrop" %>
+
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+  <%= javascript_include_tag 'jquery.fileupload', 'jquery.fileupload-ui', 'jcrop.min' %>
+
+  <script type="text/javascript" charset="utf-8">
+	
+    $(function () {
+      $('.upload').fileUploadUI({
+        uploadTable: $('.upload_files'),
+        downloadTable: $('.download_files'),
+        buildUploadRow: function (files, index) {
+          var file = files[index];
+          return $('<tr><td>' + file.name + '<\/td>' +
+            '<td class="file_upload_progress"><div><\/div><\/td>' +
+            '<td class="file_upload_cancel">' +
+            '<div class="ui-state-default ui-corner-all ui-state-hover" title="Cancel">' +
+            '<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+            '<\/div><\/td><\/tr>');
+        },
+        buildDownloadRow: function (file) {
+          return $('<tr><td><a href="' + file.pic_path + '"> <img src="' + file.name + '"></a><a href="/admin/events/'+file.id+'/delete_image">X</a>  <\/td><\/tr>');
+        }
+      });
+    });
+  </script>
+
+<div class="files"> 
+  <%= form_for @upload, :url => update_images_admin_event_path(@event), :html => { :class => "upload", :multipart => true } do |f| %>
+  <%#= f.file_field 'picture[] multiple' %>
+    <input type="file" name="upload[image]" multiple="">
+    <div>Click here to upload Images</div>
+  <% end %>
+
+  <table class="upload_files"></table>
+  <table class="download_files"></table>
+
+</div>
+
+<% @photos.each do |upload| %>
+  <p><%= link_to image_tag(upload.image.url(:medium)), upload.image.url %>
+<%= link_to 'X', delete_image_admin_event_path(upload.id) %> 
+</p>
+  
+<% end %>
+

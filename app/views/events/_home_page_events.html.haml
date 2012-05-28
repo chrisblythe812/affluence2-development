@@ -7,21 +7,21 @@
       = event_image(promotion, :normal)#display_image(promotion.photos)
       .caption
         %h5
-          = promotion.promotionable.title
+          = event.title
         %p
-          = promotion.promotionable.description
+          = event_description(event.description)
         %p
           %span.strike
-            =number_to_currency promotion.promotionable.price
+            =number_to_currency event.price
           %em Premium
         %p
           %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
             %i.icon-pencil.icon-white
             Register
-          %a.btn.btn-small.btn-info{:href => event_path(promotion.promotionable.id)}
+          %a.btn.btn-small.btn-info{:href => event_path(event.id)}
             %i.icon-info-sign.icon-white
             More Info
-  = render :partial => 'event_registration', :locals => {:event => promotion.promotionable,
+  = render :partial => 'event_registration', :locals => {:event => event,
    :display_free_modal => display_free_modal,:event_div_id => event_div_id}
   - display_free_modal =  false
 

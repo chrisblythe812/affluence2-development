@@ -55,20 +55,21 @@
         %hr.zero
           %ul.thumbnails
             - @event.promotion.registered_members.each do |registered_member|
-              = render :partial => 'shared/member', :locals => {:member => registered_member.user}
+              = render :partial => 'shared/member', :locals => {:member => registered_member.user} unless registered_member.user.nil?
       - else
         %h3 0 Members Attending
         %hr.zero
     - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{@event.id}-register")
     .row
       .span2
-        %p
-        - unless (@event.tickets == 0)
-          %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
-            %i.icon-pencil.icon-white
-            Register
+        - unless (@event.tickets_remaining == 0)
+          %p
+            %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
+              %i.icon-pencil.icon-white
+              Register
         - else
-          %em All tickets sold out
+          %p
+            %em All tickets sold out
       .span2
         %h4 $ #{@event.price}
         %i.icon-tags

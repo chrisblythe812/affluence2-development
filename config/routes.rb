@@ -56,6 +56,7 @@ Affluence2::Application.routes.draw do
   resources :events do
     member do
       post :register
+      get :delete_image
     end
     #
     collection do

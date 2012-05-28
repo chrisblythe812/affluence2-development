@@ -36,10 +36,10 @@
   - @latest_offers.each do |offer|
     .span3
       .thumbnail
-        = image_tag offer.promotion.photos.first.image
+        = image_tag offer.promotion.photos.first.image unless offer.promotion.nil?
         .caption
-          %h5= offer.title
-          %p= offer.description
+          %h5= "#{offer.title[0..30]}"
+          %p= "#{offer.description[0..48]}..."
 / row
 -content_for :javascripts do
   :javascript
