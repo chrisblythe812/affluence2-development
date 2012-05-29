@@ -12,6 +12,8 @@ class Event < ActiveRecord::Base
   scope :past, where('status = ?  and sale_ends_at <= ?', true, Date.today)
   scope :up_comming, where('status = ?  and sale_ends_at >= ?', true, Date.today)
 
+  scope :featured, where('status = ?  and featured = ?', true, true)
+
 
   EMAIL_NOTIFICATIONS = {1 => 'registraion',
                  2 => 'schedule',
@@ -57,7 +59,7 @@ class Event < ActiveRecord::Base
   def self.process_tickets(event,tickets,state)
     if state == 'initial'
     initial_process(event,tickets)
-    elsif state = 'success'
+    elsif state == 'success'
       success_process(event,tickets)
     elsif state == 'failure'
       failure_process(event,tickets)

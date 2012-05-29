@@ -5,7 +5,7 @@ ActiveAdmin.register Event do
   #config.per_page = 5
 
   scope :up_comming, :default => true
-  #scope :up_comming
+  scope :featured
   scope :past
   #scope :active #todo it should also include the upcoming events. ex: active.up_coming
   scope :draft
@@ -66,6 +66,8 @@ ActiveAdmin.register Event do
         row :sale_ends_at
         row :tickets
         row :tickets_remaining
+        row ('featured') {|event| event.featured? ? 'Yes' : 'No'}
+        row ('Status') {|event| event.status ? 'Active' : 'Draft'}
       end
 
       section "Schedules for this event" do
@@ -114,6 +116,7 @@ ActiveAdmin.register Event do
       end
       f.input :sale_ends_at, :label => "Sale Ends"
       f.input :status,:as=> :radio, :label => "Status", :collection => [["Active",true], ["Draft",false]]
+      f.input :featured,:as=> :radio, :label => "Is Featured?", :collection => [["Yes",true], ["No",false]]
     end
 
     f.has_many :schedules do |schedule|
