@@ -84,9 +84,13 @@ class ConversationsController < ApplicationController
     new_message_attrs[:recipient_id] = recipient.id
     new_message_attrs[:conversation_id] = @conversation.id
 
+    unless current_user != recipient
     Connection.make_connection(current_user, recipient)
     Connection.make_connection(recipient, current_user)
-#    authorize!(:create, Message)
+    end
+#
+#
+##    authorize!(:create, Message)
 
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message

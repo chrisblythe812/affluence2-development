@@ -16,10 +16,10 @@
           - if reply.sender
             %tr
               %td.span1
-                = link_to image_tag(reply.sender.profile.photos.first.image.url(:avatar)), profile_path(reply.sender.profile), :class => "avatar large"
+                = link_to image_tag(reply.sender.profile.photos.first.image.url(:avatar)), profile_path(reply.sender.permalink), :class => "avatar large"
               %td
                 %h5
-                  =link_to reply.sender.profile.name, profile_path(@first_message.sender)
+                  =link_to reply.sender.profile.name, profile_path(@first_message.sender.permalink)
                 %br/
                 %p
                   = message_with_links_and_paragraphs(reply.body).html_safe
@@ -28,7 +28,7 @@
           - else
             %tr
               %td.span1
-                = link_to image_tag(current_user.profile.photos.first.image.url(:avatar)), profile_path(current_user), :class => "avatar small"
+                = link_to image_tag(current_user.profile.photos.first.image.url(:avatar)), profile_path(current_user.permalink), :class => "avatar small"
               %td
                 = semantic_form_for @conversation, :url => user_conversation_path do |f|
                   = semantic_fields_for :message do |m|
