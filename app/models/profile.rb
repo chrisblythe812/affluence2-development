@@ -51,7 +51,7 @@ before_create :create_associated_records
 validates_presence_of :first_name,:last_name,:city,:country
 
       
-#before_save :update_full_name
+before_save :update_full_name
 
 def name
   #middle = middle_name.present? ? " #{middle_name} " : " "
