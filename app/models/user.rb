@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
 
   scope :members, :conditions => ['role = ?', 'member']
 
-  has_permalink :name, :update => true
+  has_permalink :name, :update => false
 
 
   def name
