@@ -3,12 +3,12 @@
     #myCarousel.carousel.slide
       / Carousel items
       .carousel-inner
-        - @events.each do |event|
-          .item{:class => "#{'active' if (@events.index(event) == 0)}"}
+        - @featured_events.each do |event|
+          .item{:class => "#{'active' if (@featured_events.index(event) == 0)}"}
             = event_image(event.promotion,:carousel) #display_image(event.promotion.photos)
             .carousel-caption
               %h4= event.title
-              %p= event.description
+              %p #{event_description(event.description)} ... #{link_to 'More Info', event_path(event.id)}
       / carousel-inner
       / Carousel nav
       %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"} ‹
