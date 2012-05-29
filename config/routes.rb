@@ -46,12 +46,13 @@ Affluence2::Application.routes.draw do
 
   resources :users, :only => :show do
     resources :conversations, :only => [:index, :show, :new, :create, :update] do
+      get :autocomplete_profile_full_name, :on => :collection
       get :archive
       get :unarchive
     end
   end
 
-
+    
   # Sample resource route with options:
   resources :events do
     member do

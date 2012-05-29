@@ -1,0 +1,31 @@
+#new-message.modal.hide.fade.in{:style => "display: none;"}
+  .modal-header
+    %a.close{"data-dismiss" => "modal", :href => "#"} ×
+    %h3 New Message
+  .modal-body
+    %form.form-horizontal
+      %fieldset
+        .control-group
+          %label.control-label{:for => "input01"} To
+          .controls
+            <input type="text" profita"]"="" stukel","michael="" macleod","doug="" blake="" data-source="[" data-input="5" data-provide="typeahead" id="input01" class="input-xlarge">
+        .control-group
+          %label.control-label{:for => "textarea"} Message
+          .controls
+            %textarea#textarea.input-xlarge{:rows => "3"}
+        .form-actions
+          %button.btn.btn-primary{:type => "submit"} Send
+
+    = semantic_form_for(@conversation, :url => user_conversations_path) do |f|
+      = f.inputs do
+        = f.fields_for(:messages) do |m|
+          %li.string.input.msg-input
+            %label To:
+            .recepients
+              %ul#msg_to{:name => "recipient_profile_id"}
+            .ajax-loader Searching Members...
+          = m.input :subject, :input_html => { :class => 'send_msg_input' }
+          = m.input :body, :label => "Message", :input_html => {:rows => 10}
+          = m.input :recipient_name, :as => :hidden, :input_html =>{:id => "msgRecip", :value => "#{@recipient.profile.name if @recipient}"}
+      = f.buttons do
+        = f.commit_button "Send Message", :button_html => {:class => "new_msg_send"}
