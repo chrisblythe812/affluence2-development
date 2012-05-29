@@ -10,7 +10,7 @@
         itemName: 'conversation',
         tagSource: function(request,response){
           $.ajax({
-            url: "#{autocomplete_friend_full_name_user_friendships_path}",
+            url: "#{autocomplete_profile_full_name_user_conversations_path(current_user)}",
             dataType: "json",
 
             data: {
@@ -55,7 +55,7 @@
       }
     });
 
-- content_for :left_column do
+.span9 
   .new_msg_form
     = semantic_form_for(@conversation, :url => user_conversations_path) do |f|
       = f.inputs do

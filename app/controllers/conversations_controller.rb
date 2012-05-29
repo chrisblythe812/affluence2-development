@@ -1,4 +1,5 @@
 class ConversationsController < ApplicationController
+  autocomplete :profile , :full_name, :extra_data => [:id]
 #  include Tabs
 #  layout "conversations"
   before_filter :set_page_header
@@ -35,12 +36,12 @@ class ConversationsController < ApplicationController
     @other_conversations = Conversation.for_user(current_user).archived?(status)
     @first_message = @conversation.messages.first
     @replies = @conversation.messages
-    @replies.shift
+#    @replies.shift
 
 #    authorize!(:view, @conversation)
     @conversation.messages.build
     unless @conversation.read?(current_user)
-#      session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
+      session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
     end
   end
 
@@ -48,11 +49,15 @@ class ConversationsController < ApplicationController
     recipient_user = Profile.find(params[:conversation][:recipient_profile_id])[0].user rescue nil
     params[:conversation].delete(:recipient_profile_id)
     @conversation = Conversation.new(params[:conversation])
-    if !recipient_user.blank? && recipient_user.profile.name == params[:conversation][:messages_attributes]["0"][:recipient_name]
+      logger.debug '----------11-------------------------'
+      logger.debug params[:conversation][:messages_attributes]["0"][:recipient_name]
+      logger.debug recipient_user
+      logger.debug '----------recipient_user-------------------------'
+    if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation][:messages_attributes]["0"][:recipient_name]
       @conversation.messages.first.sender = current_user
       @conversation.messages.first.recipient = recipient_user
-
-      authorize!(:create, @conversation.messages.first)
+      logger.debug '----------22-------------------------'
+#      authorize!(:create, @conversation.messages.first)
 
       if @conversation.save
         redirect_to user_conversations_path(current_user), :flash => {:notice => "Your message has been sent."}
@@ -68,17 +73,24 @@ class ConversationsController < ApplicationController
   def update
     @conversation = Conversation.find(params[:id])
 
-    authorize! :edit, @conversation
+    recipient = @conversation.recipient_for(current_user)
 
+#    authorize! :edit, @conversation
     previous_message = @conversation.messages.last
     new_message_attrs = {}
     new_message_attrs[:body] = params[:message][:body]
     new_message_attrs[:subject] = previous_message.subject
     new_message_attrs[:sender_id] = current_user.id
-    new_message_attrs[:recipient_id] = @conversation.recipient_for(current_user).id
+    new_message_attrs[:recipient_id] = recipient.id
     new_message_attrs[:conversation_id] = @conversation.id
 
-    authorize!(:create, Message)
+    unless current_user != recipient
+    Connection.make_connection(current_user, recipient)
+    Connection.make_connection(recipient, current_user)
+    end
+#
+#
+##    authorize!(:create, Message)
 
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message

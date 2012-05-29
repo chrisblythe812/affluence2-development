@@ -3,16 +3,16 @@ class ProfilesController < ApplicationController
   autocomplete :interest, :name, :class_name => 'ActsAsTaggableOn::Tag'
 
   def autocomplete_association_name
-       term = params[:term]
+    term = params[:term]
 
-      if term && !term.blank?
-        items =  ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
-            "left outer join taggings on tags.id=taggings.tag_id where lower(tags.name) LIKE lower('%" +
-            term + "%') and taggings.context = 'associations' order by tags.id desc limit 10")
-      else
-        items = {}
-      end    
-        render :json => json_for_autocomplete(items, 'name', [])
+    if term && !term.blank?
+      items =  ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
+          "left outer join taggings on tags.id=taggings.tag_id where lower(tags.name) LIKE lower('%" +
+          term + "%') and taggings.context = 'associations' order by tags.id desc limit 10")
+    else
+      items = {}
+    end
+    render :json => json_for_autocomplete(items, 'name', [])
   end
         
 
@@ -51,7 +51,7 @@ class ProfilesController < ApplicationController
       respond_to do |format|
         if @profile.update_attributes(params[:profile])
           #          @profile.photos.first.delete
-          format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
+          format.html { redirect_to profile_path(@profile.user.permalink), notice: 'Profile was successfully updated.' }
           format.json { head :ok }
         else
           format.html { render action: "edit"}
@@ -68,7 +68,7 @@ class ProfilesController < ApplicationController
         end
         sign_in resource_name, resource, :bypass => true
         respond_to do |format|
-          format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
+          format.html { redirect_to profile_path(@profile.user.permalink), notice: 'Profile was successfully updated.' }
           format.json { head :ok }
         end
       else
@@ -86,7 +86,6 @@ class ProfilesController < ApplicationController
   def show
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
-
   end
 
   def update_notifications
@@ -128,14 +127,14 @@ class ProfilesController < ApplicationController
 
     if @result.success?
       if User.new(session[:user_info][:user]).valid?
-      user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
-      sign_in user
-      session[:user_info] = nil
-      redirect_to profile_path(current_user.permalink)
+        user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
+        sign_in user
+        session[:user_info] = nil
+        redirect_to profile_path(current_user.permalink)
       else
-      session[:user_info] = nil
-      #todo need to populate the fields with user data.
-      redirect_to new_user_registration_path
+        session[:user_info] = nil
+        #todo need to populate the fields with user data.
+        redirect_to new_user_registration_path
       end
     else
       #todo : render the registration new page with validations
@@ -200,19 +199,19 @@ class ProfilesController < ApplicationController
   def billing_info_confirm
 
     begin
-    @result = Braintree::TransparentRedirect.confirm(request.query_string)
-    if @result.success?
-       current_user.change_current_plan(session[:user_plan],@result.customer.id)
-       flash[:success]= "You have successfully converted to #{current_user.plan} plan."
-       redirect_to edit_profile_path(current_user.permalink)
-    else
-      @profile = current_user.profile
-      @profile.photos.build if @profile.photos.blank?
-      @user = @profile.user
-      create_braintree_object
-      session['menu_link'] = 'billing info'
-      render action: :edit and return
-    end
+      @result = Braintree::TransparentRedirect.confirm(request.query_string)
+      if @result.success?
+        current_user.change_current_plan(session[:user_plan],@result.customer.id)
+        flash[:success]= "You have successfully converted to #{current_user.plan} plan."
+        redirect_to edit_profile_path(current_user.permalink)
+      else
+        @profile = current_user.profile
+        @profile.photos.build if @profile.photos.blank?
+        @user = @profile.user
+        create_braintree_object
+        session['menu_link'] = 'billing info'
+        render action: :edit and return
+      end
     rescue
       redirect_to edit_profile_path(current_user.permalink)
     end
@@ -224,21 +223,21 @@ class ProfilesController < ApplicationController
   def billing_info_update_confirm
 
     begin
-    @result = Braintree::TransparentRedirect.confirm(request.query_string)
-    if @result.success?
-      if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
-       current_user.change_current_plan(session[:user_plan])
+      @result = Braintree::TransparentRedirect.confirm(request.query_string)
+      if @result.success?
+        if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
+          current_user.change_current_plan(session[:user_plan])
+        end
+      else
+        @profile = current_user.profile
+        @profile.photos.build if @profile.photos.blank?
+        @user = @profile.user
+        create_braintree_object
+        session['menu_link'] = 'billing info'
+        render action: :edit and return
       end
-    else
-      @profile = current_user.profile
-      @profile.photos.build if @profile.photos.blank?
-      @user = @profile.user
-      create_braintree_object
-      session['menu_link'] = 'billing info'
-      render action: :edit and return
-    end
-    flash[:success]= "Card information was successfully updated."
-    redirect_to edit_profile_path(current_user.permalink)
+      flash[:success]= "Card information was successfully updated."
+      redirect_to edit_profile_path(current_user.permalink)
     rescue
       redirect_to edit_profile_path(current_user.permalink)
     end
@@ -246,11 +245,11 @@ class ProfilesController < ApplicationController
 
 
   def update_plan
-      if !params[:user_plan].blank? && (current_user.plan !=  params[:user_plan])
-        current_user.change_current_plan(params[:user_plan])
-        flash[:success]= "Your Plan has been successfully updated to #{params[:user_plan]}."
-      end
-      redirect_to edit_profile_path(current_user.permalink)
+    if !params[:user_plan].blank? && (current_user.plan !=  params[:user_plan])
+      current_user.change_current_plan(params[:user_plan])
+      flash[:success]= "Your Plan has been successfully updated to #{params[:user_plan]}."
+    end
+    redirect_to edit_profile_path(current_user.permalink)
   end
 
 

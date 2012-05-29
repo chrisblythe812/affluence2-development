@@ -1,7 +1,7 @@
 
 .span3
   %div
-    = display_image(current_user.profile.photos, :medium)
+    = display_image(@profile.nil? ? current_user.profile.photos : @profile.photos, :medium)
   .well
     %ul.nav.nav-list
       %li.nav-header Socialize
@@ -21,6 +21,9 @@
         %a{:href => "#{user_conversations_path(current_user)}"}
           %i.icon-comment>
           Messages
+          - if (unread_messages_count > 0)
+            %span{:class => "label label-important"}
+              = unread_messages_count
       %li
         %a{:href => "#"}   
           %i.icon-glass>

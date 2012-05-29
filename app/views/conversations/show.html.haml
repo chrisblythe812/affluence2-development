@@ -1,35 +1,38 @@
-.conversation
-  %ul.sender
-    %li.avatar
-      = link_to image_tag(@first_message.sender.profile.photos.first.image.url(:avatar)), profile_path(@first_message.sender.profile.user), :class => "avatar large"
-    %li.name
-      %p.message-sender.tk-proxima-nova-condensed
-        =link_to @first_message.sender.profile.name, profile_path(@first_message.sender)
-      %abbr.datetime.tk-proxima-nova-condensed
-        =@first_message.created_at.strftime("%B %d, %Y %I:%M%p")
-    %li.actions
-      .button
-        - if @conversation.archived?(current_user)
-          = link_to "Unarchive", user_conversation_unarchive_path(current_user, @conversation), :class => "unarchive"
-        - else
-          = link_to "Archive", user_conversation_archive_path(current_user, @conversation), :class => "archive"
-  .message-content
-    .message-subject
-      %h2= @first_message.subject
-    .message-body
-      %p=message_with_links_and_paragraphs(@first_message.body).html_safe
-      / @first_message.body.gsub(/<\/?[^>]*>/, "")
-    .reply.panel{ :id => "conversation_#{@conversation.id}_replies" }
-      %header
-        %h3= pluralize(@replies.length - 1, 'Reply')
-        %span.tail
-      =render :partial => "conversations/message_reply", :collection => @replies, :as => :message
-      .new-comment
-        = link_to image_tag(current_user.profile.photos.first.image.url(:avatar)), profile_path(current_user), :class => "avatar small"
+.span9
+  .row
+    .span5
+      %h2 Messages
+    .span4
+      %p.pull-right
+        %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message"}
+          %i.icon-pencil.icon-white
+          New Message
 
-        = semantic_form_for @conversation, :url => user_conversation_path do |f|
-          = semantic_fields_for :message do |m|
-            = m.inputs do
-              = m.input :body, :as => :text, :label => false, :input_html => {:placeholder => "Your comment...", :class => "textarea comment_body", :rows => 1}
-          = f.buttons do
-            = f.commit_button "Send", :button_html => {:class => "comment_button", :id => nil}
+
+  -unless @replies.blank?
+    %table.table.table-striped
+      %tbody
+        - @replies.each do |reply|
+          - if reply.sender
+            %tr
+              %td.span1
+                = link_to image_tag(reply.sender.profile.photos.first.image.url(:avatar)), profile_path(reply.sender.permalink), :class => "avatar large"
+              %td
+                %h5
+                  =link_to reply.sender.profile.name, profile_path(@first_message.sender.permalink)
+                %br/
+                %p
+                  = message_with_links_and_paragraphs(reply.body).html_safe
+              %td= time_ago_in_words(reply.updated_at) + " ago"
+
+          - else
+            %tr
+              %td.span1
+                = link_to image_tag(current_user.profile.photos.first.image.url(:avatar)), profile_path(current_user.permalink), :class => "avatar small"
+              %td
+                = semantic_form_for @conversation, :url => user_conversation_path do |f|
+                  = semantic_fields_for :message do |m|
+                    = m.inputs do
+                      = m.input :body, :as => :text, :label => false, :input_html => {:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
+                  = f.buttons do
+                    = f.commit_button "Send", :button_html => {:class => "btn btn-primary", :id => nil}

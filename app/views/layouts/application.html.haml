@@ -1,7 +1,7 @@
 !!!
 %html{:lang => "en"}
   %head
-    = stylesheet_link_tag 'bootstrap', 'main'
+    = stylesheet_link_tag 'bootstrap', 'main', 'jquery.ui.autocomplete.custom'
     = javascript_include_tag :application
 
     :css
@@ -25,6 +25,7 @@
   %body
     = render 'shared/header'
     .container
+      = render 'shared/flash_message'
       = render 'shared/notification_tracker_alert'
       .row
         = render 'shared/profile_navigation'

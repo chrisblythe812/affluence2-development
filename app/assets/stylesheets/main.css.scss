@@ -171,7 +171,27 @@ form .clearfix:before, form .clearfix:after {
     color: #B94A48;
 }
 
-#profile:hover {
+#members_search_profile:hover {
    background: #DDDDDD;
 
 }
+
+#members_search_profile small {
+    color: #999999;
+    font-size: 11px;
+    margin: 0 0 0 14px;
+}
+
+  
+.conversation {
+  ol {
+    list-style-type:none;
+    padding:0px;
+    margin:0px;
+  }
+  li {
+    list-style-type:none;
+  }
+}
+
+.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
