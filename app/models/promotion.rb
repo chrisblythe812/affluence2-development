@@ -28,4 +28,8 @@ class Promotion < ActiveRecord::Base
   def active_registered_members
     registered_members.find(:all, :conditions => " users.id is not null",  :joins => "left join users on users.id = payable_promotions.user_id" )
   end
+
+  def unique_registered_members
+    registered_members.group("user_id").select("user_id, sum(total_tickets)")
+  end
 end
