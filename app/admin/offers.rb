@@ -1,6 +1,8 @@
 ActiveAdmin.register Offer do
-   
+
   menu :label => "Offers"
+  menu false
+
 
   scope :all, :default => true
   scope :active
@@ -26,7 +28,6 @@ ActiveAdmin.register Offer do
   end
 
   member_action :create, :method => :post do
-    #Event.transaction do
     @offer = Offer.new(params[:offer]) unless params[:offer].blank?
     create_offer_object
     @offer.save!

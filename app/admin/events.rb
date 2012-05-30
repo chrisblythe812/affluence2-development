@@ -12,7 +12,13 @@ ActiveAdmin.register Event do
 
   filter :title
 
-  index do
+  before_filter :only => :index do
+    @per_page = 10
+  end
+
+
+
+  index :download_links => false do
     column("Start Date",:sortable => false) {|event| global_date_format(event.start_date)}
     column('Event',  :title,:sortable => false)
     column('Total Tickets',:tickets,:sortable => false)

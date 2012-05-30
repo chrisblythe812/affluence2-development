@@ -1,6 +1,8 @@
 ActiveAdmin.register Promotion do
 
   #menu :if => proc{ Rails.env.development? }
+  menu false
+
 
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Upload Images" do
