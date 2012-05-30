@@ -1,6 +1,6 @@
 %li.span1
   - unless @total.nil?
     %a.msg_counter
-      = @total.sum
+      = @total
   %a.thumbnail{"data-oofriginal-title" => "#{member.profile.first_name}", "data-placement" => "bottom", :href => "#", :rel => "tooltip"}
     = display_image(member.profile.photos, :thumb)
