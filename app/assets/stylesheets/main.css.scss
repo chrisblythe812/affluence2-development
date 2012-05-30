@@ -194,4 +194,18 @@ form .clearfix:before, form .clearfix:after {
   }
 }
 
-.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+ a.msg_counter {
+    background: url("main_nav_circle.png") no-repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    height: 20px;
+    left: 48px;
+    top: 10px;
+    line-height: 19px;
+    padding-left: 7px;
+    position: relative;
+    text-decoration: none;
+    width: 20px;
+z-index:2;}
