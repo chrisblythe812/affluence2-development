@@ -57,7 +57,7 @@ ActiveAdmin.register Event do
    redirect_to add_images_admin_event_path(event)
   end
 
-  show :title => "Event - #{:title}" do |event|
+  show :title => :title do |event|
       attributes_table_for event do
         row :title
         row :description
