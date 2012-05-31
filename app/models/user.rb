@@ -72,7 +72,10 @@ class User < ActiveRecord::Base
 
 
 
-  scope :members, :conditions => ['role = ?', 'member']
+  scope :all_members, :conditions => ['role not like ?', 'superadmin']
+  scope :active_members, :conditions => ['role not like ? and status like ?', 'superadmin', "active"]
+  scope :suspended_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "suspended"]
+
 
   has_permalink :name, :update => false
 
