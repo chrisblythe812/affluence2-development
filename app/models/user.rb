@@ -76,6 +76,23 @@ class User < ActiveRecord::Base
 
   has_permalink :name, :update => false
 
+  state_machine :status, :initial => :active do
+    event :suspended do
+      transition :active => :suspended
+    end
+    event :unsuspended do
+      transition :suspended => :active
+    end
+  end
+
+  def active_for_authentication?
+    super && account_active?
+  end
+
+  def account_active?
+    status=='active'
+  end
+
 
   def name
     self.profile.nil? ? '' : self.profile.name
