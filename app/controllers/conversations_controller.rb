@@ -4,6 +4,11 @@ class ConversationsController < ApplicationController
 #  layout "conversations"
   before_filter :set_page_header
 
+  def get_autocomplete_items(parameters)
+    items = super(parameters)
+    items = items.where("user_id != ?", current_user.id)
+  end
+
   def index
     tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
     set_tab(tab_page, :messages)
@@ -49,14 +54,11 @@ class ConversationsController < ApplicationController
     recipient_user = Profile.find(params[:conversation][:recipient_profile_id])[0].user rescue nil
     params[:conversation].delete(:recipient_profile_id)
     @conversation = Conversation.new(params[:conversation])
-      logger.debug '----------11-------------------------'
-      logger.debug params[:conversation][:messages_attributes]["0"][:recipient_name]
-      logger.debug recipient_user
-      logger.debug '----------recipient_user-------------------------'
     if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation][:messages_attributes]["0"][:recipient_name]
       @conversation.messages.first.sender = current_user
       @conversation.messages.first.recipient = recipient_user
-      logger.debug '----------22-------------------------'
+      ConnectionRequest.create(:requestor => current_user, :requestee_id => recipient_user.id)
+
 #      authorize!(:create, @conversation.messages.first)
 
       if @conversation.save
@@ -84,9 +86,9 @@ class ConversationsController < ApplicationController
     new_message_attrs[:recipient_id] = recipient.id
     new_message_attrs[:conversation_id] = @conversation.id
 
-    unless current_user != recipient
-    Connection.make_connection(current_user, recipient)
-    Connection.make_connection(recipient, current_user)
+    if current_user != recipient
+      Connection.make_connection(current_user, recipient)
+      Connection.make_connection(recipient, current_user)
     end
 #
 #

@@ -10,6 +10,9 @@ class Profile < ActiveRecord::Base
   acts_as_taggable_on :interests, :expertises, :associations
   accepts_nested_attributes_for :photos
 
+
+
+
   scope :member_search, lambda{ |query|
     find_by_sql ["select * from profiles
       inner join users
