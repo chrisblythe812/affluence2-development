@@ -63,7 +63,7 @@ class NotificationTracker < ActiveRecord::Base
     notifier_method = Event::EMAIL_NOTIFICATION_METHODS[notification_tracker.notifiable_mode]
     Notifier.send("#{notifier_method}",notification_tracker).deliver
     elsif notification_tracker.notifiable_type == 'SubscriptionFeeTracker'
-      notifier_method = SubscriptionFeeTracker::EMAIL_NOTIFICATION_METHODS[notification_tracker.notifiable_mode]
+      notifier_method = SubscriptionFeeTracker::EMAIL_MODE_METHODS[notification_tracker.notifiable_mode]
       Notifier.send("#{notifier_method}",notification_tracker).deliver
     end
     notification_tracker.update_attributes(:status => 'completed')
