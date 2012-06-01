@@ -59,6 +59,7 @@ class NotificationTracker < ActiveRecord::Base
 
 
   def self.notify_through_email(notification_tracker)
+    begin
     if  notification_tracker.notifiable_type == 'Event'
     notifier_method = Event::EMAIL_NOTIFICATION_METHODS[notification_tracker.notifiable_mode]
     Notifier.send("#{notifier_method}",notification_tracker).deliver
@@ -67,6 +68,10 @@ class NotificationTracker < ActiveRecord::Base
       Notifier.send("#{notifier_method}",notification_tracker).deliver
     end
     notification_tracker.update_attributes(:status => 'completed')
+    rescue
+    puts "-----------failed for notification_tracker #{notification_tracker.id}------------- "
+    end
+
   end
 
 end
