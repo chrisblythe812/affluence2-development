@@ -1,0 +1,59 @@
+common: &default_settings
+  billing:
+    body: "Thank you for your payment"
+    subject: "Thank you for your payment"
+  concierge:
+    body: "text message"
+    subject: "Your Concierge Request is pending"
+  concierge_requests_fulfilled:
+    body: "text message"
+    subject: "Your Concierge Request has been fulfilled"
+  event_payment:
+    body: "Thank you for your payment"
+    subject: "Thank you for your payment"
+  event_registers:
+    body: "event details %{event_details}"
+    subject: "%{member_name} has registered for %{event_title}"
+  hours_until_event:
+    body: "event details %{event_details}"
+    subject: "Reminder %{event_title} begins soon"
+  network_activity:
+    body: "%{message}"
+    subject: "%{member_name} has sent you a message"
+  new_connection:
+    body: "%{message}"
+    subject: "You and %{member_name} are now connected"
+  new_event:
+    body: "event details %{event_details}"
+    subject: "Register now for %{event_title}"
+  new_offer:
+    body: "offer details %{offer_details}"
+    subject: "%{offer_title} has been made available to you"
+
+
+development:
+  <<: *default_settings
+
+
+staging:
+  <<: *default_settings
+
+
+production:
+  <<: *default_settings
+
+
+test:
+  <<: *default_settings
+
+
+
+
+
+
+
+
+
+
+
+

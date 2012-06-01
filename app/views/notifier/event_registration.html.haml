@@ -1,2 +1,2 @@
 %p
-  Thank You for Registering to event
+  = EMAIL_CONTENT['event_registers']['body'] %{:event_details => @notification_tracker.notifiable.title}
