@@ -5,19 +5,23 @@ ActiveAdmin.register User do
   filter :name
   #filter lambda{ User.profile.first_name }
 
-   scope :all_members, :default => true
-   scope :active_members
+   #scope :all_members, :default => true
+   scope :active_members, :default => true
    scope :suspended_members
 
   config.clear_sidebar_sections!
 
 
   index do
-    column("Name") {|user| user.name}
+    column("Name") do |user|
+      auto_link(user)
+    end
     column("Email", :email)
     #column("Member ID", :id)
     column("Location") {|user| user.profile.city+", "+user.profile.country}
-    column("Status", :status){|user| user.status}
+    column("Status", :status) do |user|
+       user.status? ? icon(:check) : icon(:x)
+    end
     column("Membership plan", :plan)
     column('Actions',:sortable => false) do |event|
       link_to 'details', admin_user_path(event)
@@ -61,33 +65,48 @@ ActiveAdmin.register User do
 
 
   show :title => "User details" do | user |
+    panel "Profile Info" do
     attributes_table_for user do
       row("Name") {|user| user.profile.first_name}
       row :email
-      row("Member ID") {|user| user.id}
-      row("Satus") {|user| user.plan}
+      #row("Member ID") {|user| user.id}
+      row("Payment type") {|user| user.plan}
       row("Location") {|user| user.profile.city+", "+user.profile.country}
       row("Phone Number") {|user| user.profile.phone}
       row("Bio") {|user| user.profile.bio}
       row("Company") {|user| user.profile.company}
-      row("Associations") {|user| user.profile.associations }
-      row("Interests") {|user| user.profile.interests}
-      row("Expertise") {|user| user.profile.expertises}
-
-      row("News Letter") { |user| user.profile.notification_setting.newsletter }
-      row("New Events") { |user| user.profile.notification_setting.events }
-      row("New Offers") { |user| user.profile.notification_setting.offers }
-      row("New Messages") { |user| user.profile.notification_setting.messages }
-      row("Event Reminders") { |user| user.profile.notification_setting.event_reminders }
-      row("Site News") { |user| user.profile.notification_setting.site_news }
+      row("Associations") {|user| user.profile.association_list }
+      row("Interests") {|user| user.profile.interest_list}
+      row("Expertise") {|user| user.profile.expertise_list}
+    end
     end
 
-    section "Orders for this user" do
+    panel "Email Notifications"  do
+      attributes_table_for user do
+        row("News Letter") { |user| user_email_notifications(user.profile.notification_setting.newsletter) }
+        row("New Events") { |user| user_email_notifications(user.profile.notification_setting.events) }
+        row("New Offers") { |user| user_email_notifications(user.profile.notification_setting.offers) }
+        row("New Messages") { |user| user_email_notifications(user.profile.notification_setting.messages) }
+        row("Event Reminders") { |user| user_email_notifications(user.profile.notification_setting.event_reminders) }
+        row("Site News") { |user| user_email_notifications(user.profile.notification_setting.site_news) }
+      end
+    end
+
+    if user.payments.count > 0
+    panel "Orders History"  do
       table_for user.payments do |order|
         column("Order ID") { |order| order.id }
         column("Date") { |order| order.created_at }
         column("Cost") { |order| order.amount }
       end
     end
+    else
+      panel "Orders History" do
+        "No Orders"
+      end
+    end
+
+
+
   end
 end

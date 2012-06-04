@@ -173,9 +173,18 @@ module ApplicationHelper
     return "" if date.blank?
     date.strftime("%l:%M %p")
   end
+
+  def user_email_notifications(status)
+    status ? "ON" : "OFF"
+  end
+
+
   def unread_messages_count
     session[:unread_messages_count] || 0
   end
+
+
+
   def message_with_links_and_paragraphs(body)
     formated_paragraphs = []
     body.split("\n").each do |paragraph|

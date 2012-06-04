@@ -1,3 +1,4 @@
+require "base64"
 class User < ActiveRecord::Base
 
   has_one :profile, :dependent => :destroy
@@ -77,7 +78,7 @@ class User < ActiveRecord::Base
   scope :suspended_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "suspended"]
 
 
-  has_permalink :name, :update => false
+  has_permalink :permalink_name, :update => false
 
   state_machine :status, :initial => :active do
     event :suspended do
@@ -94,6 +95,16 @@ class User < ActiveRecord::Base
 
   def account_active?
     status=='active'
+  end
+
+  def permalink_name
+    profile_name = name
+    begin
+      PermalinkFu.escape(profile_name)
+    rescue syntax_error
+      profile_name = Base64.encode64(profile_name)
+    end
+    profile_name
   end
 
 
