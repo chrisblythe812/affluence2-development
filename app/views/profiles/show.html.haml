@@ -79,20 +79,34 @@
     / span9
   / row
 / span9
-#new-message.modal.hide.fade{:style => "display: none;"}
+#new-message.modal.hide.fade.in{:style => "display: none;"}
   .modal-header
     %a.close{"data-dismiss" => "modal", :href => "#"} ×
     %h3 New Message
   .modal-body
-    %form.form-horizontal
+
+    = form_for @conversation, :url => user_conversations_path(current_user), :html => { :class => "form-horizontal" } do |f|
       %fieldset
-        .control-group
-          %label.control-label{:for => "input01"} To
-          .controls
-            <input type="text" profita"]"="" stukel","michael="" macleod","doug="" blake="" data-source="[" data-input="5" data-provide="typeahead" id="input01" class="input-xlarge">
-        .control-group
-          %label.control-label{:for => "textarea"} Message
-          .controls
-            %textarea#textarea.input-xlarge{:rows => "3"}
-        .form-actions
-          %button.btn.btn-primary{:type => "submit"} Send
+        = f.fields_for :messages, :html => { :multipart => true } do |x|
+          .control-group
+            %label.control-label{:for => "fileInput"} To
+            .controls
+              %ul#msg_to.tagit{:name => "recipient_profile_id"}
+                %li.tagit-choice{"data-profile_id" => "191"}
+                  AlbernConnell
+                  %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
+                %li.tagit-new
+                  %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
+          .control-group
+            %label.control-label{:for => "fileInput"} Subject
+            .controls
+              = x.text_field :subject, :placeholder => "subject", :class => "input "
+          .control-group
+            %label.control-label{:for => "fileInput"} Body
+            .controls
+              = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
+          .control-group
+            %label.control-label{:for => "fileInput"}
+            .controls
+              = hidden_field_tag :conversation_recipient_profile_name, "#{@profile.full_name}", :class => "input "
+      = f.submit "Send Message", :class => "btn btn-primary"

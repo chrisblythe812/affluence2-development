@@ -10,6 +10,9 @@ class ConversationsController < ApplicationController
   end
 
   def index
+         @conversation = Conversation.new
+      @conversation.messages.build
+
     tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
     set_tab(tab_page, :messages)
     if params[:blitz]
@@ -54,7 +57,7 @@ class ConversationsController < ApplicationController
     recipient_user = Profile.find(params[:conversation][:recipient_profile_id])[0].user rescue nil
     params[:conversation].delete(:recipient_profile_id)
     @conversation = Conversation.new(params[:conversation])
-    if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation][:messages_attributes]["0"][:recipient_name]
+    if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation_recipient_profile_name]
       @conversation.messages.first.sender = current_user
       @conversation.messages.first.recipient = recipient_user
       ConnectionRequest.create(:requestor => current_user, :requestee_id => recipient_user.id)
@@ -62,12 +65,12 @@ class ConversationsController < ApplicationController
 #      authorize!(:create, @conversation.messages.first)
 
       if @conversation.save
-        redirect_to user_conversations_path(current_user), :flash => {:notice => "Your message has been sent."}
+        redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}
       else
         render :new
       end
     else
-      flash[:notice] = "Cannot send message to that user or user does not exist."
+      flash[:error] = "Cannot send message to that user or user does not exist."
       render :new
     end
   end
@@ -89,6 +92,8 @@ class ConversationsController < ApplicationController
     if current_user != recipient
       Connection.make_connection(current_user, recipient)
       Connection.make_connection(recipient, current_user)
+
+         
     end
 #
 #
@@ -96,7 +101,7 @@ class ConversationsController < ApplicationController
 
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message
-      redirect_to user_conversations_path(current_user), :flash => {:notice => "Your message has been sent."}
+      redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}
     else
       render :show
     end
@@ -110,7 +115,7 @@ class ConversationsController < ApplicationController
     @conversation.archive!(current_user)
 
     respond_to do |format|
-      format.html { redirect_to user_conversations_path(current_user), :flash => {:notice => "Conversation has been archived."} }
+      format.html { redirect_to user_conversations_path(current_user), :flash => {:success => "Conversation has been archived."} }
       format.js { render :layout => false }
     end
   end
@@ -123,11 +128,12 @@ class ConversationsController < ApplicationController
     @conversation.unarchive!(current_user)
 
     respond_to do |format|
-      format.html { redirect_to user_conversations_path(current_user), :flash => {:notice => "Conversation has been unarchived."} }
+      format.html { redirect_to user_conversations_path(current_user), :flash => {:success => "Conversation has been unarchived."} }
       format.js { render :nothing => true }
     end
   end
 
+   
   private
   def set_page_header
     @page_header = "Messages"
