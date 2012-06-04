@@ -1,5 +1,5 @@
 - flash.each do |key, msg|
-  .alert{:class => "alert-success flash"}
+  .alert{:class => "alert-#{key} flash"}
     %a.close{"data-dismiss" => "alert"}×
     = content_tag :div, msg, :class => [key, " message"], :id => "notice_#{key}"
     = content_tag :script, :type => "text/javascript" do

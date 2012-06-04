@@ -84,6 +84,9 @@ class ProfilesController < ApplicationController
   end
 
   def show
+         @conversation = Conversation.new
+      @conversation.messages.build
+
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
   end

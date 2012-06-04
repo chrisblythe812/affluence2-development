@@ -39,11 +39,15 @@
         onTagAdded: function(el) {
           $(el).find('input').val($(el).attr('data-profile_id'));
           var user_name = el.text().substring(0, el.text().length-1);
-          $("#msgRecip").val(user_name);
+          $("#conversation_recipient_profile_name").val(user_name);
           $("#msg_to .tagit-new input").attr("disabled", "true");
           $("#conversation_messages_attributes_0_subject").focus();
+          $("#msg_to .tagit-new input").css('display', 'none');
+
+
         },
         onTagRemoved: function(el) {
+          $("#msg_to .tagit-new input").css('display', 'block');
           $("#msg_to .tagit-new input").removeAttr("disabled");
         },
         select: true,
@@ -51,22 +55,30 @@
         caseSensitive: false
       });
       if(to_member){
-        $("#msg_to").prepend("<li class=\"tagit-choice\">"+recipient_name +"<a class=\"close\">x</a><input type=\"hidden\" style=\"display:none;\" value=\""+recipient_profile_id+"\" name=\"conversation[recipient_profile_id][]\"></li>")
+        $("#msg_to").prepend("<li class=\"alert-info alert\">"+recipient_name +"<a class=\"close\">x</a><input type=\"hidden\" style=\"display:none;\" value=\""+recipient_profile_id+"\" name=\"conversation[recipient_profile_id][]\"></li>")
       }
     });
 
 .span9 
   .new_msg_form
-    = semantic_form_for(@conversation, :url => user_conversations_path) do |f|
-      = f.inputs do
-        = f.fields_for(:messages) do |m|
-          %li.string.input.msg-input
-            %label To:
-            .recepients
+
+    = form_for @conversation, :url => user_conversations_path(current_user), :html => { :class => "form-horizontal" } do |f|
+      %fieldset
+        = f.fields_for :messages, :html => { :multipart => true } do |x|
+          .control-group
+            %label.control-label{:for => "fileInput"} To
+            .controls
               %ul#msg_to{:name => "recipient_profile_id"}
-            .ajax-loader Searching Members...
-          = m.input :subject, :input_html => { :class => 'send_msg_input' }
-          = m.input :body, :label => "Message", :input_html => {:rows => 10}
-          = m.input :recipient_name, :as => :hidden, :input_html =>{:id => "msgRecip", :value => "#{@recipient.profile.name if @recipient}"}
-      = f.buttons do
-        = f.commit_button "Send Message", :button_html => {:class => "new_msg_send"}
+          .control-group
+            %label.control-label{:for => "fileInput"} Subject
+            .controls
+              = x.text_field :subject, :placeholder => "subject", :class => "input "
+          .control-group
+            %label.control-label{:for => "fileInput"} Body
+            .controls
+              = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
+          .control-group
+            %label.control-label{:for => "fileInput"}
+            .controls
+              = hidden_field_tag :conversation_recipient_profile_name, "", :class => "input "
+      = f.submit "Send Message", :class => "btn btn-primary"

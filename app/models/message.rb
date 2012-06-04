@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :recipient, :class_name => "User"
   belongs_to :conversation
 
-  after_create :create_or_update_conversation_metadata
+  after_create :create_or_update_conversation_metadata, :notify
   attr_accessor :recipient_name
   private
 
@@ -20,5 +20,11 @@ class Message < ActiveRecord::Base
         m.save
       end
     end
+  end
+
+  def notify
+    NotificationTracker.create(:user_id => self.recipient_id, :channel => 'email', :subject => "Connection",
+        :status => 'pending', :notifiable_id => self.conversation.id, :notifiable_type => 'Conversation',
+        :notifiable_mode => 1, :scheduled_date => Date.today)
   end
 end
