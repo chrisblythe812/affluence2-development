@@ -75,6 +75,9 @@ ActiveAdmin.register User do
       row("Phone Number") {|user| user.profile.phone}
       row("Bio") {|user| user.profile.bio}
       row("Company") {|user| user.profile.company}
+      row("Invitation Source")  {|user| user.profile.invitation_source}
+      row("Account created on") {|user| global_date_format(user.created_at)}
+      row("Last logged on") {|user| global_date_format(user.last_sign_in_at)}
       row("Associations") {|user| user.profile.association_list }
       row("Interests") {|user| user.profile.interest_list}
       row("Expertise") {|user| user.profile.expertise_list}
@@ -96,7 +99,7 @@ ActiveAdmin.register User do
     panel "Orders History"  do
       table_for user.payments do |order|
         column("Order ID") { |order| order.id }
-        column("Date") { |order| order.created_at }
+        column("Date") { |order| global_date_format(order.created_at) }
         column("Cost") { |order| order.amount }
       end
     end
