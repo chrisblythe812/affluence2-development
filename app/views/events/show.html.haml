@@ -7,15 +7,7 @@
       %em= global_date_format(@event.sale_ends_at)
 
 .row
-  .span6
-    .well
-      = event_image(@event.promotion,:carousel) #display_image(@event.promotion.photos,'carousel')
-
-      %hr
-        .row
-          - @event.promotion.photos.each do |photo|
-            .span1
-              =# image_tag photo.image
+  = render :partial => "events_gallery"
   / span6 images
   .span6
     %h1= @event.title

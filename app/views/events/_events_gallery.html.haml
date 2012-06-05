@@ -1,0 +1,21 @@
+:css
+  .content{color:#777;font:12px/1.4 "helvetica neue",arial,sans-serif;width:460px;margin:20px auto;}
+              a {color:#22BCB9;text-decoration:none;}
+              .cred{margin-top:20px;font-size:11px;}
+  /* This rule is read by Galleria to define the gallery height: */
+              #galleria{height:300px}
+/ load jQuery
+/ load Galleria
+= javascript_include_tag "galleria-1.2.7.min"
+.content.span6
+  / Adding gallery images. We use resized thumbnails here for better performance, but it’s not necessary
+  #galleria
+    - @event.promotion.gallery_images.each do |photo|
+      %a{:href => "#{photo.image}"}
+        %img{:src => "#{photo.image}"}
+:javascript
+  // Load the classic theme
+  Galleria.loadTheme('/assets/galleria.classic.min.js');
+
+  // Initialize Galleria
+  Galleria.run('#galleria');

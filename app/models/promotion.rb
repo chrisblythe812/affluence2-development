@@ -1,11 +1,19 @@
 class Promotion < ActiveRecord::Base
   has_many :photos, :as => :photoable, :dependent => :destroy
   belongs_to :promotionable, :polymorphic => true, :dependent => :destroy
-  has_and_belongs_to_many :users
+
+
+  has_many :promotions_users
+  has_many :users, :through => :promotions_users
+
+
+  #has_and_belongs_to_many :users
 
   has_many :registered_members,  :class_name => 'PayablePromotion'
 
   accepts_nested_attributes_for :photos
+
+  attr_accessible :user
 
   #validates_presence_of :promotionable
 
@@ -22,7 +30,7 @@ class Promotion < ActiveRecord::Base
   end
 
   def offer_image
-    photos.find(:first)
+    photos.find(:first, :conditions => " image_type = 'normal'")
   end
 
   def active_registered_members
@@ -31,5 +39,9 @@ class Promotion < ActiveRecord::Base
 
   def unique_registered_members
     registered_members.group("user_id").select("user_id, sum(total_tickets)")
+  end
+
+  def activate_promotion_for_member(user)
+    PromotionsUser.create(:promotion_id => self.id, :user_id => user.id)
   end
 end
