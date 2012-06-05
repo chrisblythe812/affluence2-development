@@ -51,6 +51,15 @@ end
            :resource_id => event.id)
 
   end
+
+
+  def self.create_user_offer(user,offer)
+    create(:user_id  => user.id,
+           :body => "has activated  #{offer.title} Offer",
+           :resource_type => 'Offer',
+           :resource_id => offer.id)
+
+  end
   
 
 end

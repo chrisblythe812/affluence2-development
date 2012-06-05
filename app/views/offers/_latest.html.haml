@@ -6,6 +6,6 @@
         %h5= offer.title
         %p= offer.description
         %p
-          %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+          %a.btn.btn-info{"data-toggle" => "modal", :href => activate_offer_path(offer.id)}
             %i.icon-ok.icon-white
             Ativate

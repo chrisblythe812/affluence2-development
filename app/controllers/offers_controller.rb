@@ -16,6 +16,7 @@ class OffersController < ApplicationController
   def activate
   offer = Offer.find(params[:id])
   offer.promotion.activate_promotion_for_member(current_user)
+  Activity.create_user_offer(current_user,offer)
   redirect_to offer.link
   end
 end
