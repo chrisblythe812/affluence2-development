@@ -2,5 +2,5 @@
   - unless @total.nil?
     %a.msg_counter
       = @total
-  %a.thumbnail{"data-oofriginal-title" => "#{member.profile.first_name}", "data-placement" => "bottom", :href => "#", :rel => "tooltip"}
+  %a.thumbnail{"data-oofriginal-title" => "#{member.profile.first_name}", "data-placement" => "bottom", :href => "#{profile_path(member.permalink)}", :rel => "tooltip"}
     = display_image(member.profile.photos, :thumb)

@@ -9,7 +9,7 @@ class MembersController < ApplicationController
   end
 
   def latest
-    @latest_members = User.members.last(18).reverse
+    @latest_members = User.active_members.last(18).reverse
     render :partial => 'latest'
   end
 
