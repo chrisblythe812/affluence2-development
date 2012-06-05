@@ -116,6 +116,9 @@ Affluence2::Application.routes.draw do
     collection do
       get 'latest' 
     end
+    member do
+      get :activate
+    end
   end
 
   resources :activities do

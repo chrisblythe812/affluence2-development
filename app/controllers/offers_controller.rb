@@ -12,4 +12,10 @@ class OffersController < ApplicationController
     @shopping_offers = Offer.where("category like 'Shopping'", :order => 'created_at asc')
     @financial_offers = Offer.where("category like 'Financial'", :order => 'created_at asc')
   end
+
+  def activate
+  offer = Offer.find(params[:id])
+  offer.promotion.activate_promotion_for_member(current_user)
+  redirect_to offer.link
+  end
 end

@@ -100,7 +100,7 @@ ActiveAdmin.register User do
       table_for user.payments do |order|
         column("Order ID") { |order| order.id }
         column("Date") { |order| global_date_format(order.created_at) }
-        column("Cost") { |order| order.amount }
+        column("Cost") { |order| "$#{order.amount}" }
       end
     end
     else
