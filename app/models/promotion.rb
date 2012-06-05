@@ -30,7 +30,7 @@ class Promotion < ActiveRecord::Base
   end
 
   def offer_image
-    photos.find(:first)
+    photos.find(:first, :conditions => " image_type = 'normal'")
   end
 
   def active_registered_members
