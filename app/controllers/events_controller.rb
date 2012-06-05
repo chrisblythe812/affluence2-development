@@ -10,7 +10,7 @@ class EventsController < ApplicationController
     @profile_tab = false
     @event_schedules = Event.up_comming.order("sale_ends_at DESC").select("id,start_date,title")
     @featured_events = Event.up_comming.featured.order("sale_ends_at DESC")
-    @events = Event.up_comming.order("sale_ends_at DESC").page(params[:page]).per(6)
+    @events = Event.up_comming.order("sale_ends_at DESC").page(params[:page]).per(3)
     @past_events = Event.past.limit(3).order("sale_ends_at DESC")
   end
 
