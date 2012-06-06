@@ -135,7 +135,7 @@ class User < ActiveRecord::Base
     user[:braintree_customer_id] = braintree_customer_id
     user = User.new(user)
     user.save
-    create_or_update_subscription
+    create_or_update_subscription(user)
     user
   end
 
@@ -143,7 +143,7 @@ class User < ActiveRecord::Base
     self.plan = !plan.blank? ? plan : 'Monthly'
     self.braintree_customer_id = braintree_customer_id if !braintree_customer_id.blank?
     self.save
-    create_or_update_subscription
+    create_or_update_subscription(self)
   end
 
 
@@ -153,12 +153,12 @@ class User < ActiveRecord::Base
   end
 
 
-  def create_or_update_subscription
-    user_subscription = SubscriptionFeeTracker.where(:user_id => self.id).not_completed.last
+  def self.create_or_update_subscription(user)
+    user_subscription = SubscriptionFeeTracker.where(:user_id => user.id).not_completed.last
     if !user_subscription.blank?
-      user_subscription.update_attributes(:amount => self.plan_amount)
+      user_subscription.update_attributes(:amount => user.plan_amount)
     else
-      SubscriptionFeeTracker.schedule(self)
+      SubscriptionFeeTracker.schedule(user)
     end
   end
 
