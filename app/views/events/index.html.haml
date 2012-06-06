@@ -33,11 +33,13 @@
   - @events.each do |event|
   - event_div_id = (current_user.plan == 'free' ? 'register-div' : "event#{event.id}-register")
     .span4
-      .thumbnail{:style => "height:370px; margin-bottom:30px;"}
-        = event_image(event.promotion, :normal)#display_image(event.promotion.photos)
+      .thumbnail
+        %div
+          = event_image(event.promotion, :normal)#display_image(event.promotion.photos)
+          .caption{:style => "overflow: hidden; height: 132px;"}
+            %h5= event.title
+            %p= event_description(event.description)
         .caption
-          %h5= event.title
-          %p= event_description(event.description)
           %p
             %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
               %i.icon-pencil.icon-white
@@ -48,8 +50,8 @@
     = render :partial => 'event_registration', :locals => {:event => event,
     :display_free_modal => display_free_modal,:event_div_id => event_div_id}
     - display_free_modal =  false
-.span{:style => "float:right;"}
-  = paginate @events, theme: "bootstrap"
+  .span{:style => "float:right;"}
+    = paginate @events, theme: "bootstrap"
 
 %h1 Past Events
 %br/

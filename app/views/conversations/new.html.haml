@@ -81,4 +81,5 @@
             %label.control-label{:for => "fileInput"}
             .controls
               = hidden_field_tag :conversation_recipient_profile_name, "", :class => "input "
-      = f.submit "Send Message", :class => "btn btn-primary"
+      .controls
+        = f.submit "Send Message", :class => "btn btn-primary"

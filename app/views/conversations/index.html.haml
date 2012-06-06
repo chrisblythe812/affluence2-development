@@ -37,11 +37,10 @@
             %label.control-label{:for => "fileInput"} Body
             .controls
               = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
-          .control-group
-            %label.control-label{:for => "fileInput"}
-            .controls
               = hidden_field_tag :conversation_recipient_profile_name, "", :class => "input "
-      = f.submit "Send Message", :class => "btn btn-primary"
+        .control-group
+          .controls
+            = f.submit "Send Message", :class => "btn btn-primary"
 
 -content_for :javascripts do
   =javascript_include_tag("tag-it/tag-it")

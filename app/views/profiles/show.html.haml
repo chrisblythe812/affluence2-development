@@ -10,11 +10,12 @@
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
         %small= @profile.country
-    .span2
-      %p.pull-right
-        %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
-          %i.icon-pencil.icon-white
-          Send a Message
+    - unless @profile.user == current_user
+      .span2
+        %p.pull-right
+          %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
+            %i.icon-pencil.icon-white
+            Send a Message
   / row
   .row
     .span9
@@ -92,8 +93,8 @@
             %label.control-label{:for => "fileInput"} To
             .controls
               %ul#msg_to.tagit{:name => "recipient_profile_id"}
-                %li.tagit-choice{"data-profile_id" => "191"}
-                  AlbernConnell
+                %li.tagit-choice{"data-profile_id" => "#{@profile.id}"}
+                  = @profile.full_name
                   %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
                 %li.tagit-new
                   %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
@@ -105,8 +106,7 @@
             %label.control-label{:for => "fileInput"} Body
             .controls
               = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
-          .control-group
-            %label.control-label{:for => "fileInput"}
-            .controls
               = hidden_field_tag :conversation_recipient_profile_name, "#{@profile.full_name}", :class => "input "
-      = f.submit "Send Message", :class => "btn btn-primary"
+          .control-group
+            .controls
+              = f.submit "Send Message", :class => "btn btn-primary"
