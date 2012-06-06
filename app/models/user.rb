@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def create_or_update_subscription
+  def self.create_or_update_subscription
     user_subscription = SubscriptionFeeTracker.where(:user_id => self.id).not_completed.last
     if !user_subscription.blank?
       user_subscription.update_attributes(:amount => self.plan_amount)
