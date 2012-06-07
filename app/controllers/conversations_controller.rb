@@ -86,7 +86,10 @@ class ConversationsController < ApplicationController
   end
 
   def update
+    logger.info 'ssssssssssssssssssssss'
+    logger.info params
     @conversation = Conversation.find(params[:id])
+#    @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
 
     recipient = @conversation.recipient_for(current_user)
 
@@ -99,7 +102,7 @@ class ConversationsController < ApplicationController
     new_message_attrs[:recipient_id] = recipient.id
     new_message_attrs[:conversation_id] = @conversation.id
 
-    if current_user != recipient && previous_message.sender_id != current_user.id
+    if Conversation.get_conversation_for(current_user.id, recipient.id).blank?  && previous_message.sender_id != current_user.id
       Connection.make_connection(current_user, recipient)
       Connection.make_connection(recipient, current_user)
     end
