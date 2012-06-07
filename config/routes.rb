@@ -64,9 +64,10 @@ Affluence2::Application.routes.draw do
     end
     #
     collection do
-      get 'home_page_events'
-      get 'landing_page_events'
-      get 'confirm'
+      get :home_page_events
+      get :landing_page_events
+      get :confirm
+      get :events_schedules
     end
   end
 
@@ -76,20 +77,20 @@ Affluence2::Application.routes.draw do
 
   resources :profiles  do
     collection do
-      get 'confirm'
-      get 'confirm_credit_card_info'
-      get 'profile_session'
-      get 'check_avilability'
+      get :confirm
+      get :confirm_credit_card_info
+      get :profile_session
+      get :check_avilability
       get :autocomplete_interest_name 
       get :autocomplete_expertise_name
       get :autocomplete_association_name
-      get 'update_notifications'
+      get :update_notifications
       get :user_plan
       get :billing_info_confirm
       get :billing_info_update_confirm
       post :update_plan
-      get 'edit_privacy'
-      get 'update_privacy'
+      get :edit_privacy
+      get :update_privacy
     end
 
     member do
@@ -105,16 +106,16 @@ Affluence2::Application.routes.draw do
 
   resources :members do
     collection do
-      get 'latest'
-      get 'find_members'
-      get 'search'
-      #      get 'index'
+      get :latest
+      get :find_members
+      get :search
     end
   end
 
   resources :offers do
     collection do
-      get 'latest' 
+      get :latest
+      get :confirm
     end
     member do
       get :activate
@@ -123,7 +124,7 @@ Affluence2::Application.routes.draw do
 
   resources :activities do
     collection do
-      get 'latest'
+      get :latest
     end
   end
 

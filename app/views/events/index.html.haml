@@ -125,28 +125,21 @@
   / End Register Modal
   / Schedule Modal
   #event-schedule.modal.hide.fade{:style => "display: none; "}
-    .modal-header
-      %a.close{"data-dismiss" => "modal"} ×
-      %h3 Events Schedule
-    .modal-body
-      %h4 Scheudle
-      %table.table.table-striped
-        %thead
-          %tr
-            %th Date
-            %th Event
-            %th
-        %tbody
-        - @event_schedules.each do |event|
-          %tr
-            %td= global_date_format(event.start_date)
-            %td= event.title
-            %td
-              %a.btn.btn-primary{:href => event_path(event.id)} Learn More
-    .modal-footer
-  / event scheudle modal
+
 -content_for :javascripts do
   :javascript
     $(function () {
       $('#myCarousel').carousel()
+    }),
+    $('#event-schedule').on('show', function () {
+      $.ajax({
+      url: "#{events_schedules_events_path}",
+      data:'promotion=event',
+      //async: false,
+      success:function(data){
+        $('#event-schedule').html(data);
+        //alert('Load was performed.');
+      },
+      dataType:'html'
+      });
     })

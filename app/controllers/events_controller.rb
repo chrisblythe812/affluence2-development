@@ -8,7 +8,7 @@ class EventsController < ApplicationController
 
   def index
     @profile_tab = false
-    @event_schedules = Event.up_comming.order("sale_ends_at DESC").select("id,start_date,title")
+    #@event_schedules = Event.up_comming.order("sale_ends_at DESC").select("id,start_date,title")
     @featured_events = Event.up_comming.featured.order("sale_ends_at DESC")
     @events = Event.up_comming.order("sale_ends_at DESC").page(params[:page]).per(3)
     @past_events = Event.past.limit(3).order("sale_ends_at DESC")
@@ -21,6 +21,12 @@ class EventsController < ApplicationController
       flash[:notice]= "Event doesn't exists"
       redirect_to events_path
     end
+  end
+
+
+  def events_schedules
+    @event_schedules = Event.up_comming.order("sale_ends_at DESC").select("id,start_date,title")
+    render :layout => false
   end
 
 
