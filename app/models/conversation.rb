@@ -71,7 +71,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def self.get_conversation_for(*args)
-    temp = "select distinct conversation_id id from conversation_metadata
+    temp = "select distinct conversation_id as id from conversation_metadata
              where user_id = "
     query = ""
     args.each do |id|
@@ -90,7 +90,7 @@ class Conversation < ActiveRecord::Base
           conversation_ids << conv.id
         end
 
-        query = "select conversation_id id from conversation_metadata
+        query = "select conversation_id as id from conversation_metadata
  where conversation_id in (#{conversation_ids.join(',')})
  group by conversation_id
  having count(user_id)=#{result.size}"
