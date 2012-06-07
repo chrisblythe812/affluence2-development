@@ -1,0 +1,20 @@
+.modal-header
+  %a.close{"data-dismiss" => "modal"} ×
+  %h3 Events Schedule
+.modal-body
+  %h4 Scheudle
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Date
+        %th Event
+        %th
+    %tbody
+    - @event_schedules.each do |event|
+      %tr
+        %td= global_date_format(event.start_date)
+        %td= event.title
+        %td
+          %a.btn.btn-primary{:href => event_path(event.id)} Learn More
+.modal-footer
+/ event scheudle modal
