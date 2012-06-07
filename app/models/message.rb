@@ -5,6 +5,10 @@ class Message < ActiveRecord::Base
 
   after_create :create_or_update_conversation_metadata, :notify
   attr_accessor :recipient_name
+
+  validates_presence_of :body, :sender_id, :recipient_id
+
+
   private
 
   def create_or_update_conversation_metadata

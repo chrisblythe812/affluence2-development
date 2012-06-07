@@ -50,6 +50,7 @@
     = render :partial => 'event_registration', :locals => {:event => event,
     :display_free_modal => display_free_modal,:event_div_id => event_div_id}
     - display_free_modal =  false
+.row
   .span{:style => "float:right;"}
     = paginate @events, theme: "bootstrap"
 

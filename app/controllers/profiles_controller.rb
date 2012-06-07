@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  before_filter :authenticate_user!  
   autocomplete :expertise, :name, :class_name => 'ActsAsTaggableOn::Tag'
   autocomplete :interest, :name, :class_name => 'ActsAsTaggableOn::Tag'
 
