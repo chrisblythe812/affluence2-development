@@ -16,7 +16,6 @@ gem 'aws-s3'
 gem 'acts-as-taggable-on'
 gem 'rails3-jquery-autocomplete', :git => "git://github.com/crowdint/rails3-jquery-autocomplete.git"
 gem 'aws-sdk'
-gem 'country_select'
 gem 'braintree'
 gem 'permalink_fu'
 gem 'bartt-ssl_requirement', '~>1.4.0', :require => 'ssl_requirement'
