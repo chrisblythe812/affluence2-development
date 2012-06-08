@@ -13,11 +13,11 @@
           .control-group
             %label.control-label{:for => "input01"} Name
             .controls
-              = f.text_field :name, {:value => (current_user.profile.name if !current_user.profile.blank?), :class => 'input-xlarge'}
+              = f.text_field :name, {:value => (current_user.profile.name if !current_user.profile.blank?), :class => 'input-xlarge', :readonly => true}
           .control-group
             %label.control-label{:for => "input02"} Email
             .controls
-              = f.text_field :email, {:value => current_user.email, :class => 'input-xlarge'}
+              = f.text_field :email, {:value => current_user.email, :class => 'input-xlarge', :readonly => true}
           .control-group
             %label.control-label{:for => "input03"} Phone #
             .controls
