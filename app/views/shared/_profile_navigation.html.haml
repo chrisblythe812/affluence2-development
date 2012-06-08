@@ -17,13 +17,14 @@
         %a{:href => "#{search_members_path}"}
           %i.icon-user>
           Members
-      %li
-        %a{:href => "#{user_conversations_path(current_user)}"}
-          %i.icon-comment>
-          Messages
-          - if (unread_messages_count > 0)
-            %span{:class => "label label-important"}
-              = unread_messages_count
+      - unless current_user.plan == 'free'
+        %li
+          %a{:href => "#{user_conversations_path(current_user)}"}
+            %i.icon-comment
+            Messages
+            - if (unread_messages_count > 0)
+              %span{:class => "label label-important"}
+                = unread_messages_count
       %li
         %a{:href => "#"}   
           %i.icon-glass>

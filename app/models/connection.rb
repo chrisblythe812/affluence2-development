@@ -7,16 +7,20 @@ class Connection < ActiveRecord::Base
   attr_accessor :skip_observer
 
   def self.make_connection(user, friend)
-     connected = where(:user_id => user.id, :friend_id => friend.id).first
-    if connected.blank?
       connected = create(:user_id => user.id, :friend_id => friend.id)
+      connected = create(:user_id => friend.id, :friend_id => user.id)
       NotificationTracker.create(:user_id => user.id, :channel => 'email', :subject => "Connection",
         :status => 'pending', :notifiable_id => connected.id, :notifiable_type => 'Connection',
         :notifiable_mode => 1, :scheduled_date => Date.today)
-    end
-    return connected
+      return connected
 
   end
 
-
+  def self.are_connected?(user, friend)
+     connected = where(:user_id => user, :friend_id => friend)
+    if connected.nil?
+      connected = where(:user_id => friend, :friend_id => user)  
+    end
+    return connected.nil?
+  end
 end

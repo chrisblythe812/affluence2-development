@@ -11,6 +11,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_paid_user!
+    if current_user.plan == 'free'
+      flash[:error] = "Unauthorized Access!  Please become a premium member."
+      redirect_to profile_path(current_user.permalink)
+    end
+  end
+
   def set_unread_messages_count
     session[:unread_messages_count] = current_user.unread_messages_counter
   end

@@ -10,7 +10,7 @@
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
         %small= @profile.country
-    - unless @profile.user == current_user
+    - if @profile.user != current_user && current_user.plan != 'free'
       .span2
         %p.pull-right
           %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
@@ -46,7 +46,7 @@
     .span9
       %h3 Activity
       %table.table.table-striped
-        - @latest_activities = current_user.activities.last(9).reverse
+        - @latest_activities = @profile.user.activities.last(9).reverse
         = render :partial => "activities/latest", :object => @latest_activities
     / span9
   / row
