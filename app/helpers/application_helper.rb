@@ -183,7 +183,9 @@ module ApplicationHelper
     session[:unread_messages_count] || 0
   end
 
-
+  def offer_activation_link(user,offer)
+    (user.plan == 'free' ? '#billing_info' : activate_offer_path(offer.id))
+  end
 
   def message_with_links_and_paragraphs(body)
     formated_paragraphs = []

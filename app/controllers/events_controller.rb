@@ -32,12 +32,19 @@ class EventsController < ApplicationController
 
   def register
     @event = Event.active.find(params[:id])
+    if current_user.plan == 'free'
+      flash[:error] = "You need to Become a Premium Member to register for this Event"
+      redirect_to event_path(@event.id) and return
+    end
+
+
     payable_promotion = PayablePromotion.create_event_promotion(params[:payable_promotion],@event,current_user)
     Event.process_tickets(@event,params[:payable_promotion][:total_tickets],'initial')
     if !payable_promotion.blank?
       result = BrainTreeTranscation.event_payment(payable_promotion)
       if result == 'success'
         Event.process_tickets(@event,params[:payable_promotion][:total_tickets],'success')
+        @event.promotion.activate_promotion_for_member(current_user)
         Activity.create_user_event(current_user,@event)
         NotificationTracker.schedule_event_emails(current_user,@event)
         flash[:success]= 'Your have successfully registered for the event'

@@ -71,13 +71,11 @@
       $('#activity button').click(function(){
          getActivities($(this).text() == 'my Connections');
       });
+           $('a[rel=tooltip]').tooltip({
+                  live: true
+             });
 
- 
-      $('a[rel=tooltip]').tooltip({
-        	live: true
-        });
-
-      });
+            });
 
 
     function getActivities(text){
@@ -99,7 +97,12 @@
            $("#latest_activities").html(data);
         }
       });
-    }  
+    }
+
+
+
+
+
 
 
 

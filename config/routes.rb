@@ -20,6 +20,7 @@ Affluence2::Application.routes.draw do
 
   get "offers/show"
 
+
   ActiveAdmin.routes(self)
 
 
@@ -29,6 +30,7 @@ Affluence2::Application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"} do
 
     get "/users/sign_in" => "welcome#index"
+
   end
  
   match "states_of_country", :to => "application#states_of_country"
@@ -130,7 +132,11 @@ Affluence2::Application.routes.draw do
 
   resources :orders
 
-
+  resources :promotions do
+    member do
+      get :become_premium_member
+    end
+  end
 
   # Sample resource route with sub-resources:
   #   resources :products do

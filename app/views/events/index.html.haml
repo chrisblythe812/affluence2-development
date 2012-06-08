@@ -22,7 +22,7 @@
     %p Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
     %br/
     %p
-      %a.btn.btn-primary{"data-toggle" => "modal", :href => "#event-schedule"} See Schedule
+      %a.btn.btn-primary{"data-toggle" => "modal", :href => "#event-schedule", :id => 'see_schedule' } See Schedule
   / span 3
   / row
 
@@ -41,7 +41,7 @@
             %p= event_description(event.description)
         .caption
           %p
-            %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
+            %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}", :id => "event_#{event.id}", :class => "event-register-button"}
               %i.icon-pencil.icon-white
               Register
             %a.btn.btn-small.btn-info{:href => event_path(event.id)}
@@ -131,15 +131,38 @@
     $(function () {
       $('#myCarousel').carousel()
     }),
-    $('#event-schedule').on('show', function () {
+        $('#event-schedule').on('show', function () {
+          $.ajax({
+          url: "/events/events_schedules",
+          data:'promotion=event',
+          //async: false,
+          success:function(data){
+            $('#event-schedule').html(data);
+            //alert('Load was performed.');
+          },
+          dataType:'html'
+          });
+        })
+- if current_user.plan == 'free'
+  :javascript
+    $('.event-register-button').click(function(){
+      var event_id = this.id.split('_')[1]
+      //alert(event_id) ;
       $.ajax({
-      url: "#{events_schedules_events_path}",
-      data:'promotion=event',
-      //async: false,
-      success:function(data){
-        $('#event-schedule').html(data);
-        //alert('Load was performed.');
-      },
-      dataType:'html'
-      });
-    })
+                    url: "/promotions/"+event_id+"/become_premium_member",
+                    data:'promotion=event',
+                    //async: false,
+                    success:function(data){
+                      $('#register-div').html(data);
+                      //alert('Load was performed.');
+                    },
+                    dataType:'html'
+                    });
+      //$('#register-div').modal('show');
+    });
+
+
+
+
+
+
