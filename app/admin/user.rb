@@ -20,7 +20,7 @@ ActiveAdmin.register User do
     #column("Member ID", :id)
     column("Location") {|user| user.profile.city+", "+user.profile.country}
     column("Status", :status) do |user|
-       user.status? ? icon(:check) : icon(:x)
+       user.account_active? ? icon(:check) : icon(:x)
     end
     column("Membership plan", :plan)
     column('Actions',:sortable => false) do |event|
@@ -55,7 +55,7 @@ ActiveAdmin.register User do
 
 
   action_item :only => [:show] do
-    if user.status == 'active'
+    if user.account_active?
     link_to('Suspend', suspend_admin_user_path(user.id))
     else
       link_to('Active', unsuspend_admin_user_path(user.id))
