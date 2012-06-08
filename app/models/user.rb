@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role, :status, :created_at, :updated_at
   accepts_nested_attributes_for :profile
 
 
@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
     profile_name = name
     begin
       PermalinkFu.escape(profile_name)
-    rescue syntax_error
+    rescue #syntax_error
       profile_name = Base64.encode64(profile_name)
     end
     profile_name
@@ -150,6 +150,15 @@ class User < ActiveRecord::Base
 
   def change_current_plan(new_plan,braintree_customer_id=nil)
     update_user_with_plan_and_braintree_id(new_plan,braintree_customer_id)
+  end
+
+  def create_or_update_subscription(user)
+    user_subscription = SubscriptionFeeTracker.where(:user_id => user.id).not_completed.last
+    if !user_subscription.blank?
+      user_subscription.update_attributes(:amount => user.plan_amount)
+    else
+      SubscriptionFeeTracker.schedule(user)
+    end
   end
 
 

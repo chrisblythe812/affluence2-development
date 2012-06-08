@@ -57,7 +57,7 @@
       .span2
         - unless (@event.tickets == 0)
           %p
-            %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
+            %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}", :id => "event_#{@event.id}", :class => "event-register-button"}
               %i.icon-pencil.icon-white
               Register
         - else
@@ -73,6 +73,24 @@
   / Register Modal
   - unless (@event.tickets == 0)
     = render :partial => 'event_registration', :locals => {:event => @event, :display_free_modal => true,:event_div_id => event_div_id}
+
+- if current_user.plan == 'free'
+  :javascript
+    $('.event-register-button').click(function(){
+      var event_id = this.id.split('_')[1]
+      //alert(event_id) ;
+      $.ajax({
+                    url: "/promotions/"+event_id+"/become_premium_member",
+                    data:'promotion=event',
+                    //async: false,
+                    success:function(data){
+                      $('#register-div').html(data);
+                      //alert('Load was performed.');
+                    },
+                    dataType:'html'
+                    });
+      //$('#register-div').modal('show');
+    });
 
 :javascript
   $(function () {

@@ -1,130 +1,5 @@
 - if current_user.plan == 'free' && display_free_modal == true
-  .modal.hide.fade{:style => "display: none;", :id => "#{event_div_id}"}
-    .modal-header.well
-      %a.close{"data-dismiss" => "modal", :href => "#"} ×
-      %h2 Become a Premium Member
-      %p
-        Make Connections, Send Messages, Post Photo's, take advantage of
-        %strong Affluence Offerings
-        and
-        %strong Affluence Events
-        and use the
-        = succeed "." do
-          %strong Affluence Concierge
-    .modal-body
-      = form_tag("#{Braintree::TransparentRedirect.url}",:class => "braintree_form form-horizontal" , :onSubmit => 'return validate_card_info();') do |f|
-        %fieldset
-          .control-group
-            %label.control-label{:for => "input01"} Name
-            .controls
-              %input#input01.input-xlarge{:value => (current_user.profile.name if !current_user.profile.blank?), :type => "text"}
-          .control-group
-            %label.control-label Plan
-            .controls
-              %label.radio
-                %input#optionsRadios2{:checked => "", :name => "optionsRadios", :type => "radio", :value => "Monthly"}
-                  Monthly - $50 per Month
-              %label.radio
-                %input#optionsRadios3{:name => "optionsRadios", :type => "radio", :value => "Yearly"}
-                  Yearly - $450 per Year
-                  %em
-                    %strong Save 25%
-          %hr.zero
-            = render :partial => '/registrations/credit_card_fields'
-            = hidden_field_tag :tr_data, Braintree::TransparentRedirect.create_customer_data(:redirect_url => confirm_events_url(:event_id => event.id))
-            .form-actions
-              %button.btn.btn-primary{:type => "submit"} Subscribe
-    :javascript
-      function validate_card_info(){
-      var form_url = $('form.braintree_form').attr("action");
-      var card_number = $('#user_card_number');
-      var user_plan = $('#present_user_plan');
-      var user_zip_code = $('#user_zip_code');
-      var user_billing_zip_code = $('#user_billing_zip_code');
-
-
-
-                   if (card_number.val()=="")
-                   {
-                   alert("Card can't be blank");
-                   card_number.focus();
-                   return false
-                   }
-
-                   if (card_number.val().length<12 || card_number.val().length>19)
-                   {
-                   alert("Credit card number must be 12-19 digits");
-                   card_number.focus();
-                   return false
-                   }
-
-
-                  if (user_zip_code.val()=="")
-                  {
-                    alert("CVV can't be blank");
-                    return false
-                  }
-
-                  if (user_zip_code.val().length<3 || user_zip_code.val().length>4)
-                  {
-                    alert("CVV must be 3 or 4 digits");
-                    return false
-                  }
-
-                  if (user_billing_zip_code.val()=="")
-                  {
-                    alert("Billing ZIP can't be blank");
-                    return false
-                  }
-                  return true;
-
-      }
-
-
-
-    :javascript
-          $(function () {
-            $('#optionsRadios2').click(function(){
-                            $.ajax({
-                            type : 'get',
-                            url : '/profiles/user_plan?plan=Monthly&format=json',
-                            datatype : 'json',
-                            async: false,
-                            headers: {
-                                 'X-Transaction': 'POST Example',
-                                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                               },
-                            success : function(data) {
-                            //alert('success');
-
-                            },
-                            error : function(data){
-                            //alert('error');
-                            }
-                          });
-                 });
-            $('#optionsRadios3').click(function(){
-                            $.ajax({
-                            type : 'get',
-                            url : '/profiles/user_plan?plan=Yearly&format=json',
-                            datatype : 'json',
-                            async: false,
-                            headers: {
-                                 'X-Transaction': 'POST Example',
-                                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                               },
-                            success : function(data) {
-                            //alert('success');
-
-                            },
-                            error : function(data){
-                            //alert('error');
-                            }
-                          });
-                 });
-
-          });
-
+  = render :partial => 'shared/billing_info', :locals => {:div_id => event_div_id , :callback_url => confirm_events_url(:event_id => event.id)}
 -elsif current_user.plan == 'Yearly' || current_user.plan == 'Monthly'
   .modal.hide.fade{:style => "display: none;", :id => "#{event_div_id}"}
     .modal-header
@@ -138,11 +13,11 @@
           .control-group
             %label.control-label{:for => "input01"} Name
             .controls
-              = f.text_field :name, {:value => (current_user.profile.name if !current_user.profile.blank?), :class => 'input-xlarge'}
+              = f.text_field :name, {:value => (current_user.profile.name if !current_user.profile.blank?), :class => 'input-xlarge', :readonly => true}
           .control-group
             %label.control-label{:for => "input02"} Email
             .controls
-              = f.text_field :email, {:value => current_user.email, :class => 'input-xlarge'}
+              = f.text_field :email, {:value => current_user.email, :class => 'input-xlarge', :readonly => true}
           .control-group
             %label.control-label{:for => "input03"} Phone #
             .controls

@@ -15,7 +15,7 @@
             =number_to_currency event.price
           %em Premium
         %p
-          %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}"}
+          %a.btn.btn-success{"data-toggle" => "modal", :href => "##{event_div_id}", :id => "event_#{event.id}", :class => "event-register-button"}
             %i.icon-pencil.icon-white
             Register
           %a.btn.btn-small.btn-info{:href => event_path(event.id)}
@@ -24,4 +24,24 @@
   = render :partial => 'event_registration', :locals => {:event => event,
    :display_free_modal => display_free_modal,:event_div_id => event_div_id}
   - display_free_modal =  false
+- if current_user.plan == 'free'
+  :javascript
+    $('.event-register-button').click(function(){
+      var event_id = this.id.split('_')[1]
+      //alert(event_id) ;
+      $.ajax({
+                    url: "/promotions/"+event_id+"/become_premium_member",
+                    data:'promotion=event',
+                    //async: false,
+                    success:function(data){
+                      $('#billing_info').empty();
+                      $('#register-div').html(data);
+                      //alert('Load was performed.');
+                    },
+                    dataType:'html'
+                    });
+      //$('#register-div').modal('show');
+    });
+
+
 

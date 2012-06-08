@@ -13,9 +13,9 @@
           %li{:class => "#{'active' if events?}"}
             %a{:href => "/events"} Events
           %li{:class => "#{'active' if offers?}"}
-            %a{:href => "./offers"} Offers
+            %a{:href => "/offers"} Offers
           %li{:class => "#{'active' if gives?}"}
-            %a{:href => "./gives.html"} Gives
+            %a{:href => "#"} Gives
           - if current_user.superadmin?
             %li{:class => "#{'active' if gives?}"}
               %a{:href => "#{admin_dashboard_path}"} Dashboard
