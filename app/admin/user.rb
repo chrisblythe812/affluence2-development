@@ -54,6 +54,30 @@ ActiveAdmin.register User do
   end
 
 
+  action_item :only => [:show] do
+    if user.status == 'active'
+    link_to('Suspend', suspend_admin_user_path(user.id))
+    else
+      link_to('Active', unsuspend_admin_user_path(user.id))
+    end
+  end
+
+  member_action :suspend, :method => :get do
+    user = User.find(params[:id])
+    user.suspended
+    flash[:notice] = "Member has been suspended"
+    redirect_to :action => :show
+  end
+
+  member_action :unsuspend, :method => :get do
+    user = User.find(params[:id])
+    user.unsuspended
+    flash[:notice] = "Member has been unsuspended"
+    redirect_to :action => :show
+  end
+
+
+
   member_action :update,  :method => :post do
     @user = User.find(params[:id]) unless params[:id].blank?
     if @user.update_attributes(params[:user])
