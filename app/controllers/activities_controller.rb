@@ -1,7 +1,8 @@
 class ActivitiesController < ApplicationController
+  before_filter :authenticate_user!
 
   def index
-    @latest_activities = Kaminari.paginate_array(Activity.all_by_privacy_setting).page(params[:page]).per(3)
+    @latest_activities = current_user.activities.page(params[:page]).per(3)
   end
 
  def latest

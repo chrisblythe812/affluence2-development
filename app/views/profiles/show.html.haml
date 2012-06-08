@@ -48,6 +48,9 @@
       %table.table.table-striped
         - @latest_activities = @profile.user.activities.last(9).reverse
         = render :partial => "activities/latest", :object => @latest_activities
+      %p.pull-right
+        %a{:href => "/activities"} see more activities
+
     / span9
   / row
   .row
