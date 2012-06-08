@@ -5,27 +5,29 @@ class Conversation < ActiveRecord::Base
 
   scope :for_user, lambda { |user|
     joins(:conversation_metadata).
-    includes(:messages).
-    where("conversation_metadata.user_id = ?", user.id).
-    order("messages.updated_at DESC")
+      includes(:messages).
+      where("conversation_metadata.user_id = ?", user.id).
+      order("messages.updated_at DESC")
   }
 
   # at least one message in the conversation was sent to user
   scope :for_recipient, lambda { |user|
     joins(:conversation_metadata).
-    includes(:messages).
-    where("conversation_metadata.user_id = ? AND messages.recipient_id = ?", user.id, user.id)
+      includes(:messages).
+      where("conversation_metadata.user_id = ? AND messages.recipient_id = ?", user.id, user.id)
   }
 
   scope :archived?, lambda { |is_archived|
     joins(:conversation_metadata).
-    where("conversation_metadata.archived = ?", is_archived)
+      where("conversation_metadata.archived = ?", is_archived)
   }
 
   scope :read?, lambda { |is_read|
     joins(:conversation_metadata).
-    where("conversation_metadata.read = ?", is_read)
+      where("conversation_metadata.read = ?", is_read)
   }
+
+  
 
   accepts_nested_attributes_for :messages
   # attr_accessible :messages_attributes
@@ -68,5 +70,34 @@ class Conversation < ActiveRecord::Base
     !result.empty?
   end
 
+  def self.get_conversation_for(*args)
+    temp = "select distinct conversation_id as id from conversation_metadata
+             where user_id = "
+    query = ""
+    args.each do |id|
+      query = query + temp + id.to_s
+      unless (args.last == id) 
+        query = query + " intersect "
+      end
+    end
+ 
+    result = find_by_sql(query)
+    if result.size > 1
+      unless result.blank?
+        conversation_ids = []
+    
+        result.each do |conv|
+          conversation_ids << conv.id
+        end
+
+        query = "select conversation_id as id from conversation_metadata
+ where conversation_id in (#{conversation_ids.join(',')})
+ group by conversation_id
+ having count(user_id)=#{result.size}"
+        result = find_by_sql(query)
+      end
+    end
+    result
+  end 
 end
 
