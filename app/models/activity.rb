@@ -37,7 +37,7 @@ def self.all_by_privacy_setting
         activities << activity if (privacy.send(OPTS[activity.resource_type]) == 0)
       end
 
-    end while activities.length < all.size
+    end while activities.length < 7
 
     activities
 
