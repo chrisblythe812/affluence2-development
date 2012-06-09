@@ -26,7 +26,7 @@ gem 'bootstrap_kaminari', :git => 'git://github.com/dleavitt/bootstrap_kaminari.
 gem "formtastic", "~> 2.1.1"
 gem 'tabs_on_rails'
 gem 'state_machine'
-
+gem "hominid"
 
 
 

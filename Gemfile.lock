@@ -153,6 +153,7 @@ GEM
       railties (~> 3.0)
     has_scope (0.5.1)
     hike (1.2.1)
+    hominid (3.0.4)
     httparty (0.8.3)
       multi_json (~> 1.0)
       multi_xml
@@ -312,6 +313,7 @@ DEPENDENCIES
   guard-spork
   haml
   haml-rails
+  hominid
   jquery-rails
   kaminari
   launchy

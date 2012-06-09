@@ -65,7 +65,11 @@ class User < ActiveRecord::Base
 
   validates_presence_of :plan
 
+   after_create :create_user_in_mailchimp
 
+  def create_user_in_mailchimp
+  MailChimp.add_user(self)
+  end
 
   def superadmin?
     self.role == 'superadmin' 
