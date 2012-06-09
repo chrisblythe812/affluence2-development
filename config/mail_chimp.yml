@@ -1,0 +1,25 @@
+common: &default_settings
+  api_key: "ccd7bc4a6cd9917f0fab752867c23eb5-us5"
+  subscriber_list: "b74c253706"
+
+development:
+  <<: *default_settings
+test:
+  <<: *default_settings
+demo:
+  <<: *default_settings
+staging:
+  <<: *default_settings
+
+production:
+  api_key: "ccd7bc4a6cd9917f0fab752867c23eb5-us5"
+  subscriber_list: "b74c253706"
+
+
+#subscriber_list is the list that each user will be subscribed to.
+#MAIL_CHIMP[Rails.env]["api_key"]
+#MAIL_CHIMP[Rails.env]["subscriber_list"]
+
+#account created for testing
+#U: umamahesh_seneca
+#P: umamahesh_seneca
