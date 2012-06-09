@@ -3,7 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :recipient, :class_name => "User"
   belongs_to :conversation, :touch => true
 
-  after_create :create_or_update_conversation_metadata, :notify
+  after_create :create_or_update_conversation_metadata, :notify_message_through_email
   attr_accessor :recipient_name
 
   validates_presence_of :body, :sender_id, :recipient_id
@@ -68,9 +68,9 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def notify
-    #NotificationTracker.create(:user_id => self.recipient_id, :channel => 'email', :subject => "Connection",
-      #:status => 'pending', :notifiable_id => self.conversation.id, :notifiable_type => 'Conversation',
-      #:notifiable_mode => 1, :scheduled_date => Date.today)
+  def notify_message_through_email
+    NotificationTracker.create(:user_id => self.sender_id, :channel => 'email', :subject => "message",
+      :status => 'pending', :notifiable_id => self.id, :notifiable_type => 'Message',
+      :notifiable_mode => 1, :scheduled_date => Date.today)
   end
 end

@@ -69,6 +69,9 @@ class NotificationTracker < ActiveRecord::Base
     elsif notification_tracker.notifiable_type == 'Connection'
       puts 'inside notification of Connection'
       Notifier.send('new_connection_email',notification_tracker.notifiable).deliver
+    elsif notification_tracker.notifiable_type == 'Message'
+      puts 'inside notification of message'
+      Notifier.send('new_message_email',notification_tracker.notifiable).deliver
     end
     #puts "inside updating notification record to as completed-#{notification_tracker.id}"
     notification_tracker.update_attributes(:status => 'completed')

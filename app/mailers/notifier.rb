@@ -32,5 +32,11 @@ class Notifier < ActionMailer::Base
           :subject => EMAIL_CONTENT['new_connection']['subject'] %{:member_name => @connection.friend.name})
   end
 
+  def new_message_email(message)
+    @message = message
+    mail( :to => 'umamahesh.seeram@seneca-global.com', #message.recipient.email,
+          :subject => EMAIL_CONTENT['new_message']['subject'] %{:member_name => @message.sender.name})
+  end
+
 
 end

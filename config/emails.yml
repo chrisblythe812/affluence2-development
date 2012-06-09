@@ -17,7 +17,7 @@ common: &default_settings
   hours_until_event:
     body: "event details %{event_details}"
     subject: "Reminder %{event_title} begins soon"
-  network_activity:
+  new_message:
     body: "%{message}"
     subject: "%{member_name} has sent you a message"
   new_connection:
