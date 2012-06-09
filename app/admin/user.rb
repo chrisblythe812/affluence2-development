@@ -93,6 +93,7 @@ ActiveAdmin.register User do
     attributes_table_for user do
       row("Name") {|user| user.profile.first_name}
       row :email
+      row("Unique ID(permalink)") {|user| user.permalink}
       #row("Member ID") {|user| user.id}
       row("Payment type") {|user| user.plan}
       row("Location") {|user| user.profile.city+", "+user.profile.country}

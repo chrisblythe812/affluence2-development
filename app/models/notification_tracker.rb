@@ -66,7 +66,11 @@ class NotificationTracker < ActiveRecord::Base
     elsif notification_tracker.notifiable_type == 'SubscriptionFeeTracker'
       notifier_method = SubscriptionFeeTracker::EMAIL_MODE_METHODS[notification_tracker.notifiable_mode]
       Notifier.send("#{notifier_method}",notification_tracker).deliver
+    elsif notification_tracker.notifiable_type == 'Connection'
+      puts 'inside notification of Connection'
+      Notifier.send('new_connection_email',notification_tracker.notifiable).deliver
     end
+    #puts "inside updating notification record to as completed-#{notification_tracker.id}"
     notification_tracker.update_attributes(:status => 'completed')
     rescue
     puts "-----------failed for notification_tracker #{notification_tracker.id}------------- "

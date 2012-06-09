@@ -26,4 +26,12 @@ class Notifier < ActionMailer::Base
           :subject => 'subscription failure' )
   end
 
+  def new_connection_email(connection)
+    @connection = connection
+    #mail( :to => connection.user.email,
+    mail( :to => 'umamahesh.seeram@seneca-global.com',
+          :subject => EMAIL_CONTENT['new_connection']['subject'] %{:member_name => @connection.friend.name})
+  end
+
+
 end

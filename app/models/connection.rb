@@ -13,7 +13,12 @@ class Connection < ActiveRecord::Base
         :status => 'pending', :notifiable_id => connected.id, :notifiable_type => 'Connection',
         :notifiable_mode => 1, :scheduled_date => Date.today)
       return connected
+  end
 
+    def notify_user_through_email
+    NotificationTracker.create(:user_id => self.user_id, :channel => 'email', :subject => "Connection",
+                               :status => 'pending', :notifiable_id => self.id, :notifiable_type => 'Connection',
+                               :notifiable_mode => 1, :scheduled_date => Date.today)
   end
 
   def self.are_connected?(user, friend)

@@ -21,7 +21,7 @@ common: &default_settings
     body: "%{message}"
     subject: "%{member_name} has sent you a message"
   new_connection:
-    body: "%{message}"
+    body: "You and %{member_name} are now connected"
     subject: "You and %{member_name} are now connected"
   new_event:
     body: "event details %{event_details}"

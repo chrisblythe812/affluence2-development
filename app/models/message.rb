@@ -39,7 +39,9 @@ class Message < ActiveRecord::Base
   def check_and_clear_connection_request(from,to,connection_request_object)
     # create connection and delete coneection request
     c1 = Connection.create(:user_id => from, :friend_id => to)
+    c1.notify_user_through_email
     c2 = Connection.create(:user_id => to, :friend_id => from)
+    c2.notify_user_through_email
     puts "created c1-#{c1.id}--c2--#{c2.id}"
     # delete connection request
     puts "#{connection_request_object.id}"
@@ -67,8 +69,8 @@ class Message < ActiveRecord::Base
   end
 
   def notify
-    NotificationTracker.create(:user_id => self.recipient_id, :channel => 'email', :subject => "Connection",
-      :status => 'pending', :notifiable_id => self.conversation.id, :notifiable_type => 'Conversation',
-      :notifiable_mode => 1, :scheduled_date => Date.today)
+    #NotificationTracker.create(:user_id => self.recipient_id, :channel => 'email', :subject => "Connection",
+      #:status => 'pending', :notifiable_id => self.conversation.id, :notifiable_type => 'Conversation',
+      #:notifiable_mode => 1, :scheduled_date => Date.today)
   end
 end
