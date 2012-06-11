@@ -5,8 +5,10 @@ class PromotionsController < ApplicationController
     if params[:promotion] == 'event'
       event = Event.find(params[:id])
       @callback_url = confirm_events_url(:event_id => event.id)
-    else
+    elsif params[:promotion] == 'offer'
       @callback_url = confirm_offers_url
+    else
+      @callback_url = confirm_user_conversations_url(params[:id])
     end
   end
 

@@ -26,7 +26,7 @@ class OffersController < ApplicationController
 
   # will be called when free user tries to subscribe before offer activation.
   def confirm
-    #begin
+    begin
       @result = Braintree::TransparentRedirect.confirm(request.query_string)
       if @result.success?
         current_user.update_user_with_plan_and_braintree_id(session[:user_plan],@result.customer.id)
@@ -37,10 +37,10 @@ class OffersController < ApplicationController
         flash[:error] = "Your payment was not success. Check your card information."
         redirect_to offers_path
       end
-    #rescue
-      #flash[:error] = "Your payment was not success. Check your card information."
-      #redirect_to offers_path
-    #end
+    rescue
+      flash[:error] = "Your payment was not success. Check your card information."
+      redirect_to offers_path
+    end
   end
 
 

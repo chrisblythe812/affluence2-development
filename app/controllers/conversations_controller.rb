@@ -1,5 +1,6 @@
 class ConversationsController < ApplicationController
-  before_filter :authenticate_user!, :authenticate_paid_user!
+  before_filter :authenticate_user!
+  before_filter :authenticate_paid_user!, :except =>  [:index, :show, :confirm]
   autocomplete :profile , :full_name, :extra_data => [:id]
   #  include Tabs
   #  layout "conversations"
@@ -146,7 +147,28 @@ class ConversationsController < ApplicationController
     end
   end
 
-   
+  # will be called when free user tries to subscribe before offer activation.
+  def confirm
+    begin
+      @result = Braintree::TransparentRedirect.confirm(request.query_string)
+      if @result.success?
+        current_user.update_user_with_plan_and_braintree_id(session[:user_plan],@result.customer.id)
+        session[:user_plan]=nil
+        flash[:success] = "You have successfully converted to paid member. Now you can send messages"
+        redirect_to user_conversations_path(current_user.id)
+      else
+        flash[:error] = "Your payment was not success. Check your card information."
+        redirect_to user_conversations_path(current_user.id)
+      end
+    rescue
+      flash[:error] = "Your payment was not success. Check your card information."
+      redirect_to user_conversations_path(current_user.id)
+    end
+  end
+
+
+
+
   private
   def set_page_header
     @page_header = "Messages"

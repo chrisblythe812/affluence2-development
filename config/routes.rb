@@ -54,6 +54,7 @@ Affluence2::Application.routes.draw do
       get :autocomplete_profile_full_name, :on => :collection
       get :archive
       get :unarchive
+      get :confirm, :on => :collection
     end
   end
 
