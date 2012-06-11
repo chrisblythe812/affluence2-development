@@ -10,10 +10,10 @@
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
         %small= @profile.country
-    - if @profile.user != current_user && current_user.plan != 'free'
+    - if @profile.user != current_user
       .span2
         %p.pull-right
-          %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message"}
+          %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-message", :id => "message_#{@profile.id}", :class => "message-register-button"}
             %i.icon-pencil.icon-white
             Send a Message
   / row
@@ -83,33 +83,53 @@
     / span9
   / row
 / span9
-#new-message.modal.hide.fade.in{:style => "display: none;"}
-  .modal-header
-    %a.close{"data-dismiss" => "modal", :href => "#"} ×
-    %h3 New Message
-  .modal-body
+- if current_user.plan == 'free'
+  #new-message.modal.hide.fade.in{:style => "display: none;"}
+  :javascript
+     $('.message-register-button').click(function(){
+       var profile_id = this.id.split('_')[1]
+       //alert(event_id) ;
+       $.ajax({
+                     url: "/promotions/"+profile_id+"/become_premium_member",
+                     data:'promotion=message',
+                     //async: false,
+                     success:function(data){
+                       $('#new-message').html(data);
+                       //alert('Load was performed.');
+                     },
+                     dataType:'html'
+                     });
+       //$('#register-div').modal('show');
+     });
 
-    = form_for @conversation, :url => user_conversations_path(current_user), :html => { :class => "form-horizontal" } do |f|
-      %fieldset
-        = f.fields_for :messages, :html => { :multipart => true } do |x|
-          .control-group
-            %label.control-label{:for => "fileInput"} To
-            .controls
-              %ul#msg_to.tagit{:name => "recipient_profile_id"}
-                %li.tagit-choice{"data-profile_id" => "#{@profile.id}"}
-                  = @profile.full_name
-                  %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
-                %li.tagit-new
-                  %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
-          .control-group
-            %label.control-label{:for => "fileInput"} Subject
-            .controls
-              = x.text_field :subject, :placeholder => "subject", :class => "input "
-          .control-group
-            %label.control-label{:for => "fileInput"} Body
-            .controls
-              = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
-              = hidden_field_tag :conversation_recipient_profile_name, "#{@profile.full_name}", :class => "input "
-          .control-group
-            .controls
-              = f.submit "Send Message", :class => "btn btn-primary"
+- else
+  #new-message.modal.hide.fade.in{:style => "display: none;"}
+    .modal-header
+      %a.close{"data-dismiss" => "modal", :href => "#"} ×
+      %h3 New Message
+    .modal-body
+
+      = form_for @conversation, :url => user_conversations_path(current_user), :html => { :class => "form-horizontal" } do |f|
+        %fieldset
+          = f.fields_for :messages, :html => { :multipart => true } do |x|
+            .control-group
+              %label.control-label{:for => "fileInput"} To
+              .controls
+                %ul#msg_to.tagit{:name => "recipient_profile_id"}
+                  %li.tagit-choice{"data-profile_id" => "#{@profile.id}"}
+                    = @profile.full_name
+                    %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
+                  %li.tagit-new
+                    %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
+            .control-group
+              %label.control-label{:for => "fileInput"} Subject
+              .controls
+                = x.text_field :subject, :placeholder => "subject", :class => "input "
+            .control-group
+              %label.control-label{:for => "fileInput"} Body
+              .controls
+                = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
+                = hidden_field_tag :conversation_recipient_profile_name, "#{@profile.full_name}", :class => "input "
+            .control-group
+              .controls
+                = f.submit "Send Message", :class => "btn btn-primary"
