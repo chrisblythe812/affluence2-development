@@ -68,6 +68,7 @@ class User < ActiveRecord::Base
    after_create :create_user_in_mailchimp
 
   def create_user_in_mailchimp
+    #should create user only when user is in active state
   MailChimp.add_user(self)
   end
 
@@ -85,6 +86,10 @@ class User < ActiveRecord::Base
   has_permalink :permalink_name, :update => false
 
   state_machine :status, :initial => :active do
+
+    after_transition :on => :suspended, :do => :suspended_from_mail_chimp
+    after_transition :on => :unsuspended, :do => :add_user_on_mail_chimp
+
     event :suspended do
       transition :active => :suspended
     end
@@ -92,6 +97,15 @@ class User < ActiveRecord::Base
       transition :suspended => :active
     end
   end
+
+  def suspended_from_mail_chimp
+    MailChimp.unsubscribe_user(self)
+  end
+
+  def add_user_on_mail_chimp
+    MailChimp.add_user(self)
+  end
+
 
   def active_for_authentication?
     super && account_active?

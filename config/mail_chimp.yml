@@ -8,12 +8,15 @@ test:
   <<: *default_settings
 demo:
   <<: *default_settings
+
 staging:
-  <<: *default_settings
+  api_key: "ccd7bc4a6cd9917f0fab752867c23eb5-us5"
+  subscriber_list: "728e638c05"
+
 
 production:
   api_key: "ccd7bc4a6cd9917f0fab752867c23eb5-us5"
-  subscriber_list: "b74c253706"
+  subscriber_list: "728e638c05"
 
 
 #subscriber_list is the list that each user will be subscribed to.
