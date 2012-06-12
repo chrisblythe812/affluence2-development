@@ -30,24 +30,32 @@ ActiveAdmin.register User do
 
 
   form :html => { :enctype => "multipart/form-data" } do |f|
-    f.inputs "Create New User" do
+    f.inputs "Edit User Details" do
       f.input :email , :label => "Email"
-      f.input :role , :label => "Role"
-    end
+      f.input :status,:as => :select, :collection => [['Active', 'active'], ['Suspended', 'suspended']] , :include_blank => false
+     end
 
     f.inputs :name => "Profile", :for => :profile do |profile_form|
       profile_form.input :first_name
       profile_form.input :last_name
+      profile_form.input :city
+      profile_form.input :state
+      #profile_form.input :country, :as => :country
+      profile_form.input :phone
+      profile_form.input :bio
+      profile_form.input :title
+      profile_form.input :company
+
     end
 
-    f.inputs :name => "Notification Settings", :for => :notification_settings do |notification_settings_form|
-      notification_settings_form.input :newsletter
-      notification_settings_form.input :offers
-      notification_settings_form.input :events
-      notification_settings_form.input :messages
-      notification_settings_form.input :event_reminders
-      notification_settings_form.input :site_news
-    end
+    #f.inputs :name => "Notification Settings", :for => :notification_settings do |notification_settings_form|
+      #notification_settings_form.input :newsletter
+      #notification_settings_form.input :offers
+      #notification_settings_form.input :events
+      #notification_settings_form.input :messages
+      #notification_settings_form.input :event_reminders
+      #notification_settings_form.input :site_news
+    #end
 
 
     f.buttons
@@ -120,12 +128,13 @@ ActiveAdmin.register User do
       end
     end
 
-    if user.payments.count > 0
+    if user.promotions.count > 0
     panel "Orders History"  do
-      table_for user.payments do |order|
-        column("Order ID") { |order| order.id }
-        column("Date") { |order| global_date_format(order.created_at) }
-        column("Cost") { |order| "$#{order.amount}" }
+      table_for user.promotions do |promotion |
+        column("Promotion ID") { |promotion| promotion.promotionable.id }
+        column("Promotion Type") { |promotion| promotion.promotionable_type }
+        column("Promotion") { |promotion| promotion.promotionable.title }
+        #column("Cost") { |order| "$#{order.amount}" }
       end
     end
     else
