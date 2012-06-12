@@ -195,16 +195,18 @@ form .clearfix:before, form .clearfix:after {
 }
 
  a.msg_counter {
-    //background: url("main_nav_circle.png") no-repeat scroll 0 0 transparent;
+    background: url("circle_red.png") no-repeat scroll 0 0 transparent;
+    background-size:25px 25px;
+
     color: #FFFFFF;
     display: inline-block;
     font-size: 10px;
     font-weight: bold;
-    height: 20px;
+    height: 25px;
     left: 48px;
     top: 10px;
-    line-height: 19px;
-    padding-left: 7px;
+    line-height: 22px;
+    padding-left: 4px;
     position: relative;
     text-decoration: none;
     width: 20px;
