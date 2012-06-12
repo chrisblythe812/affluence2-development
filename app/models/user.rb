@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
   has_many :payments
   has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
 
+  has_many :promotions_users
+  has_many :promotions, :through => :promotions_users
+
+
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
