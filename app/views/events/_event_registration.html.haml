@@ -53,7 +53,7 @@
   :javascript
     $(function() {
       $("#total_tickets_#{event.id}").change(function(){
-      var event_price = '353'
+      var event_price = "#{event.price.to_i}"
       var total_tickets = this.value;
       total =  parseFloat(event_price)*parseFloat(total_tickets);
       var total_cost = parseFloat(total);
