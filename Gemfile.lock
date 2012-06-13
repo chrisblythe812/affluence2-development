@@ -317,6 +317,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   launchy
+  nokogiri
   paperclip (~> 2.3)
   permalink_fu
   pg
