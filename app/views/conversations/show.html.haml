@@ -14,7 +14,7 @@
                 = link_to display_image(reply.sender.profile.photos, :thumb), profile_path(reply.sender.permalink), :class => "avatar large"
               %td
                 %h5
-                  =link_to reply.sender.profile.name, profile_path(@first_message.sender.permalink)
+                  =link_to reply.sender.profile.name, profile_path(reply.sender.permalink)
                 %br/
                 %p
                   = message_with_links_and_paragraphs(reply.body).html_safe
