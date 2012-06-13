@@ -27,7 +27,7 @@ Affluence2::Application.routes.draw do
   get "home/index"
 
 
-  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions"} do
+  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions", :passwords => 'passwords'} do
 
     get "/users/sign_in" => "welcome#index"
 

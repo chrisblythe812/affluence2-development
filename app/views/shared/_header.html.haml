@@ -16,7 +16,7 @@
             %a{:href => "/offers"} Offers
           %li{:class => "#{'active' if gives?}"}
             %a{:href => "#"} Gives
-          - if current_user.superadmin?
+          - if current_user && current_user.superadmin?
             %li{:class => "#{'active' if gives?}"}
               %a{:href => "#{admin_dashboard_path}"} Dashboard
         %ul.nav.pull-right

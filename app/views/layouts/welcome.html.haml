@@ -41,10 +41,13 @@
             = form_for(User, :as => 'user', :url => session_path('user'), :html=> {:class => 'form-search nav pull-right',:style => "margin-top:5px;" }) do |f|
               /%form.form-search.nav.pull-right{:style => "margin-top:5px;",:action=>"/users/sign_in",:method=>"post"}
               %input.input.span2{:name=>"user[email]", :type => "text",:placeholder=>"Email"}
-                %input.input.span2{:name => "user[password]", :type => "password",:placeholder=>"Password"}
-                  /%a{:href => "./paid/home.html"}
-                  %button.btn.btn-primary{:style => "margin-top: 0px;", :type => "submit"} Login
-                  / <p class="help-block"><a href="#" class="white">Forgot Password?</a><label class="checkbox white"><input type="checkbox"> Remember Me?</label> </p>
+              %input.input.span2{:name => "user[password]", :type => "password",:placeholder=>"Password"}
+              /%a{:href => "./paid/home.html"}
+              %button.btn.btn-primary{:style => "margin-top: 0px;", :type => "submit"} Login
+              %p.help-block
+                %a.white{:href => new_user_password_url} Forgot Password?
+                %label.checkbox.white{:style => "color:white;"}
+                  %input{:type => "checkbox", :name=> "user[remember_me]", :id=>"user_remember_me"} Remember Me?
           / /.nav-collapse
     #landing
       .container
