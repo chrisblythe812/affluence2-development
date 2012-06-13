@@ -2,7 +2,7 @@
 - profile = (message.sender == current_user) ? message.recipient.profile : message.sender.profile
 %tr{:class => "#{'unread' unless conversation.read?(current_user)}" }
   %td.span1{:data => {:conversation_id => conversation.id}}
-    = link_to display_image(profile.photos, :thumb), profile_path(profile.user.permalink), :class => "thumbnail"
+    = link_to display_image(profile.photos, :thumb), user_conversation_path(current_user, conversation), :class => "thumbnail"
   %td
     -if conversation.messages.length > 1
       %h5{:class => "#{'unread_msg' unless conversation.read?(current_user)} tk-ff-tisa-web-pro" }
