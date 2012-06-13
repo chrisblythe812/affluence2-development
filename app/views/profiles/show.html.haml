@@ -46,10 +46,10 @@
     .span9
       %h3 Activity
       %table.table.table-striped
-        - @latest_activities = @profile.user.activities.last(9).reverse
+        - @latest_activities =  current_user != @profile.user ? Activity.all_by_privacy_setting(@profile.user) : current_user.activities.reverse
         = render :partial => "activities/latest", :object => @latest_activities
-      %p.pull-right
-        %a{:href => "/activities"} see more activities
+      /%p.pull-right
+    /%a{:href => "#{activities_path(:user_permalink => @profile.user.permalink)}"} see more activities
 
     / span9
   / row

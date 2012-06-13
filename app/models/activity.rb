@@ -24,11 +24,14 @@ class Activity < ActiveRecord::Base
 #    activities
 #
 #  end
-def self.all_by_privacy_setting
+def self.all_by_privacy_setting(user)
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
       break unless activity
+      if user
+        next unless activity.user == user
+      end
       privacy =  activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
@@ -43,7 +46,7 @@ def self.all_by_privacy_setting
 
 end
 
-
+  
   def self.create_user_event(user,event)
     create(:user_id  => user.id,
            :body => "has registered for the #{event.title} Event",
