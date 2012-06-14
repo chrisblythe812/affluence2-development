@@ -24,14 +24,12 @@ class Activity < ActiveRecord::Base
 #    activities
 #
 #  end
-def self.all_by_privacy_setting(user)
+def self.all_by_privacy_setting
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
       break unless activity
-      if user
-        next unless activity.user == user
-      end
+  
       privacy =  activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'

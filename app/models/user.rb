@@ -46,7 +46,25 @@ class User < ActiveRecord::Base
     activities
   end
 
+def activities_by_privacy_settings  
+    activities = []
+    begin
+      activity = activity ? Activity.previous(activity).first : Activity.last
+      break unless activity
+      next unless activity.user == self
+      privacy =  activity.user.profile.privacy_setting
 
+      if activity.resource_type == 'Profile'
+        #activities << activity
+      else
+        activities << activity if (privacy.send(Activity::OPTS[activity.resource_type]) == 0)
+      end
+
+    end while activities.length < 7
+
+    activities
+
+end
   has_many :payments
   has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
 
