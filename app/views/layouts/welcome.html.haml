@@ -45,9 +45,9 @@
               /%a{:href => "./paid/home.html"}
               %button.btn.btn-primary{:style => "margin-top: 0px;", :type => "submit"} Login
               %p.help-block
-                %a.white{:href => new_user_password_url} Forgot Password?
                 %label.checkbox.white{:style => "color:white;"}
-                  %input{:type => "checkbox", :name=> "user[remember_me]", :id=>"user_remember_me"} Remember Me?
+                  %input{:type => "checkbox", :name=> "user[remember_me]", :id=>"user_remember_me"} Remember Me? &nbsp
+                  %a.white{:href => new_user_password_url} Forgot Password?
           / /.nav-collapse
     #landing
       .container
