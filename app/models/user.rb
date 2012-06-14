@@ -46,8 +46,13 @@ class User < ActiveRecord::Base
     activities
   end
 
-def activities_by_privacy_settings  
+def activities_by_privacy_settings(current_user)
+    ids = []
+    self.connections.each{|x| ids<<x.friend.id}
+
     activities = []
+    is_friend = ids.include?(current_user.id)
+         
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
@@ -57,8 +62,12 @@ def activities_by_privacy_settings
       if activity.resource_type == 'Profile'
         #activities << activity
       else
-        activities << activity if (privacy.send(Activity::OPTS[activity.resource_type]) == 0)
-      end
+        if is_friend
+          activities << activity if [0,1].include?(privacy.send(Activity::OPTS[activity.resource_type])) 
+        elsif (privacy.send(Activity::OPTS[activity.resource_type]) == 0)
+          activities << activity
+        end
+      end             
 
     end while activities.length < 7
 
