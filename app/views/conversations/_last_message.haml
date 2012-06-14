@@ -1,4 +1,4 @@
-- message = conversation.messages.first
+- message = conversation.messages.last
 - profile = (message.sender == current_user) ? message.recipient.profile : message.sender.profile
 %tr{:class => "#{'unread' unless conversation.read?(current_user)}" }
   %td.span1{:data => {:conversation_id => conversation.id}}

@@ -14,7 +14,7 @@ class ConversationsController < ApplicationController
   def index
     @conversation = Conversation.new
     @conversation.messages.build
-    @conversations = Conversation.for_user(current_user).page params[:page]
+    @conversations = Conversation.joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).order("updated_at DESC").page params[:page]
 
     #    tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
     #    set_tab(tab_page, :messages)
