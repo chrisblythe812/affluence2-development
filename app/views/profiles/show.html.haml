@@ -2,7 +2,7 @@
 .span9
   .row
     .span7
-      %h1= @profile.name.capitalize if !@profile.name.blank?
+      %h1= @profile.name if !@profile.name.blank?
       %h5
         %strong= @profile.title.capitalize  if !@profile.title.blank?
         %em=" at #{@profile.company}"
@@ -121,10 +121,6 @@
                     %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
                   %li.tagit-new
                     %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
-            .control-group
-              %label.control-label{:for => "fileInput"} Subject
-              .controls
-                = x.text_field :subject, :placeholder => "subject", :class => "input "
             .control-group
               %label.control-label{:for => "fileInput"} Body
               .controls
