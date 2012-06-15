@@ -4,8 +4,9 @@
     .span7
       %h1= @profile.name if !@profile.name.blank?
       %h5
-        %strong= @profile.title.capitalize  if !@profile.title.blank?
-        %em=" at #{@profile.company}"
+        - unless @profile.title.blank? && @profile.company.blank?
+          %strong= @profile.title.capitalize  if !@profile.title.blank?
+          %em=" at #{@profile.company}"
       %h6
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
