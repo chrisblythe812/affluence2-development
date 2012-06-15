@@ -285,5 +285,15 @@ class ProfilesController < ApplicationController
     end
     redirect_to edit_profile_path(current_user.permalink)
   end
+
+  def delete_account
+    if current_user.plan != 'free'
+      current_user.cancel_membership
+    end
+    current_user.deleted
+    sign_out current_user
+    flash[:success] = "Your account has been deleted successfully"
+    redirect_to root_path
+  end
           
 end

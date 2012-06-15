@@ -151,6 +151,10 @@ end
     status=='active'
   end
 
+  def account_suspended?
+    status=='suspended'
+  end
+
   def clear_connections_conversations
     delete_all_connections
     update_all_conversations

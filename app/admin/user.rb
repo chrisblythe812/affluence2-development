@@ -66,7 +66,7 @@ ActiveAdmin.register User do
   action_item :only => [:show] do
     if user.account_active?
     link_to('Suspend', suspend_admin_user_path(user.id))
-    else
+    elsif user.account_suspended?
       link_to('Active', unsuspend_admin_user_path(user.id))
     end
   end
@@ -94,6 +94,17 @@ ActiveAdmin.register User do
     else
       render :edit
     end
+  end
+
+
+  member_action :destroy,  :method => :post do
+    @user = User.find(params[:id]) unless params[:id].blank?
+    if @user.plan != 'free'
+      @user.cancel_membership
+    end
+    @user.deleted
+    flash[:notice] = "Member was successfully deleted"
+    redirect_to :action => :index
   end
 
 

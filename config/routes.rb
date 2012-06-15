@@ -95,6 +95,7 @@ Affluence2::Application.routes.draw do
       get :edit_privacy
       get :update_privacy
       get :cancel_membership
+      get :delete_account
     end
 
     member do

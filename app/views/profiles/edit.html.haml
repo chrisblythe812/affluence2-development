@@ -8,6 +8,9 @@
     = render 'billing'
     = render 'email_notifications'
     = render 'change_password'
+    %p
+      %a.btn.btn-small.btn-info{:href => delete_account_profiles_path}
+        Delete Account
 - content_for :accordion do
   :javascript
     $(function() {

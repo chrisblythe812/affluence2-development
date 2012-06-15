@@ -42,6 +42,7 @@
               .form-actions
                 %button.btn.btn-primary{:type => "submit"} Save changes
               = link_to "Cancel Membership", cancel_membership_profiles_path  unless current_user.plan == 'free'
+
           :javascript
             function validate_card_info(){
             var form_url = $('form.payment_form').attr("action");
