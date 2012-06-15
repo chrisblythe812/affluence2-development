@@ -252,9 +252,9 @@ end
     Connection.delete_all(["user_id=? OR friend_id=?", self.id, self.id])
   end
 
-  def archive_all_conversations!  
+  def update_all_conversations(bool = true)
     ConversationMetadata.where(:user_id => self.id).each do |meta|
-      meta.update_attribute(:archived, true)
+      meta.update_attribute(:archived, bool)
     end
   end
 end
