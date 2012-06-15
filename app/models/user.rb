@@ -247,4 +247,14 @@ end
 
     credit_cards.find { |cc| cc.default? }
   end
+
+  def delete_all_connections
+    Connection.delete_all(["user_id=? OR friend_id=?", self.id, self.id])
+  end
+
+  def archive_all_conversations!  
+    ConversationMetadata.where(:user_id => self.id).each do |meta|
+      meta.update_attribute(:archived, true)
+    end
+  end
 end
