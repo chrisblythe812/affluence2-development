@@ -5,7 +5,7 @@
   .well
     %ul.nav.nav-list
       %li.nav-header Socialize
-      %li{:class => "#{(params[:controller] == 'home') ? 'active':''}"}
+      %li{:class => "#{params[:controller] == "home" ? "active":""}"}
         %a{:href => "/home"}
           %i.icon-star>
           What's New
@@ -17,7 +17,7 @@
         %a{:href => "#{search_members_path}"}
           %i.icon-user>
           Members
-      %li
+      %li{:class => "#{(params[:controller] == 'conversations') ? 'active':''}"}
         %a{:href => "#{user_conversations_path(current_user)}"}
           %i.icon-comment>
           Messages
