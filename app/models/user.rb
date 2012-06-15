@@ -46,7 +46,34 @@ class User < ActiveRecord::Base
     activities
   end
 
+def activities_by_privacy_settings(current_user)
+    ids = []
+    self.connections.each{|x| ids<<x.friend.id}
 
+    activities = []
+    is_friend = ids.include?(current_user.id)
+         
+    begin
+      activity = activity ? Activity.previous(activity).first : Activity.last
+      break unless activity
+      next unless activity.user == self
+      privacy =  activity.user.profile.privacy_setting
+
+      if activity.resource_type == 'Profile'
+        #activities << activity
+      else
+        if is_friend
+          activities << activity if [0,1].include?(privacy.send(Activity::OPTS[activity.resource_type])) 
+        elsif (privacy.send(Activity::OPTS[activity.resource_type]) == 0)
+          activities << activity
+        end
+      end             
+
+    end while activities.length < 7
+
+    activities
+
+end
   has_many :payments
   has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
 
@@ -219,5 +246,15 @@ class User < ActiveRecord::Base
     return unless has_payment_info?
 
     credit_cards.find { |cc| cc.default? }
+  end
+
+  def delete_all_connections
+    Connection.delete_all(["user_id=? OR friend_id=?", self.id, self.id])
+  end
+
+  def update_all_conversations(bool = true)
+    ConversationMetadata.where(:user_id => self.id).each do |meta|
+      meta.update_attribute(:archived, bool)
+    end
   end
 end

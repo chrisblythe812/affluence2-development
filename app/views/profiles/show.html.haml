@@ -2,10 +2,11 @@
 .span9
   .row
     .span7
-      %h1= @profile.name.capitalize if !@profile.name.blank?
+      %h1= @profile.name if !@profile.name.blank?
       %h5
-        %strong= @profile.title.capitalize  if !@profile.title.blank?
-        %em=" at #{@profile.company}"
+        - unless @profile.title.blank? && @profile.company.blank?
+          %strong= @profile.title.capitalize  if !@profile.title.blank?
+          %em=" at #{@profile.company}"
       %h6
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
@@ -46,7 +47,7 @@
     .span9
       %h3 Activity
       %table.table.table-striped
-        - @latest_activities =  current_user != @profile.user ? Activity.all_by_privacy_setting(@profile.user) : current_user.activities.reverse
+        - @latest_activities =  current_user != @profile.user ? @profile.user.activities_by_privacy_settings(current_user): current_user.activities.reverse
         = render :partial => "activities/latest", :object => @latest_activities
       /%p.pull-right
     /%a{:href => "#{activities_path(:user_permalink => @profile.user.permalink)}"} see more activities
@@ -121,10 +122,6 @@
                     %input{:name => "conversation[recipient_profile_id][]", :style => "display: none;", :type => "hidden", :value => "#{@profile.id}"}
                   %li.tagit-new
                     %input.tagit-input.ui-autocomplete-input{"aria-autocomplete" => "list", "aria-haspopup" => "true", :autocomplete => "off", :disabled => "disabled", :role => "textbox", :style => "display: none;", :type => "text"}
-            .control-group
-              %label.control-label{:for => "fileInput"} Subject
-              .controls
-                = x.text_field :subject, :placeholder => "subject", :class => "input "
             .control-group
               %label.control-label{:for => "fileInput"} Body
               .controls

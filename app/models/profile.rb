@@ -58,7 +58,7 @@ before_save :update_full_name
 
 def name
   #middle = middle_name.present? ? " #{middle_name} " : " "
-  "#{first_name} #{last_name}"
+  "#{first_name} #{middle_name} #{last_name}"
 end
 
 def update_full_name
