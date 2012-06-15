@@ -28,6 +28,7 @@ gem 'tabs_on_rails'
 gem 'state_machine'
 gem "hominid"
 gem 'nokogiri'
+gem 'ruby-debug19', :require => 'ruby-debug'
 
 
 
