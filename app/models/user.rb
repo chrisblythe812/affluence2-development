@@ -112,7 +112,7 @@ end
   scope :all_members, :conditions => ['role not like ?', 'superadmin']
   scope :active_members, :conditions => ['role not like ? and status like ?', 'superadmin', "active"]
   scope :suspended_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "suspended"]
-
+  scope :deleted_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "deleted"]
 
   has_permalink :permalink_name, :update => false
 
@@ -120,12 +120,17 @@ end
 
     after_transition :on => :suspended, :do => :suspended_from_mail_chimp
     after_transition :on => :unsuspended, :do => :add_user_on_mail_chimp
+    after_transition :on => :deleted, :do => :clear_connections_conversations
 
     event :suspended do
       transition :active => :suspended
     end
     event :unsuspended do
       transition :suspended => :active
+    end
+
+    event :deleted do
+      transition :active => :deleted
     end
   end
 
@@ -145,6 +150,12 @@ end
   def account_active?
     status=='active'
   end
+
+  def clear_connections_conversations
+    delete_all_connections
+    update_all_conversations
+  end
+
 
   def permalink_name
     profile_name = name
@@ -253,8 +264,19 @@ end
   end
 
   def update_all_conversations(bool = true)
-    ConversationMetadata.where(:user_id => self.id).each do |meta|
+    ConversationMetadatum.where(:user_id => self.id).each do |meta|
       meta.update_attribute(:archived, bool)
     end
+  end
+
+  def cancel_membership
+    SubscriptionFeeTracker.delete_all(["user_id=? AND status = ?", self.id, 'pending'])
+    result = Braintree::Customer.delete(self.braintree_customer_id)
+    if result.success?
+      puts "customer successfully deleted"
+    else
+      raise "this should never happen"
+    end
+    self.update_attributes(:plan => 'free', :braintree_customer_id => '')
   end
 end

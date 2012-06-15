@@ -8,6 +8,7 @@ ActiveAdmin.register User do
    #scope :all_members, :default => true
    scope :active_members, :default => true
    scope :suspended_members
+   scope :deleted_members
 
   config.clear_sidebar_sections!
 
@@ -99,7 +100,7 @@ ActiveAdmin.register User do
   show :title => "User details" do | user |
     panel "Profile Info" do
     attributes_table_for user do
-      row("Name") {|user| user.profile.first_name}
+      row("Name") {|user| Profile.all.count}
       row :email
       row("Unique ID(permalink)") {|user| user.permalink}
       #row("Member ID") {|user| user.id}
