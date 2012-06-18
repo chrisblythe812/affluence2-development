@@ -62,7 +62,6 @@ class ConversationsController < ApplicationController
       end
     elsif current_user.plan == 'free'
       flash[:error] = "Cannot send message, Please become a premium member."
-
     else
       redirect_to user_conversations_path(current_user), :flash => {:error => "Unauthorized Access!"}
     end
