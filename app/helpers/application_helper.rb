@@ -107,7 +107,8 @@ module ApplicationHelper
   end
 
   def event_description(description,length=130)
-    description[0..length] unless description.nil?
+    #description[0..length] unless description.nil?
+    truncate(description, :length => length)
   end
 
   def display_image(photos, format = :medium)

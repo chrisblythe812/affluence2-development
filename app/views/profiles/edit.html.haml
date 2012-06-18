@@ -8,6 +8,8 @@
     = render 'billing'
     = render 'email_notifications'
     = render 'change_password'
+    %p{:style=>"margin-top:50px;float:right;"}
+      = link_to 'Delete My Account', delete_account_profiles_path, :confirm => "Are you sure, that you want to delete your account?",:class => "btn btn-primary"
 - content_for :accordion do
   :javascript
     $(function() {

@@ -8,6 +8,7 @@ ActiveAdmin.register User do
    #scope :all_members, :default => true
    scope :active_members, :default => true
    scope :suspended_members
+   scope :deleted_members
 
   config.clear_sidebar_sections!
 
@@ -65,7 +66,7 @@ ActiveAdmin.register User do
   action_item :only => [:show] do
     if user.account_active?
     link_to('Suspend', suspend_admin_user_path(user.id))
-    else
+    elsif user.account_suspended?
       link_to('Active', unsuspend_admin_user_path(user.id))
     end
   end
@@ -96,10 +97,21 @@ ActiveAdmin.register User do
   end
 
 
+  member_action :destroy,  :method => :post do
+    @user = User.find(params[:id]) unless params[:id].blank?
+    if @user.plan != 'free'
+      @user.cancel_membership
+    end
+    @user.deleted
+    flash[:notice] = "Member was successfully deleted"
+    redirect_to :action => :index
+  end
+
+
   show :title => "User details" do | user |
     panel "Profile Info" do
     attributes_table_for user do
-      row("Name") {|user| user.profile.first_name}
+      row("Name") {|user| Profile.all.count}
       row :email
       row("Unique ID(permalink)") {|user| user.permalink}
       #row("Member ID") {|user| user.id}

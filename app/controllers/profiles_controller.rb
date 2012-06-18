@@ -276,5 +276,24 @@ class ProfilesController < ApplicationController
     notification.update_attributes(:status => 'completed')
     render :nothing => true
   end
+
+
+  def cancel_membership
+    if current_user.plan != 'free'
+      current_user.cancel_membership
+      flash[:success] = "You have successfully converted to free member"
+    end
+    redirect_to edit_profile_path(current_user.permalink)
+  end
+
+  def delete_account
+    if current_user.plan != 'free'
+      current_user.cancel_membership
+    end
+    current_user.deleted
+    sign_out current_user
+    flash[:success] = "Your account has been deleted successfully"
+    redirect_to root_path
+  end
           
 end
