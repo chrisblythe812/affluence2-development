@@ -8,8 +8,9 @@
       %h5{:class => "#{'unread_msg' unless conversation.read?(current_user)} tk-ff-tisa-web-pro" }
         Last reply by <span>#{last_reply_name(conversation.messages.first.sender)}:</span>
     -else
-      %span{:class => "#{'unread_msg' unless conversation.read?(current_user)} last-reply tk-ff-tisa-web-pro" }=link_to truncate(message.subject, :length => 45), user_conversation_path(current_user, conversation), :class => "desc"
-    %br/
+      %span{:class => "#{'unread_msg' unless conversation.read?(current_user)} last-reply tk-ff-tisa-web-pro" }
+        = link_to message.sender.profile.full_name, user_conversation_path(current_user, conversation), :class => "desc"
+    %br/ 
     %p
       %a.summary{:href => user_conversation_path(current_user, conversation) }
         =truncate(message.body.gsub(/<\/?[^>]*>/, ""), :length => 90)
