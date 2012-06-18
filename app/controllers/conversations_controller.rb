@@ -1,16 +1,22 @@
 class ConversationsController < ApplicationController
-  before_filter :authenticate_user!  
+  before_filter :authenticate_user!
   before_filter :authenticate_paid_user!, :except =>  [:index, :show, :confirm]
-  autocomplete :profile , :full_name, :extra_data => [:id]
-  #  include Tabs
-  #  layout "conversations"
   before_filter :set_page_header
+  autocomplete :profile , :full_name, :extra_data => [:id]
+
 
   def get_autocomplete_items(parameters)
+    logger.info "parameters#{parameters.inspect}"
     items = super(parameters)
-    items = items.where("user_id != ?", current_user.id)
+    logger.info "items#{items.inspect}"
+    items.includes(:user)
+    items =   Profile.joins(:user)
+    .where("LOWER(profiles.full_name) ilike ? and status = ? and user_id != ?", "#{params[:term]}%", "active", current_user.id)
+    .order("profiles.full_name")
+    .limit(10)
+    .select(["profiles.id", "profiles.full_name"])
   end
- 
+
   def index
     @conversation = Conversation.new
     @conversation.messages.build
@@ -57,20 +63,22 @@ class ConversationsController < ApplicationController
       unless @conversation.read?(current_user)
         session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
       end
+    elsif current_user.plan == 'free'
+      flash[:error] = "Cannot send message, Please become a premium member."
+
     else
-       
-       redirect_to user_conversations_path(current_user), :flash => {:error => "Unauthorized Access!"}
+      redirect_to user_conversations_path(current_user), :flash => {:error => "Unauthorized Access!"}
     end
- end
+  end
 
   def create
     recipient_user = Profile.find(params[:conversation][:recipient_profile_id])[0].user rescue nil
     params[:conversation].delete(:recipient_profile_id)
-      
+
     @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
     if @conversation.nil?
       @conversation = Conversation.new(params[:conversation])
-        
+
     else
       #      @conversation = message.conversation
       @conversation.messages << Message.new(params[:conversation][:messages_attributes]["0"])
@@ -81,9 +89,9 @@ class ConversationsController < ApplicationController
       @conversation.messages.last.sender = current_user
       @conversation.messages.last.recipient = recipient_user
       #      ConnectionRequest.find_or_create_by_requestor_id_and_requestee_id(current_user.id, recipient_user.id)
-   
+
       #      authorize!(:create, @conversation.messages.first)
-  
+
       if @conversation.save
         redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}
       else
@@ -122,7 +130,7 @@ class ConversationsController < ApplicationController
 
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message
-      @conversation.save 
+      @conversation.save
       redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}
     else
       render :show
@@ -182,5 +190,5 @@ class ConversationsController < ApplicationController
     @page_header = "Messages"
   end
 
-   
+
 end
