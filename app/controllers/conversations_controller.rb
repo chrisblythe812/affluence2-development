@@ -6,10 +6,7 @@ class ConversationsController < ApplicationController
 
 
   def get_autocomplete_items(parameters)
-    logger.info "parameters#{parameters.inspect}"
     items = super(parameters)
-    logger.info "items#{items.inspect}"
-    items.includes(:user)
     items =   Profile.joins(:user)
     .where("LOWER(profiles.full_name) ilike ? and status = ? and user_id != ?", "#{params[:term]}%", "active", current_user.id)
     .order("profiles.full_name")
