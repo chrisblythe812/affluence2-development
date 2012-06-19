@@ -14,10 +14,11 @@ class Profile < ActiveRecord::Base
 
 
   scope :member_search, lambda{ |query|
-    find_by_sql ["select * from profiles
+    find_by_sql ["select profiles.* from profiles
       inner join users
       on (profiles.user_id=users.id)
       where (user_id is not null)
+      and (users.status = 'active')
       and (
             (to_tsvector('english', COALESCE(first_name,'') || ' ' ||
                                     COALESCE(last_name,'') || ' ' ||
@@ -72,8 +73,10 @@ end
     query_text = ""
     query_params = []
     if(matched_name != nil && matched_name.chop.size > 0)
-      query_text << "select * from profiles
+      query_text << "select profiles.* from profiles
+      INNER JOIN users ON users.id = profiles.user_id
       where (user_id is not null)
+      and (users.status = 'active')
       and (
             (to_tsvector('english', COALESCE(first_name,'') || ' ' ||
                                     COALESCE(last_name,'') || ' ' ||
@@ -91,9 +94,11 @@ end
     end
 
          recursive_count == 0 ? query_text << "  INTERSECT  " : query_text << "  UNION  "
-         query_text  << "select * from profiles
+         query_text  << "select profiles.* from profiles 
+           INNER JOIN users ON users.id = profiles.user_id 
            where (user_id is not null)
-           and id in ( select distinct taggable_id 
+           and (users.status = 'active') 
+           and profiles.id in ( select distinct taggable_id
                        from taggings
                        where taggable_type='Profile'
                        and (context = 'interests' or context = 'expertises')

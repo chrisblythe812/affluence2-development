@@ -25,6 +25,7 @@
   %body
     = render 'shared/header'
     .container
+      = render 'shared/flash_message'
       .row
         - if @profile_navigation
           = render 'shared/profile_navigation'
@@ -39,4 +40,10 @@
 / Placed at the end of the document so the pages load faster
 / javascript
 = yield(:javascripts)
+:javascript
+  $(function () {
+    $('a[rel=tooltip]').tooltip({
+        live: true
+    });
+  });
 

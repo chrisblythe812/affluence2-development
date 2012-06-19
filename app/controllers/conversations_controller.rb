@@ -17,7 +17,7 @@ class ConversationsController < ApplicationController
   def index
     @conversation = Conversation.new
     @conversation.messages.build
-    @conversations = Conversation.joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).order("updated_at DESC").page params[:page]
+    @conversations = Conversation.joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
 
     #    tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
     #    set_tab(tab_page, :messages)
@@ -28,7 +28,7 @@ class ConversationsController < ApplicationController
     #      raise CanCan::AccessDenied if params[:user_id].to_i != current_user.id
     #    end
     #    if tab_page == :inbox
-    #      @conversations = Conversation.for_user(current_user).archived?(false).page params[:page]
+#          @conversations = Conversation.for_user(current_user).archived?(false).page params[:page]
     #    elsif tab_page == :archive
     #      @conversations = Conversation.for_user(current_user).archived?(true).page params[:page]
     #    end
@@ -136,7 +136,7 @@ class ConversationsController < ApplicationController
   def archive
     @conversation = Conversation.find(params[:conversation_id])
 
-    authorize! :edit, @conversation
+#    authorize! :edit, @conversation
 
     @conversation.archive!(current_user)
 

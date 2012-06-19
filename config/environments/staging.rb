@@ -48,7 +48,8 @@ Affluence2::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.action_mailer.default_url_options = { :host => 'affluence.org' }
++  config.action_mailer.default_url_options = { :host => 'affluence2-staging.herokuapp.com' }
+
 
   #config.action_controller.asset_host = Proc.new do |source|
    #'http://affluence-demo.s3.amazonaws.com'

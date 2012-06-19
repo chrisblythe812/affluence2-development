@@ -15,3 +15,9 @@
       %a.summary{:href => user_conversation_path(current_user, conversation) }
         =truncate(message.body.gsub(/<\/?[^>]*>/, ""), :length => 90)
   %td= time_ago_in_words(message.updated_at) + " ago"
+  %td
+    %a.close{:href => "#{user_conversation_archive_path(current_user, conversation)}",
+             :rel => "tooltip",
+             "data-original-title" => "Delete",
+             "data-placement" => "bottom"}×
+
