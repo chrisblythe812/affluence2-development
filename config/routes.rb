@@ -114,6 +114,7 @@ Affluence2::Application.routes.draw do
       get :latest
       get :find_members
       get :search
+      get :delete_connection
     end
   end
 
