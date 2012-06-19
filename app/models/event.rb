@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
 
   has_one :promotion, :as => :promotionable, :dependent => :destroy
-  has_many :schedules, :dependent => :destroy
+  has_many :schedules, :dependent => :destroy, :order =>  "date asc"
   has_many :includes, :dependent => :destroy
 
 
@@ -38,6 +38,10 @@ class Event < ActiveRecord::Base
 
 
   attr_accessor :carousel_image, :normal_image
+
+
+
+
 
   #private
 
