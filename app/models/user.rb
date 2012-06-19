@@ -8,22 +8,30 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :promotions
   has_many :connections
   has_many :connections_activities, :class_name => "Activity", :finder_sql => Proc.new {
-#    ids=[]
-#    ids<<id
-#    self.connections.each{|x| ids<<x.friend.id}
-#    temp = ''
-#    ids.each_index{|x|
-#      temp =   temp + ids[x].to_s
-#      temp = temp + ',' unless x==ids.length-1
-#    }
-#    %Q{
-#      SELECT  *
-#      FROM activities
-#      WHERE user_id IN (#{id})
-#      ORDER BY updated_at DESC
-#      LIMIT 6 OFFSET 0;
-#    }
+    #    ids=[]
+    #    ids<<id
+    #    self.connections.each{|x| ids<<x.friend.id}
+    #    temp = ''
+    #    ids.each_index{|x|
+    #      temp =   temp + ids[x].to_s
+    #      temp = temp + ',' unless x==ids.length-1
+    #    }
+    #    %Q{
+    #      SELECT  *
+    #      FROM activities
+    #      WHERE user_id IN (#{id})
+    #      ORDER BY updated_at DESC
+    #      LIMIT 6 OFFSET 0;
+    #    }
   }
+
+  def disconnect_with_user(friend_id)
+    connection1 = Connection.where("user_id=? and friend_id=?", id, friend_id)  
+    connection2 = Connection.where("user_id=? and friend_id=?", friend_id, id)  
+    no_of_records_deleted = Connection.delete(connection1 + connection2)
+    return no_of_records_deleted == 2
+  end
+
   def connections_activities
     ids=[]
     ids<<self.id
@@ -46,7 +54,7 @@ class User < ActiveRecord::Base
     activities
   end
 
-def activities_by_privacy_settings(current_user)
+  def activities_by_privacy_settings(current_user)
     ids = []
     self.connections.each{|x| ids<<x.friend.id}
 
@@ -73,7 +81,7 @@ def activities_by_privacy_settings(current_user)
 
     activities
 
-end
+  end
   has_many :payments
   has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
 
@@ -85,7 +93,7 @@ end
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role, :status, :created_at, :updated_at
@@ -96,11 +104,11 @@ end
 
   validates_presence_of :plan
 
-   after_create :create_user_in_mailchimp
+  after_create :create_user_in_mailchimp
 
   def create_user_in_mailchimp
     #should create user only when user is in active state
-  MailChimp.add_user(self)
+    MailChimp.add_user(self)
   end
 
   def superadmin?
@@ -176,16 +184,16 @@ end
     self.profile.nil? ? '' : self.profile.name
   end
 
-   def with_profile
-     self.build_profile
-     self
-   end
+  def with_profile
+    self.build_profile
+    self
+  end
 
- def plan_amount
-   return 50 if plan == 'Monthly'
-   return 450 if plan == 'Yearly'
-   return 0 if plan == 'free'
- end
+  def plan_amount
+    return 50 if plan == 'Monthly'
+    return 450 if plan == 'Yearly'
+    return 0 if plan == 'free'
+  end
 
 
   def plan_period_in_days

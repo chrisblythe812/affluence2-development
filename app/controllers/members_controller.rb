@@ -13,7 +13,14 @@ class MembersController < ApplicationController
     render :partial => 'latest'
   end
 
-
+  def delete_connection
+    if current_user.disconnect_with_user(params[:id])
+      flash[:success] = "Successfully disconnected"
+    else
+      flash[:error] = "Not in connections or might have already disconnected"
+    end
+    redirect_to search_members_path
+  end
   private
 
   def search_profile

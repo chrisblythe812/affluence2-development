@@ -17,19 +17,26 @@
         %ul.thumbnails
           - x.each do |profile|
             %li.span3#members_search_profile
-              %a{:href => "#{profile_path(profile.user.permalink)}"}
-                .thumbnail
-                  %img{:alt => "", :src => "#{profile.photos.first.image.url(:medium) unless profile.photos.blank?   }"}
-                  %h5
-                    = profile.first_name + " " + profile.last_name
-                  %h6
-                    = profile.title
+              .thumbnail
+                %a{"data-original-title" => "#{profile.name}", "data-placement" => "bottom", :href => "#{profile_path(profile.user.permalink)}", :rel => "tooltip"}
+                  = display_image(profile.photos, :medium)
+                %h5
+                  = profile.first_name + " " + profile.last_name
+                %h6
+                  = profile.title
+                .row{:style => "padding-bottom:0px;"}
+                  .span2
+                    %div
+                      %i.icon-map-marker>
+                      = "#{profile.city}, #{profile.state}."
+                    %div
+                      %small= profile.country
                   %div
-                    %i.icon-map-marker>
-                    = "#{profile.city}, #{profile.state}."
-                  %div
-                    %small= profile.country
-
+                    %a.close{:href => "#{delete_connection_members_path(:id=>profile.user.id)}",
+                           :rel => "tooltip",
+                           "data-original-title" => "Delete",
+                           "data-placement" => "bottom"}×
+ 
 
 
   / Results
