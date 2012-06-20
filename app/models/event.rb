@@ -58,7 +58,9 @@ class Event < ActiveRecord::Base
     has_tickets? && tickets_remaining > 10
   end
 
-
+  def has_gallery?
+    promotion.gallery_images.blank?
+  end
 
   def self.process_tickets(event,tickets,state)
     if state == 'initial'
