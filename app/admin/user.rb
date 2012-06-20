@@ -1,16 +1,15 @@
 ActiveAdmin.register User do
   actions :all, :except => [:new]
+
+
   filter :email
-  filter :plan
-  filter :name
-  #filter lambda{ User.profile.first_name }
 
-   #scope :all_members, :default => true
-   scope :active_members, :default => true
-   scope :suspended_members
-   scope :deleted_members
 
-  config.clear_sidebar_sections!
+  scope :active_members, :default => true
+  scope :suspended_members
+  scope :deleted_members
+
+  #config.clear_sidebar_sections!
 
 
   index do
