@@ -2,7 +2,7 @@ ActiveAdmin.register Event do
 
   menu :label => "Events"
   config.sort_order = "start_date_desc"
-  #config.per_page = 5
+
 
   scope :up_comming, :default => true
   scope :featured
@@ -145,24 +145,27 @@ ActiveAdmin.register Event do
     @event = Event.find(params[:id])
     update_event_photo(params[:event][:carousel_image], :carousel) unless params[:event][:carousel_image].blank?
     update_event_photo(params[:event][:normal_image]) unless params[:event][:normal_image].blank?
-
-    if event_start_date_set? && @event.update_attributes(params[:event])
+    has_events = !@event.schedules.blank?
+    if has_events && @event.update_attributes(params[:event])
       redirect_to :action => :show, :id => @event.id
     else
+      flash[:notice] = "Please add atleast one schedule to the event." unless has_events
       render :edit
     end
   end
 
   member_action :create, :method => :post do
-    #Event.transaction do
+    Event.transaction do
     @event = Event.new(params[:event])
     construct_event
-      if event_start_date_set? && @event.save
+    has_events = !@event.schedules.blank?
+      if has_events && @event.save
         redirect_to :action => :show, :id => @event.id
       else
+        flash[:notice] = "Please add atleast one schedule to the event." unless has_events
         render :new
       end
-     #end
+     end
 
   end
 
@@ -177,15 +180,6 @@ ActiveAdmin.register Event do
 
     def construct_event_photo
       [{title: @event.title, description: @event.description, image: @event.carousel_image, image_type: 'carousel'},{title: @event.title, description: @event.description, image: @event.normal_image, image_type: 'normal'}]
-    end
-
-    def event_start_date_set?
-      if !@event.schedules.first.blank? && !@event.schedules.first.date.blank?
-        @event.start_date = @event.schedules.first.date.to_date
-        return true
-      else
-        return false
-      end
     end
 
     def update_event_photo(image,type = :normal)

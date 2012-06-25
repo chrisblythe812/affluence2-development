@@ -110,7 +110,7 @@ ActiveAdmin.register User do
   show :title => "User details" do | user |
     panel "Profile Info" do
     attributes_table_for user do
-      row("Name") {|user| Profile.all.count}
+      row("Name") {|user| user.name}
       row :email
       row("Unique ID(permalink)") {|user| user.permalink}
       #row("Member ID") {|user| user.id}
