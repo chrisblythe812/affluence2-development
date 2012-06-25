@@ -20,7 +20,7 @@
             .accordion-heading
               %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
                 %h4
-                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "#{discussion.user.profile.photos.first.image.url(:thumb)}", :width => "30px", :alt => "#{discussion.user.profile.full_name}"}
+                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "#{discussion.user.profile.photos.blank? ? '': discussion.user.profile.photos.first.image.url(:thumb)}", :width => "30px", :alt => "#{discussion.user.profile.full_name}"}
                     = discussion.question
                     %span.label.label-info
                       = discussion.comments.count
