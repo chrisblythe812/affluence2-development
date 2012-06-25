@@ -4,6 +4,9 @@ Affluence2::Application.routes.draw do
 
   
 
+  
+  resources :discussions, :only => [:index, :new, :create, :update] do
+    end
   get "activities/index"
 
   get "activities/connections"

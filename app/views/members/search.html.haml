@@ -34,6 +34,7 @@
                   %div
                     %a.close{:href => "#{delete_connection_members_path(:id=>profile.user.id)}",
                            :rel => "tooltip",
+                           "data-confirm" => 'Are you sure?',
                            "data-original-title" => "Delete",
                            "data-placement" => "bottom"}×
  

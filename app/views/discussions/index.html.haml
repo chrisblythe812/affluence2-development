@@ -1,0 +1,50 @@
+.span9
+  = render 'shared/error_messages', :target => @discussion
+  %h2
+    %small new
+    Discussion
+  = form_for @discussion, :html => { :class => "form-search well" } do |f|
+    = f.text_field :question, :placeholder => "Enter Question or Topic for Discussion", :class => "input-xlarge span7", :size => "20x1"
+    = f.submit "Discuss", :class => "btn btn-primary"
+
+  - unless @discussions.blank?
+    #Discussions
+      %h2
+        Discussions
+        %small= @discussions.size
+      %hr.zero
+      #accordion2.accordion
+        - @discussions.each do |discussion|
+          - index = @discussions.index(discussion)
+          .accordion-group
+            .accordion-heading
+              %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
+                %h4
+                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw", :width => "30px"}
+                    = discussion.question
+                    %span.label.label-info
+                      = discussion.comments.count
+            / according-heading
+            .accordion-body{:style => "height: #{index == 0 ? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{index == 0 ? 'in':'collapse'}"}
+              .accordion-inner
+                #convo.row
+                  - discussion.comments.each do |comment|
+                    .span7.offset1
+                      %p
+                        %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
+                          = image_tag "https://lh4.googleusercontent.com/-YswsvHLdvIk/ThsHAMib6ZI/AAAAAAAAAaQ/_DLti6gsbXc/s387/263890_10150248122814633_591424632_7344455_539665_n.jpg", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail"
+                        = comment.body
+                        %hr.zero
+                  .offset1
+                    - discussion.comments.build
+                    = form_for discussion, :html => { :class => "form-search " } do |f|
+                      = f.fields_for :comments do |s|
+                        = s.text_area :body, :placeholder => "", :class => "input-xlarge span6", :size => "20x2"
+                        = f.submit "Reply", :class => "btn btn-primary btn-large"
+
+                / convo
+              / accordion-inner
+            / accordion-body
+          / accordion-group
+    / Discussions
+    = paginate @discussions, theme: "bootstrap"
