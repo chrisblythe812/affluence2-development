@@ -20,7 +20,7 @@
             .accordion-heading
               %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
                 %h4
-                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "https://encrypted-tbn1.google.com/images?q=tbn:ANd9GcSYhnBvyrRrhumLTwSW7CLDFLVNY_ONEAHBFMdxc46bJLU8nuGLZw", :width => "30px"}
+                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "#{discussion.user.profile.photos.first.image.url(:thumb)}", :width => "30px", :alt => "#{discussion.user.profile.full_name}"}
                     = discussion.question
                     %span.label.label-info
                       = discussion.comments.count
@@ -32,7 +32,7 @@
                     .span7.offset1
                       %p
                         %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
-                          = image_tag "https://lh4.googleusercontent.com/-YswsvHLdvIk/ThsHAMib6ZI/AAAAAAAAAaQ/_DLti6gsbXc/s387/263890_10150248122814633_591424632_7344455_539665_n.jpg", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail"
+                          = image_tag "#{comment.user.profile.photos.first.image.url(:thumb)}", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail", :alt => "#{comment.user.profile.full_name}"
                         = comment.body
                         %hr.zero
                   .offset1

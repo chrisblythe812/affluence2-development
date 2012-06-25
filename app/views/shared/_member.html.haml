@@ -3,4 +3,4 @@
     %a.msg_counter.label.label-important
       = "+#{@total}"
   %a.thumbnail{"data-original-title" => "#{member.profile.full_name}", "data-placement" => "bottom", :href => "#{profile_path(member.permalink)}", :rel => "tooltip"}
-    = display_image(member.profile.photos, :thumb)
+    = image_tag display_image(member.profile.photos, :thumb)

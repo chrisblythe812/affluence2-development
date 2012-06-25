@@ -19,7 +19,7 @@
             %li.span3#members_search_profile
               .thumbnail
                 %a{"data-original-title" => "#{profile.name}", "data-placement" => "bottom", :href => "#{profile_path(profile.user.permalink)}", :rel => "tooltip"}
-                  = display_image(profile.photos, :medium)
+                  = image_tag display_image(profile.photos, :medium)
                 %h5
                   = profile.first_name + " " + profile.last_name
                 %h6
