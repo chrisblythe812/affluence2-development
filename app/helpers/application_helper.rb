@@ -112,7 +112,7 @@ module ApplicationHelper
 
   def display_image(photos, format = :medium)
     if photos.blank?
-      temp = (format == :thumb) ? 'aff-user-small.png':'aff-user-large.png'
+      temp = (format == :thumb) ? '/assets/aff-user-small.png':'/assets/aff-user-large.png'
       temp
     else
       photos.first.image.url(format)

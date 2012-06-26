@@ -19,7 +19,7 @@
           Members
       %li{:class => "#{(params[:controller] == 'discussions') ? 'active':''}"}
         %a{:href => "#{discussions_path}"}
-          %i.icon-comment
+          %i.icon-comment>
           Discussions
       %li{:class => "#{(params[:controller] == 'conversations') ? 'active':''}"}
         %a{:href => "#{user_conversations_path(current_user)}"}

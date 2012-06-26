@@ -2,6 +2,7 @@ class DiscussionsController < ApplicationController
   before_filter :authenticate_user!
   def index
     @discussion = Discussion.new
+    @discussions_size = Discussion.all.size
     @discussions = Kaminari.paginate_array(Discussion.all(:include => :comments).reverse).page(params[:page]).per(3)
   end
 
@@ -11,7 +12,7 @@ class DiscussionsController < ApplicationController
   def create
     params[:discussion][:question].strip!  unless params[:discussion][:question].nil?
     @discussion = Discussion.new(params[:discussion])
-    @discussion.user_id = current_user
+    @discussion.user_id = current_user.id
   
     respond_to do |format|
       if @discussion.save
