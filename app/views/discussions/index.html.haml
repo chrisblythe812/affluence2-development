@@ -24,17 +24,28 @@
                   = discussion.question
                   %span.label.label-info
                     = discussion.comments.count
+                  %p{:style=>"float:right"}
+                    = time_ago_in_words(discussion.updated_at) + " ago"
             / according-heading
             .accordion-body{:style => "height: #{index == 0 ? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{index == 0 ? 'in':'collapse'}"}
               .accordion-inner
                 #convo.row
-                  - discussion.comments.each do |comment|
-                    .span7.offset1
-                      %p
-                        %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
-                          = image_tag "#{display_image(comment.user.profile.photos, :thumb)}", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail", :alt => "#{comment.user.profile.full_name}"
-                        = comment.body
-                        %hr.zero
+                  %table.offset1
+                    - discussion.comments.each do |comment|
+                      %tr
+                        %td.span1
+                          %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
+                            = image_tag "#{display_image(comment.user.profile.photos, :thumb)}", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail", :alt => "#{comment.user.profile.full_name}"
+                        %td.span6
+                          %p
+                            = comment.body
+                        %td.span4
+                          = time_ago_in_words(comment.updated_at) + " ago"
+                      %tr
+                        %td{:colspan=> "3"}
+                          %hr.zero
+
+ 
                   .offset1
                     - discussion.comments.build
                     = form_for discussion, :html => { :class => "form-search " } do |f|
