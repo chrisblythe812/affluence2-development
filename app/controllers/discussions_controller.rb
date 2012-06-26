@@ -2,7 +2,8 @@ class DiscussionsController < ApplicationController
   before_filter :authenticate_user!
   def index
     @discussion = Discussion.new
-    @discussions = Kaminari.paginate_array(Discussion.all(:include => :comments).reverse).page(params[:page]).per(3)
+    @discussions_size = Discussion.all.size
+    @discussions = Kaminari.paginate_array(Discussion.all(:include => :comments, :order =>"last_comment_at Desc")).page(params[:page]).per(3)
   end
 
   def new
@@ -11,12 +12,14 @@ class DiscussionsController < ApplicationController
   def create
     params[:discussion][:question].strip!  unless params[:discussion][:question].nil?
     @discussion = Discussion.new(params[:discussion])
-    @discussion.user_id = current_user
+    @discussion.user_id = current_user.id
   
     respond_to do |format|
       if @discussion.save
-         flash[:success]= "Discussion was successfully created."
-       format.html { redirect_to discussions_path }
+        @discussion.last_comment_at = @discussion.created_at
+        @discussion.save
+        flash[:success]= "Discussion was successfully created."
+        format.html { redirect_to discussions_path }
         format.json { head :ok }
       else
         flash[:error]= "Discussion was not created."
@@ -35,10 +38,12 @@ class DiscussionsController < ApplicationController
     @discussion.comments.build(comments)
     respond_to do |format|
       if @discussion.save
+        @discussion.last_comment_at = @discussion.comments.last.created_at
+        @discussion.save
         flash[:success]= "Reply was successfully created."
 
 
-       format.html { redirect_to discussions_path}
+        format.html { redirect_to discussions_path}
         format.json { head :ok }
       else
         flash[:error]= "Reply was not created."
