@@ -16,6 +16,8 @@ class DiscussionsController < ApplicationController
   
     respond_to do |format|
       if @discussion.save
+        @discussion.last_comment_at = @discussion.created_at
+        @discussion.save
         flash[:success]= "Discussion was successfully created."
         format.html { redirect_to discussions_path }
         format.json { head :ok }
