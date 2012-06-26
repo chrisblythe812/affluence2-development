@@ -89,6 +89,7 @@ class User < ActiveRecord::Base
   has_many :promotions, :through => :promotions_users
 
 
+  has_many :vincompass_shares
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -121,6 +122,14 @@ class User < ActiveRecord::Base
   scope :active_members, :conditions => ['role not like ? and status like ?', 'superadmin', "active"]
   scope :suspended_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "suspended"]
   scope :deleted_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "deleted"]
+
+  scope :first_name_or_last_name, lambda {|query| {:conditions => ['role not like ? and status like ? email like ? ', 'superadmin', "deleted", query]}}
+
+   def  first_name_or_last_name
+
+   end
+
+
 
   has_permalink :permalink_name, :update => false
 
@@ -291,4 +300,17 @@ class User < ActiveRecord::Base
     end
     self.update_attributes(:plan => 'free', :braintree_customer_id => '')
   end
+
+  def generate_token
+    self.token = SecureRandom.hex(16)
+    self.token_expiration_date = 60.days.from_now
+    self.save(:validate => false)
+    self.token
+  end
+
+  def valid_api_token?
+    self.token.present? && self.token_expiration_date > Date.today
+  end
+
+
 end

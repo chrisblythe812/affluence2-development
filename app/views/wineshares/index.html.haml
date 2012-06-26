@@ -1,0 +1,39 @@
+.span9
+
+  - unless @wine_shares.blank?
+    #Discussions
+      %h2
+        WineShares
+        %small= @wine_shares.size
+      %hr.zero
+      #accordion2.accordion
+        - @wine_shares.each do |wine_share|
+          - index = @wine_shares.index(wine_share)
+          .accordion-group
+            .accordion-heading
+              %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
+                %h4
+                  = wine_share.comment
+            / according-heading
+            .accordion-body{:style => "height: #{index == 0 ? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{index == 0 ? 'in':'collapse'}"}
+              .accordion-inner
+                #convo.row
+                  .span7.offset1
+                    %p
+                      = "Wine name : #{wine_share.comment}"
+                      %br
+                      = "Year : #{wine_share.year}"
+                      %br
+                      = "Grape : #{wine_share.grape}"
+                      %br
+                      = "Region : #{wine_share.region}"
+                      %br
+                      = "Producer : #{wine_share.producer}"
+                      %br
+                      = "Restaurant name : #{wine_share.restaurant_name}"
+                / convo
+              / accordion-inner
+            / accordion-body
+          / accordion-group
+    / Discussions
+    = paginate @wine_shares, theme: "bootstrap"

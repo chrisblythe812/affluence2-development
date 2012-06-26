@@ -1,0 +1,43 @@
+!!! 5
+-# paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+%html.no-js
+  <!--<![endif]-->
+  %head
+    %meta{ :charset => "utf-8" }/
+    -#
+      Always force latest IE rendering engine (even in intranet) & Chrome Frame
+      Remove this if you use the .htaccess
+    %meta{ :content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible" }/
+
+    %title Affluence · Make Life Better
+    %meta{ :content => "", :name => "description" }/
+    %meta{ :content => "", :name => "author" }/
+    %meta{ :name=>"HandheldFriendly", :content=>"True"}/
+    %meta{ :name=>"MobileOptimized", :content=>"320"}/
+    %meta{ :content => "width=device-width, initial-scale=1.0", :name => "viewport" }/
+    = csrf_meta_tag
+    = include_css :bundle => "mobile"
+
+
+    = yield(:stylesheets)
+    = javascript_include_tag "http://affluence-demo.s3.amazonaws.com/javascripts/less-1.0.41.min.js"
+    = javascript_include_tag "http://use.typekit.com/blk7suk.js"
+    :javascript
+      try{Typekit.load();}catch(e){}
+    = yield(:head)
+  %body.mobile
+    #container.mobile
+      = content_for?(:content) ? yield(:content) : yield
+      = javascript_include_tag "http://affluence-demo.s3.amazonaws.com/javascripts/jquery.js"
+      = yield(:javascripts)
+      = javascript_include_tag "mobile/helper.js"
+
+      %script{:type=>"text/javascript"}
+        MBP.scaleFix();
+
+
