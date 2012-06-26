@@ -18,14 +18,20 @@
           - index = @discussions.index(discussion)
           .accordion-group
             .accordion-heading
-              %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
-                %h4
-                  %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "#{display_image(discussion.user.profile.photos, :thumb)}", :width => "30px", :alt => "#{discussion.user.profile.full_name}"}
-                  = discussion.question
-                  %span.label.label-info
-                    = discussion.comments.count
-                  %p{:style=>"float:right"}
-                    = time_ago_in_words(discussion.updated_at) + " ago"
+              %div{:style=>"padding: 8px 15px;"}
+                %table
+                  %tr
+                    %td.span1
+                      %a{"data-original-title" => "#{discussion.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(discussion.user.permalink)}", :rel => "tooltip"}
+                        %img.thumbnail.discussion-img{:align => "middle", :height => "30px", :src => "#{display_image(discussion.user.profile.photos, :thumb)}", :width => "30px", :alt => "#{discussion.user.profile.full_name}"}
+                    %td.span6
+                      %a.accordion-toggle{"data-parent" => "#accordion2", "data-toggle" => "collapse", :href => "#collapse#{numbers_and_words[index]}"}
+                        %h4
+                          = discussion.question
+                          %span.label.label-info
+                            = discussion.comments.count
+                          %p{:style=>"float:right"}
+                            = time_ago_in_words(discussion.updated_at) + " ago"
             / according-heading
             .accordion-body{:style => "height: #{index == 0 ? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{index == 0 ? 'in':'collapse'}"}
               .accordion-inner
