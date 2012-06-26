@@ -138,12 +138,23 @@ Affluence2::Application.routes.draw do
   end
 
   resources :orders
+  resources :wineshares
 
   resources :promotions do
     member do
       get :become_premium_member
     end
   end
+
+
+  match "api/user/sign_in" => "api#user_sign_in"
+  match "api/postback" => "api#postback"
+  match "api/callback_test" => "api#callback_test"
+  post "api/vincompass/validate_tokens" => "api#validate_tokens"
+  post "api/vincompass/authorize/application" => "api#authorize_application"
+  post "api/vincompass/authorize/user" => "api#authorize_user"
+  post "api/vincompass/activity_post" => "api#activity_post"
+  post "api/vincompass/v2/activity_post" => "api#activity_post_v2"
 
   # Sample resource route with sub-resources:
   #   resources :products do

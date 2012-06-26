@@ -21,6 +21,10 @@
         %a{:href => "#{discussions_path}"}
           %i.icon-comment>
           Discussions
+      %li{:class => "#{(params[:controller] == 'wineshares') ? 'active':''}"}
+        %a{:href => "#{wineshares_path}"}
+          %i.icon-comment
+          WineShares
       %li{:class => "#{(params[:controller] == 'conversations') ? 'active':''}"}
         %a{:href => "#{user_conversations_path(current_user)}"}
           %i.icon-comment>

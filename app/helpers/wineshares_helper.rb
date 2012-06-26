@@ -1,0 +1,2 @@
+module WinesharesHelper
+end

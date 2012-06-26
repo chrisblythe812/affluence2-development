@@ -1,0 +1,36 @@
+.main_skinny_bg.corners
+  %header
+    %img{:src => "/images/logo.png"}
+  .sign_form
+    %h2
+      %img{:src => "/images/sign_in.png"}
+      -if flash[:notice]
+        %p{:style=>"font-size:17px;"}=flash[:notice]
+    = form_for :user, :url => api_postback_path do |f|
+      <input type="hidden" name="callback_url" value=#{callback_url}'>
+      .sign_up_email
+        %p.title
+          %img{:src => "/images/sign_up_email.png"}
+          = f.label :email
+
+        = f.text_field :email
+      .sign_up_pass
+        %p.title
+          %img{:src => "/images/sign_up_pass.png"}
+          = f.label :password
+
+        = f.password_field :password
+        .remember_me
+          = f.check_box :remember_me
+          = f.label :remember_me
+
+        = f.hidden_field :access_token, :value => params[:access_token]
+        = f.hidden_field :callback_url, :value => params[:callback_url]
+      .clear
+      %p.submit= f.submit "Sign in"
+  .clear
+  %span.corner.top-left
+  %span.corner.top-right
+  %span.corner.bottom-right
+  %span.corner.bottom-left
+
