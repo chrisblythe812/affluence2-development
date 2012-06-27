@@ -1,11 +1,10 @@
 .span9
   = render 'shared/error_messages', :target => @discussion
   %h2
-    %small new
     Discussion
-  = form_for @discussion, :html => { :class => "form-search well" } do |f|
-    = f.text_field :question, :placeholder => "Enter Question or Topic for Discussion", :class => "input-xlarge span7", :size => "20x1"
-    = f.submit "Discuss", :class => "btn btn-primary"
+  = form_tag discussions_path, {:method => :get} do
+    = text_field_tag :search, nil, :placeholder => "Search for Discussion", :class => "input-xlarge span7", :size => "20x1"
+    = submit_tag "Discuss", :class => "btn btn-primary"
 
   - unless @discussions.blank?
     #Discussions
@@ -30,10 +29,11 @@
                           = discussion.question
                           %span.label.label-info
                             = discussion.comments.count
-                          %p{:style=>"float:right"}
-                            = time_ago_in_words(discussion.updated_at) + " ago"
+                    %td.span4
+                      %p{:style=>"float:right"}
+                        = time_ago_in_words(discussion.updated_at) + " ago"
             / according-heading
-            .accordion-body{:style => "height: #{index == 0 ? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{index == 0 ? 'in':'collapse'}"}
+            .accordion-body{:style => "height: #{(index == 0 && !@search)? 'auto':'0px'};", :id => "collapse#{numbers_and_words[index]}", :class => "#{(index == 0 && !@search)? 'in':'collapse'}"}
               .accordion-inner
                 #convo.row
                   %table.offset1
@@ -65,3 +65,8 @@
           / accordion-group
     / Discussions
     = paginate @discussions, theme: "bootstrap"
+
+  - if @search
+    = form_for @discussion, :html => { :class => "form-search well" } do |f|
+      = f.text_field :question, :placeholder => "Enter Question or Topic for Discussion", :class => "input-xlarge span7", :size => "20x1"
+      = f.submit "Post", :class => "btn btn-primary"

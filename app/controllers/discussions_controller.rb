@@ -1,10 +1,19 @@
 class DiscussionsController < ApplicationController
   before_filter :authenticate_user!
   def index
-    @discussion = Discussion.new
-    @discussions_size = Discussion.all.size
-    @discussions = Kaminari.paginate_array(Discussion.all(:include => :comments, :order =>"last_comment_at Desc")).page(params[:page]).per(3)
+      @discussion = Discussion.new
+    unless params[:search].blank?
+      @discussions =   Kaminari.paginate_array(Discussion.search(params[:search])).page(params[:page]).per(3)
+      @discussions_size = Discussion.search(params[:search]).size
+      @search = true
+    else
+      @discussions_size = Discussion.all.size
+      @discussions = Kaminari.paginate_array(Discussion.all(:include => :comments, :order =>"last_comment_at Desc")).page(params[:page]).per(10)
+    end
   end
+
+  
+
 
   def new
   end
