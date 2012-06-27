@@ -97,24 +97,23 @@ class ApiController < ApplicationController
     if access_grant
       user = User.where(:token => json["user_token"]).first
       if user && user.valid_api_token?
-        @vincompass_share = VincompassShare.create({
-                                                          :comment => json["comment"],
-                                                          :wine_name => json["wine_name"],
-                                                          :year =>json["year"],
-                                                          :grape => json["grape"],
-                                                          :link => json["link"],
-                                                          :restaurant_name => json["restaurant_name"],
-                                                          :region => json["region"],
-                                                          :producer => json["producer"],
-                                                          :photo_url => winshare_image(json) })
+        @vincompass_share = VincompassShare.new(:title => json["comment"],:comment => json["comment"],
+                                                :wine_name => json["wine_name"],
+                                                :year =>json["year"],
+                                                :grape => json["grape"],
+                                                :link => json["link"],
+                                                :restaurant_name => json["restaurant_name"],
+                                                :region => json["region"],
+                                                :producer => json["producer"])
         # adding photos to winshare posts
         #if json["media_type"] == ("Photo" || "photo") && json["media_url"].present?
           #@vincompass_share.photo_url = json["media_url"]
         #end
-        promotion = @vincompass_share.build_promotion
+
         if @vincompass_share.valid?
           @vincompass_share.save
           @vincompass_share.promotion.activate_promotion_for_member(user)
+          @vincompass_share.post_activity(user)
           render :json => {:code => 200, :message => "Successfully posted user's activity", :user_token => json["user_token"]}.to_json
         else
           render :json => {:code => 401, :message => "Invalid user activity post"}.to_json
