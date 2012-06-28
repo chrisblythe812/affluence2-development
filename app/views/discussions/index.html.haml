@@ -2,10 +2,13 @@
   = render 'shared/error_messages', :target => @discussion
   %h2
     Discussion
-  = form_tag discussions_path, {:method => :get} do
-    = text_field_tag :search, nil, :placeholder => "Search for Discussion", :class => "input-xlarge span7", :size => "20x1"
-    = submit_tag "Discuss", :class => "btn btn-primary"
-
+  = form_tag discussions_path, {:method => :get, :id => "search_form"  } do
+    = text_field_tag :search, params[:search], :placeholder => "Search for Discussion", :class => "input-xlarge span7", :size => "20x1"
+    - if @search
+      %br
+      = submit_tag "post", :class => "btn btn-primary", :id => "post"
+    = submit_tag "search", :class => "btn btn-primary"
+    
   - unless @discussions.blank?
     #Discussions
       %h2
@@ -65,8 +68,22 @@
           / accordion-group
     / Discussions
     = paginate @discussions, theme: "bootstrap"
+  - else
+    %h3
+      No discussions found with your search text, would you like to create one?
 
   - if @search
-    = form_for @discussion, :html => { :class => "form-search well" } do |f|
-      = f.text_field :question, :placeholder => "Enter Question or Topic for Discussion", :class => "input-xlarge span7", :size => "20x1"
-      = f.submit "Post", :class => "btn btn-primary"
+    %div{:style=>"display:none"} 
+      = form_for @discussion, :html => { :class => "form-search", :id=>"create-form" } do |f|
+        = f.text_field :question, :placeholder => "Enter Question or Topic for Discussion", :class => "input-xlarge span7", :size => "20x1", :value => params[:search]
+        = f.submit "Post", :class => "btn btn-primary"
+:javascript
+  $(function(){
+    $('#post').click(function() {
+      $('#discussion_question').val($('#search').val());
+      $('#create-form').submit();
+      return false;
+    });
+
+
+  });
