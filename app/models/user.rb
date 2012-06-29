@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
       if activity.resource_type == 'Profile'
         #activities << activity
       else
-        activities << activity if [0, 1].include? (privacy.send(Activity::OPTS[activity.resource_type]))
+        activities << activity if [0, 1].include? (privacy.send(PrivacySetting::OPTS[activity.resource_type]))
       end
 
     end while activities.length < 7
