@@ -5,13 +5,7 @@ class Activity < ActiveRecord::Base
   scope :previous, lambda { |p| {:conditions => ["id < ?", p.id], :limit => 1, :order => "id DESC"} }
   scope :next, lambda { |p| {:conditions => ["id > ?", p.id], :limit => 1, :order => "id"} }
 
-  OPTS = {
-    "Event" => "events",
-    "Offer" => "offers",
-    "Connection" => "new_contact",
-    "Photo" => "photos",
-    "Invitation" => "invitations"
-  }
+
 #  def self.all_by_privacy_setting
 #    activities = []
 #    begin
@@ -24,6 +18,8 @@ class Activity < ActiveRecord::Base
 #    activities
 #
 #  end
+
+
 def self.all_by_privacy_setting
     activities = []
     begin
@@ -35,7 +31,7 @@ def self.all_by_privacy_setting
       if activity.resource_type == 'Profile'
         #activities << activity
       else
-        activities << activity if (privacy.send(OPTS[activity.resource_type]) == 0)
+        activities << activity if (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
       end
 
     end while activities.length < 7

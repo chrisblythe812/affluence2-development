@@ -11,11 +11,30 @@ class PrivacySetting < ActiveRecord::Base
     ["Nobody", NOBODY]
   ]
 
+
+  OPTS = {
+      "Event" => "events",
+      "Offer" => "offers",
+      "Connection" => "new_contact",
+      "Photo" => "photos",
+      "Invitation" => "invitations",
+      "VincompassShare" => "vincompass_share"
+  }
+
+
   attr_accessible :events, :offers, :concierge, :photos,
     :invitations, :new_contact  
 
    
   validates_inclusion_of(accessible_attributes.to_a, :in => PRIVACY_OPTS.map {|p| p.last}, :allow_nil => true)
+
+  def method_missing(method)
+    if OPTS.invert.include?("#{method}")
+    return true
+    else
+      super
+    end
+  end
 
 
   def set_to_default_privacy
