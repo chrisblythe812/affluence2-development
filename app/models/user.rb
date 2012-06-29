@@ -71,8 +71,8 @@ class User < ActiveRecord::Base
         #activities << activity
       else
         if is_friend
-          activities << activity if [0,1].include?(privacy.send(Activity::OPTS[activity.resource_type])) 
-        elsif (privacy.send(Activity::OPTS[activity.resource_type]) == 0)
+          activities << activity if [0,1].include?(privacy.send(PrivacySetting::OPTS[activity.resource_type]))
+        elsif (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
           activities << activity
         end
       end             
