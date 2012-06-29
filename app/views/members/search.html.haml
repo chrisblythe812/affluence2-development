@@ -32,7 +32,8 @@
                     %div
                       %small= profile.country
                   %div
-                    %a.close{:href => "#{delete_connection_members_path(:id=>profile.user.id)}",
+                    - if @connections
+                      %a.close{:href => "#{delete_connection_members_path(:id=>profile.user.id)}",
                            :rel => "tooltip",
                            "data-confirm" => 'Are you sure?',
                            "data-original-title" => "Delete",
