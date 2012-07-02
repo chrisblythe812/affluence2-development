@@ -23,32 +23,39 @@
             .controls
               = f.text_field :phone, {:value => (current_user.profile.phone if !current_user.profile.blank?), :class => 'input-xlarge'}
           %hr.zero
-            .control-group
-              %label.control-label Credit Card
-              .controls
-                %label.radio
-                  %input#optionsRadios1{:checked => "", :name => "customer_id", :type => "radio", :value => current_user.braintree_customer_id}
-                    %strong #{current_user.default_credit_card.card_type}
-                    on file ending in
-                    %em #{current_user.default_credit_card.last_4}
-            .control-group
-              %label.control-label # of Tickets
-              .controls
-                - if event.has_more_than_10_tickets?
-                  %select.span1{:name => 'payable_promotion[total_tickets]', :id => "total_tickets_#{event.id}"}
-                    - 10.times do |x|
-                      %option{:value => "#{x+1}"}= x+1
-                - else#if event.has_tickets?
-                  %select.span1{:name => 'payable_promotion[total_tickets]', :id => 'total_tickets'}
-                    - event.tickets_remaining.times do |x|
-                      %option{:value => "#{x+1}"}= x+1
+            - if event.has_tickets?
+              .control-group
+                %label.control-label Credit Card
+                .controls
+                  %label.radio
+                    %input#optionsRadios1{:checked => "", :name => "customer_id", :type => "radio", :value => current_user.braintree_customer_id}
+                      %strong #{current_user.default_credit_card.card_type}
+                      on file ending in
+                      %em #{current_user.default_credit_card.last_4}
+              .control-group
+                %label.control-label # of Tickets
+                .controls
+                  - if event.has_more_than_10_tickets?
+                    %select.span1{:name => 'payable_promotion[total_tickets]', :id => "total_tickets_#{event.id}"}
+                      - 10.times do |x|
+                        %option{:value => "#{x+1}"}= x+1
+                  - else#if event.has_tickets?
+                    %select.span1{:name => 'payable_promotion[total_tickets]', :id => 'total_tickets'}
+                      - event.tickets_remaining.times do |x|
+                        %option{:value => "#{x+1}"}= x+1
 
-                %span{:style => "margin-left:40px"}
-                  Total cost:
-                  %strong{:id => "total_cost_#{event.id}"} $#{event.price}
-            .form-actions
-              %button.btn.btn-primary{:type => "submit"} Register
-              %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+                  %span{:style => "margin-left:40px"}
+                    Total cost:
+                    %strong{:id => "total_cost_#{event.id}"} $#{event.price}
+              .form-actions
+                %button.btn.btn-primary{:type => "submit"} Register
+                %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+            - else
+              .control-group
+                %h4 There are no more tickets available to purchase
+              .form-actions
+                %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+
 
   :javascript
     $(function() {
