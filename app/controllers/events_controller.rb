@@ -36,7 +36,8 @@ class EventsController < ApplicationController
       flash[:error] = "You need to Become a Premium Member to register for this Event"
       redirect_to event_path(@event.id) and return
     end
-    if @event.has_tickets?
+
+    if @event.has_required_tickets?(params[:payable_promotion][:total_tickets].to_i)
     payable_promotion = PayablePromotion.create_event_promotion(params[:payable_promotion], @event, current_user)
     Event.process_tickets(@event, params[:payable_promotion], 'initial')
     if !payable_promotion.blank?
@@ -58,6 +59,9 @@ class EventsController < ApplicationController
         redirect_to event_path(@event.id)
       end
     end
+    elsif @event.has_tickets?
+      flash[:error]= "You Can't register for the event with more than the available tickets"
+      redirect_to event_path(@event.id)
     else
       flash[:error]= 'There are no more tickets available to register for this event'
       redirect_to event_path(@event.id)
