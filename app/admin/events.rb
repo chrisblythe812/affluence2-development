@@ -145,7 +145,7 @@ ActiveAdmin.register Event do
     update_event_photo(params[:event][:carousel_image], :carousel) unless params[:event][:carousel_image].blank?
     update_event_photo(params[:event][:normal_image]) unless params[:event][:normal_image].blank?
     has_events = !@event.schedules.blank?
-    if has_events && @event.update_attributes(params[:event])
+    if has_events && @event.custom_update(params[:event])
       redirect_to :action => :show, :id => @event.id
     else
       flash[:notice] = "Please add atleast one schedule to the event." unless has_events
