@@ -24,9 +24,9 @@ namespace :affluence2 do
     p ''
     #TODO profile indexing
     p ' ------------------------ profiles indexing for search  ------------------------  '
-    migration.execute <<-SQL
-      DROP INDEX profiles_all_search_gin_idx_english;
 
+    migration.execute <<-SQL
+      DROP INDEX IF EXISTS profiles_all_search_gin_idx_english;
       CREATE INDEX profiles_all_search_gin_idx_english 
       ON profiles
       USING gin(to_tsvector('english', COALESCE(first_name,'') || ' ' ||

@@ -3,9 +3,7 @@ class MembersController < ApplicationController
 
   def search
     logger.info "Called Members#search ..."
-    profiles = search_profile
-    @size = profiles.size
-    @profiles = Kaminari.paginate_array(profiles).page(params[:page]).per(9)
+    search_profile
   end
 
   def latest
@@ -26,14 +24,18 @@ class MembersController < ApplicationController
   def search_profile
     logger.info "Called Members#search_profile ..."
     unless params[:query].blank?
-      Profile.get_by_matching_name(params[:query])
+      @size = Profile.get_by_matching_name(params[:query]).size
+      @profiles = Kaminari.paginate_array(Profile.get_by_matching_name(params[:query])).page(params[:page]).per(9)
     else
-      @connections = true
+      @size = current_user.connections.size
+      @connections_list = true
+      @connections = current_user.connections.page(params[:page]).per(9)
       profiles = []
-      current_user.connections.each do |connection|
+      @connections.each do |connection|
         profiles <<  connection.friend.profile
       end
-      profiles  
+      @profiles =  profiles
     end
   end
 end
+ 
