@@ -42,6 +42,7 @@
 
 
   / Results
-
-  = paginate @profiles, theme: "bootstrap"
-  
+  - if @connections_list
+    = paginate @connections, theme: "bootstrap"
+  - else
+    = paginate @profiles, theme: "bootstrap"
