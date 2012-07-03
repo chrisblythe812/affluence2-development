@@ -32,7 +32,7 @@
                           = discussion.question
                           %span.label.label-info
                             = discussion.comments.count
-                    %td.span4
+                    %td.span1
                       %p{:style=>"float:right"}
                         = time_ago_in_words(discussion.updated_at) + " ago"
             / according-heading
@@ -46,9 +46,9 @@
                           %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
                             = image_tag "#{display_image(comment.user.profile.photos, :thumb)}", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail", :alt => "#{comment.user.profile.full_name}"
                         %td.span6
-                          %p
+                          %p{:style => "padding:8px 15px"}
                             = comment.body
-                        %td.span4
+                        %td.span1
                           = time_ago_in_words(comment.updated_at) + " ago"
                       %tr
                         %td{:colspan=> "3"}
