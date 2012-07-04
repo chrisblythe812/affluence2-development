@@ -1,19 +1,21 @@
 .span9
   = render 'shared/error_messages', :target => @discussion
   %h2
-    Discussion
+    New Discussion
   = form_tag discussions_path, {:method => :get, :id => "search_form"  } do
-    = text_field_tag :search, params[:search], :placeholder => "Search for Discussion", :class => "input-xlarge span7", :size => "20x1"
+    = text_field_tag :search, params[:search], :placeholder => "Start a Discussion", :class => "input-xlarge span7", :size => "20x1"
     - if @search
-      %br
-      = submit_tag "post", :type => 'button', :class => "btn btn-primary", :id => "post"
-    = submit_tag "search", :class => "btn btn-primary"
+      = submit_tag "post", :type => 'button', :class => "btn btn-primary post", :id => "post"
+      = submit_tag "search", :class => "btn"
+    - else
+      = submit_tag "start", :class => "btn btn-primary", :id => ""
     
   - unless @discussions.blank?
     #Discussions
       %h2
         Discussions
-        %small= @discussions_size  
+        %small.label.label-success{:style => "font-size:18px"}
+          = @discussions_size
       %hr.zero
       #accordion2.accordion
         - @discussions.each do |discussion|
@@ -32,7 +34,7 @@
                           = discussion.question
                           %span.label.label-info
                             = discussion.comments.count
-                    %td.span1
+                    %td.span3
                       %p{:style=>"float:right"}
                         = time_ago_in_words(discussion.updated_at) + " ago"
             / according-heading
@@ -45,11 +47,12 @@
                         %td.span1
                           %a{"data-original-title" => "#{comment.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(comment.user.permalink)}", :rel => "tooltip"}
                             = image_tag "#{display_image(comment.user.profile.photos, :thumb)}", :size => "30x30", :align => "middle", :class => "discussion-img thumbnail", :alt => "#{comment.user.profile.full_name}"
-                        %td.span6
+                        %td.span4
                           %p{:style => "padding:8px 15px"}
                             = comment.body
-                        %td.span1
-                          = time_ago_in_words(comment.updated_at) + " ago"
+                        %td.span2
+                          %p{:style=>"float:right"}
+                            = time_ago_in_words(comment.updated_at) + " ago"
                       %tr
                         %td{:colspan=> "3"}
                           %hr.zero
@@ -70,8 +73,8 @@
     = paginate @discussions, theme: "bootstrap"
   - else
     %h3
-      No discussions found with your search text, would you like to create one?
-
+      = "No discussions found with your search text, would you like to "
+      = link_to "create one",'', :class => 'post'
   - if @search
     %div{:style=>"display:none"} 
       = form_for @discussion, :html => { :class => "form-search", :id=>"create-form" } do |f|
@@ -79,7 +82,7 @@
         = f.submit "Post", :class => "btn btn-primary"
 :javascript
   $(function(){
-    $('#post').click(function() {
+    $('.post').click(function() {
       $('#discussion_question').val($('#search').val());
       $('#create-form').submit();
       return false;
