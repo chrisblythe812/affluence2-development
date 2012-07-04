@@ -18,7 +18,9 @@ class PrivacySetting < ActiveRecord::Base
       "Connection" => "new_contact",
       "Photo" => "photos",
       "Invitation" => "invitations",
-      "VincompassShare" => "vincompass_share"
+      "VincompassShare" => "vincompass_share",
+      "Discussion" => "discussions",
+      "Comment" => "comments"
   }
 
 

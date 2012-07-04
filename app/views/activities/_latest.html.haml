@@ -2,7 +2,7 @@
   %tr
     %td.span1
       %a.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
-        = display_image(activity.user.profile.photos, :thumb)
+        = image_tag display_image(activity.user.profile.photos, :thumb)
     %td
       %h5= activity.user.profile.name
       %p

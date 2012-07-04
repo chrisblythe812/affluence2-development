@@ -66,6 +66,7 @@ class ConversationsController < ApplicationController
   def create
     recipient_user = Profile.find(params[:conversation][:recipient_profile_id])[0].user rescue nil
     params[:conversation].delete(:recipient_profile_id)
+    if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation_recipient_profile_name]
 
     @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
     if @conversation.nil?
@@ -77,7 +78,6 @@ class ConversationsController < ApplicationController
 
     end
 
-    if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation_recipient_profile_name]
       @conversation.messages.last.sender = current_user
       @conversation.messages.last.recipient = recipient_user
       #      ConnectionRequest.find_or_create_by_requestor_id_and_requestee_id(current_user.id, recipient_user.id)
@@ -90,6 +90,8 @@ class ConversationsController < ApplicationController
         render :new
       end
     else
+      @conversation = Conversation.new
+      @conversation.messages.build
       flash[:error] = "Cannot send message to that user or user does not exist."
       render :new
     end
