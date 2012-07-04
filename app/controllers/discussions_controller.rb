@@ -4,8 +4,9 @@ class DiscussionsController < ApplicationController
   def index
     @discussion = Discussion.new
     unless params[:search].blank?
-      @discussions = Kaminari.paginate_array(Discussion.search(params[:search])).page(params[:page]).per(3)
-      @discussions_size = Discussion.search(params[:search]).size
+      search_params = params[:search].gsub(/ /, ' | ').chomp(' | ')
+      @discussions = Kaminari.paginate_array(Discussion.search(search_params)).page(params[:page]).per(3)
+      @discussions_size = Discussion.search(search_params).size
       @search = true
     else
       @discussions_size = Discussion.all.size
