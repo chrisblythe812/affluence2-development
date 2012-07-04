@@ -1,3 +1,5 @@
+require 'active_admin_custom_filter'
+
 ActiveAdmin.setup do |config|
 
   # == Site Title

@@ -1,5 +1,5 @@
 class Activity < ActiveRecord::Base
-  belongs_to :user 
+  belongs_to :user
   belongs_to :resource, :polymorphic => true
 
   scope :previous, lambda { |p| {:conditions => ["id < ?", p.id], :limit => 1, :order => "id DESC"} }
@@ -20,13 +20,13 @@ class Activity < ActiveRecord::Base
 #  end
 
 
-def self.all_by_privacy_setting
+  def self.all_by_privacy_setting
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
       break unless activity
-  
-      privacy =  activity.user.profile.privacy_setting
+
+      privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
         #activities << activity
@@ -38,11 +38,11 @@ def self.all_by_privacy_setting
 
     activities
 
-end
+  end
 
-  
-  def self.create_user_event(user,event)
-    create(:user_id  => user.id,
+
+  def self.create_user_event(user, event)
+    create(:user_id => user.id,
            :body => "has registered for the #{event.title} Event",
            :resource_type => 'Event',
            :resource_id => event.id)
@@ -50,13 +50,13 @@ end
   end
 
 
-  def self.create_user_offer(user,offer)
-    create(:user_id  => user.id,
+  def self.create_user_offer(user, offer)
+    create(:user_id => user.id,
            :body => "has activated  #{offer.title} Offer",
            :resource_type => 'Offer',
            :resource_id => offer.id)
 
   end
-  
+
 
 end

@@ -5,84 +5,69 @@ class Conversation < ActiveRecord::Base
 
   scope :for_user, lambda { |user|
     joins(:conversation_metadata).
-      includes(:messages).
-      where("conversation_metadata.user_id = ?", user.id).
-      order("messages.updated_at DESC")
+        includes(:messages).
+        where("conversation_metadata.user_id = ?", user.id).
+        order("messages.updated_at DESC")
   }
 
   # at least one message in the conversation was sent to user
   scope :for_recipient, lambda { |user|
     joins(:conversation_metadata).
-      includes(:messages).
-      where("conversation_metadata.user_id = ? AND messages.recipient_id = ?", user.id, user.id)
+        includes(:messages).
+        where("conversation_metadata.user_id = ? AND messages.recipient_id = ?", user.id, user.id)
   }
 
   scope :archived?, lambda { |is_archived|
     joins(:conversation_metadata).
-      where("conversation_metadata.archived = ?", is_archived)
+        where("conversation_metadata.archived = ?", is_archived)
   }
 
   scope :read?, lambda { |is_read|
     joins(:conversation_metadata).
-      where("conversation_metadata.read = ?", is_read)
+        where("conversation_metadata.read = ?", is_read)
   }
 
-  
 
   accepts_nested_attributes_for :messages
   # attr_accessible :messages_attributes
 
   # the user <user> is having a conversation with.
-  
 
 
+  #    unless Connection.are_connected?(self.sender,  self.recipient)
+  #      #       ConnectionRequest.find_or_create_by_requestor_id_and_requestee_id(current_user.id, recipient_user.id)
+  #      if ConnectionRequest.where(:requestor_id => self.sender, :requestee_id => self.recipient).first
+  #        if ConnectionRequest.where(:requestor_id => self.recipient, :requestee_id => self.sender).first
+  #          Connection.make_connection(self.sender,  self.recipient)
+  #        end
+  #      else
+  #        ConnectionRequest.create!(:requestor_id => self.recipient, :requestee_id => self.sender)
+  #      end
+  #
+  ##
+  ##      logger.info 'not yet connected  -----------------------------------------------------   '
+  ##             if   ConnectionRequest.present?(self.sender, self.recipient)
+  ##      messages = self.messages
+  ##
+  ##      if messages.size > 1
+  ##        messages = messages.last(2)
+  ##        logger.info messages.inspect
+  ##        unless messages[0].sender_id == messages[1].sender_id
+  ##          Connection.make_connection(self.sender,  self.recipient)
+  ##          logger.info ' connected  -----------------------------------------------------   '
+  ##        end
+  ##      end
+  #
+  #    end
+  #    #    logger.info ' make_connection_req55555555555555555555555555555555555555555555555555555 '
+  #    #    logger.info new_saved_message.inspect
+  #    #    connected =  Connection.are_connected?
+  #    #    logger.info   connected
+  #    #
+  #    #    con_req = ConnectionRequest.where(:requestor_id => new_saved_message.sender_id, :requestee_id => new_saved_message.recipient_id)
+  #    #
 
 
-
-
-
-
-
-
-
-
-
-    
-#    unless Connection.are_connected?(self.sender,  self.recipient)
-#      #       ConnectionRequest.find_or_create_by_requestor_id_and_requestee_id(current_user.id, recipient_user.id)
-#      if ConnectionRequest.where(:requestor_id => self.sender, :requestee_id => self.recipient).first
-#        if ConnectionRequest.where(:requestor_id => self.recipient, :requestee_id => self.sender).first
-#          Connection.make_connection(self.sender,  self.recipient)
-#        end
-#      else
-#        ConnectionRequest.create!(:requestor_id => self.recipient, :requestee_id => self.sender)
-#      end
-#
-##
-##      logger.info 'not yet connected  -----------------------------------------------------   '
-##             if   ConnectionRequest.present?(self.sender, self.recipient)
-##      messages = self.messages
-##
-##      if messages.size > 1
-##        messages = messages.last(2)
-##        logger.info messages.inspect
-##        unless messages[0].sender_id == messages[1].sender_id
-##          Connection.make_connection(self.sender,  self.recipient)
-##          logger.info ' connected  -----------------------------------------------------   '
-##        end
-##      end
-#
-#    end
-#    #    logger.info ' make_connection_req55555555555555555555555555555555555555555555555555555 '
-#    #    logger.info new_saved_message.inspect
-#    #    connected =  Connection.are_connected?
-#    #    logger.info   connected
-#    #
-#    #    con_req = ConnectionRequest.where(:requestor_id => new_saved_message.sender_id, :requestee_id => new_saved_message.recipient_id)
-#    #
-  
-
- 
   def recipient_for(user)
     results = messages.where(:sender_id => user.id)
     if !results.empty?
@@ -126,16 +111,16 @@ class Conversation < ActiveRecord::Base
     query = ""
     args.each do |id|
       query = query + temp + id.to_s
-      unless (args.last == id) 
+      unless (args.last == id)
         query = query + " intersect "
       end
     end
- 
+
     result = find_by_sql(query)
     if result.size > 1
       unless result.blank?
         conversation_ids = []
-    
+
         result.each do |conv|
           conversation_ids << conv.id
         end
@@ -148,6 +133,6 @@ class Conversation < ActiveRecord::Base
       end
     end
     result
-  end 
+  end
 end
 

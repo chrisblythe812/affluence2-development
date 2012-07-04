@@ -10,6 +10,6 @@ class PaymentLog < ActiveRecord::Base
           '9' => 'Last payment was success. Update the subscription to success payment',
   }
 
-  LOG_LEVELS = { '1' => 'info','2' => 'warn','3' => 'error', '4' => 'fatal',' 5' => 'debug'}
+  LOG_LEVELS = {'1' => 'info', '2' => 'warn', '3' => 'error', '4' => 'fatal', ' 5' => 'debug'}
 
 end

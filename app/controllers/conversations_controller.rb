@@ -1,17 +1,13 @@
 class ConversationsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :authenticate_paid_user!, :except =>  [:index, :show, :confirm]
+  before_filter :authenticate_paid_user!, :except => [:index, :show, :confirm]
   before_filter :set_page_header
-  autocomplete :profile , :full_name, :extra_data => [:id]
+  autocomplete :profile, :full_name, :extra_data => [:id]
 
 
   def get_autocomplete_items(parameters)
     items = super(parameters)
-    items =   Profile.joins(:user)
-    .where("LOWER(profiles.full_name) ilike ? and status = ? and user_id != ?", "#{params[:term]}%", "active", current_user.id)
-    .order("profiles.full_name")
-    .limit(10)
-    .select(["profiles.id", "profiles.full_name"])
+    items = Profile.joins(:user).where("LOWER(profiles.full_name) ilike ? and status = ? and user_id != ?", "#{params[:term]}%", "active", current_user.id).order("profiles.full_name").limit(10).select(["profiles.id", "profiles.full_name"])
   end
 
   def index
@@ -28,7 +24,7 @@ class ConversationsController < ApplicationController
     #      raise CanCan::AccessDenied if params[:user_id].to_i != current_user.id
     #    end
     #    if tab_page == :inbox
-#          @conversations = Conversation.for_user(current_user).archived?(false).page params[:page]
+    #          @conversations = Conversation.for_user(current_user).archived?(false).page params[:page]
     #    elsif tab_page == :archive
     #      @conversations = Conversation.for_user(current_user).archived?(true).page params[:page]
     #    end
@@ -164,7 +160,7 @@ class ConversationsController < ApplicationController
     begin
       @result = Braintree::TransparentRedirect.confirm(request.query_string)
       if @result.success?
-        current_user.update_user_with_plan_and_braintree_id(session[:user_plan],@result.customer.id)
+        current_user.update_user_with_plan_and_braintree_id(session[:user_plan], @result.customer.id)
         session[:user_plan]=nil
         flash[:success] = "You have successfully converted to paid member. Now you can send messages"
         redirect_to user_conversations_path(current_user.id)
@@ -177,8 +173,6 @@ class ConversationsController < ApplicationController
       redirect_to user_conversations_path(current_user.id)
     end
   end
-
-
 
 
   private

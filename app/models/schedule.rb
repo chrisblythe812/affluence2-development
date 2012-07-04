@@ -6,6 +6,6 @@ class Schedule < ActiveRecord::Base
 
   def update_event_start_date
     start_date = event.schedules.first.date
-    event.update_attributes(:start_date =>  start_date)
+    event.update_attributes(:start_date => start_date)
   end
 end

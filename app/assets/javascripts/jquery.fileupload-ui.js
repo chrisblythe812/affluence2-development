@@ -16,14 +16,14 @@
 
     var UploadHandler,
         methods;
-        
+
     UploadHandler = function (container, options) {
         var uploadHandler = this,
             undef = 'undefined',
             func = 'function',
             dragOverTimeout,
             isDropZoneEnlarged;
-        
+
         this.dropZone = container;
         this.progressSelector = '.file_upload_progress div';
         this.cancelSelector = '.file_upload_cancel div';
@@ -32,7 +32,7 @@
         this.cssClassHighlight = 'file_upload_highlight';
         this.dropEffect = 'highlight';
         this.uploadTable = this.downloadTable = $();
-        
+
         this.buildUploadRow = this.buildDownloadRow = function () {
             return null;
         };
@@ -77,7 +77,7 @@
         this.onAbort = function (event, files, index, xhr, handler) {
             uploadHandler.removeNode(handler.uploadRow);
         };
-        
+
         this.cancelUpload = function (event, files, index, xhr, handler) {
             var readyState = xhr.readyState;
             xhr.abort();
@@ -86,11 +86,11 @@
                 handler.onAbort(event, files, index, xhr, handler);
             }
         };
-        
+
         this.initProgressBar = function (node, value) {
             if (typeof node.progressbar === func) {
                 return node.progressbar({
-                    value: value
+                    value:value
                 });
             } else {
                 var progressbar = $('<progress value="' + value + '" max="100"/>').appendTo(node);
@@ -100,7 +100,7 @@
                 return progressbar;
             }
         };
-        
+
         this.initUploadRow = function (event, files, index, xhr, handler, callBack) {
             var uploadRow = handler.uploadRow = uploadHandler.buildUploadRow(files, index);
             if (uploadRow) {
@@ -114,7 +114,7 @@
             }
             uploadHandler.addNode(uploadHandler.uploadTable, uploadRow, callBack);
         };
-        
+
         this.initUpload = function (event, files, index, xhr, handler, callBack) {
             uploadHandler.initUploadRow(event, files, index, xhr, handler, function () {
                 if (typeof uploadHandler.beforeSend === func) {
@@ -124,7 +124,7 @@
                 }
             });
         };
-        
+
         this.onProgress = function (event, files, index, xhr, handler) {
             if (handler.progressbar) {
                 handler.progressbar.progressbar(
@@ -133,7 +133,7 @@
                 );
             }
         };
-        
+
         this.parseResponse = function (xhr) {
             if (typeof xhr.responseText !== undef) {
                 return $.parseJSON(xhr.responseText);
@@ -142,7 +142,7 @@
                 return $.parseJSON(xhr.contents().text());
             }
         };
-        
+
         this.initDownloadRow = function (event, files, index, xhr, handler, callBack) {
             var json, downloadRow;
             try {
@@ -158,7 +158,7 @@
                 }
             }
         };
-        
+
         this.onLoad = function (event, files, index, xhr, handler) {
             uploadHandler.removeNode(handler.uploadRow, function () {
                 uploadHandler.initDownloadRow(event, files, index, xhr, handler, function () {
@@ -183,7 +183,7 @@
                 isDropZoneEnlarged = true;
             }
         };
-        
+
         this.dropZoneReduce = function () {
             if (typeof uploadHandler.dropZone.switchClass === func) {
                 uploadHandler.dropZone.switchClass(
@@ -200,7 +200,7 @@
         this.onDocumentDragEnter = function (event) {
             uploadHandler.dropZoneEnlarge();
         };
-        
+
         this.onDocumentDragOver = function (event) {
             if (dragOverTimeout) {
                 clearTimeout(dragOverTimeout);
@@ -209,11 +209,11 @@
                 uploadHandler.dropZoneReduce();
             }, 200);
         };
-        
+
         this.onDragEnter = this.onDragLeave = function (event) {
             uploadHandler.dropZone.toggleClass(uploadHandler.cssClassHighlight);
         };
-        
+
         this.onDrop = function (event) {
             if (dragOverTimeout) {
                 clearTimeout(dragOverTimeout);
@@ -233,19 +233,19 @@
     };
 
     methods = {
-        init : function (options) {
+        init:function (options) {
             return this.each(function () {
                 $(this).fileUpload(new UploadHandler($(this), options));
             });
         },
-    
-        destroy : function (namespace) {
+
+        destroy:function (namespace) {
             return this.each(function () {
                 $(this).fileUpload('destroy', namespace);
             });
         }
     };
-    
+
     $.fn.fileUploadUI = function (method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -255,5 +255,5 @@
             $.error('Method ' + method + ' does not exist on jQuery.fileUploadUI');
         }
     };
-    
+
 }(jQuery));

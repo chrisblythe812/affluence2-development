@@ -16,9 +16,9 @@ class Message < ActiveRecord::Base
     if _conn.blank?
       _conn_req = ConnectionRequest.where(:requestor_id => self.sender_id, :requestee_id => self.recipient_id)
       if _conn_req.blank?
-        check_record = check_reverse_exists_or_not(self.sender_id,self.recipient_id)
+        check_record = check_reverse_exists_or_not(self.sender_id, self.recipient_id)
         if !check_record.blank?
-          check_and_clear_connection_request(self.recipient_id,self.sender_id,check_record)
+          check_and_clear_connection_request(self.recipient_id, self.sender_id, check_record)
         else
           # create connection request
           conec_req = ConnectionRequest.create(:requestor_id => self.sender_id, :requestee_id => self.recipient_id)
@@ -31,12 +31,12 @@ class Message < ActiveRecord::Base
   end
 
 
-  def check_reverse_exists_or_not(from,to)
-    _conn_req = ConnectionRequest.find(:first, :conditions => [' "requestor_id" = ? and  "requestee_id" = ?',self.recipient_id.to_i, self.sender_id.to_i])
+  def check_reverse_exists_or_not(from, to)
+    _conn_req = ConnectionRequest.find(:first, :conditions => [' "requestor_id" = ? and  "requestee_id" = ?', self.recipient_id.to_i, self.sender_id.to_i])
     return _conn_req
   end
 
-  def check_and_clear_connection_request(from,to,connection_request_object)
+  def check_and_clear_connection_request(from, to, connection_request_object)
     # create connection and delete coneection request
     c1 = Connection.create(:user_id => from, :friend_id => to)
     c1.notify_user_through_email
@@ -49,8 +49,6 @@ class Message < ActiveRecord::Base
   end
 
 
-
-  
   private
 
   def create_or_update_conversation_metadata
@@ -70,7 +68,7 @@ class Message < ActiveRecord::Base
 
   def notify_message_through_email
     NotificationTracker.create(:user_id => self.sender_id, :channel => 'email', :subject => "message",
-      :status => 'pending', :notifiable_id => self.id, :notifiable_type => 'Message',
-      :notifiable_mode => 1, :scheduled_date => Date.today)
+                               :status => 'pending', :notifiable_id => self.id, :notifiable_type => 'Message',
+                               :notifiable_mode => 1, :scheduled_date => Date.today)
   end
 end

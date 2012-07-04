@@ -37,10 +37,10 @@ module ApplicationHelper
         if @braintree_existing.kind_of?(Braintree::CreditCard)
 
           case method
-          when :number
-            method = :masked_number
-          when :cvv
-            return nil
+            when :number
+              method = :masked_number
+            when :cvv
+              return nil
           end
         end
 
@@ -93,26 +93,26 @@ module ApplicationHelper
     params[:controller] == 'gives'
   end
 
-  def event_image(promotion,format=:normal)
+  def event_image(promotion, format=:normal)
     photo = promotion.carousel_image unless format == :normal
     photo = promotion.normal_image unless format == :carousel
     if photo.blank?
-      temp = (format == :thumb) ? 'aff-user-small.png':'aff-user-large.png'
+      temp = (format == :thumb) ? 'aff-user-small.png' :'aff-user-large.png'
       img = temp
     else
       temp = (format == :normal) ? :medium : :carousel
-     img = photo.image.url(temp)
+      img = photo.image.url(temp)
     end
     image_tag img
   end
 
-  def event_description(description,length=130)
+  def event_description(description, length=130)
     truncate(description, :length => length, :separator => ' ')
   end
 
   def display_image(photos, format = :medium)
     if photos.blank?
-      temp = (format == :thumb) ? '/assets/aff-user-small.png':'/assets/aff-user-large.png'
+      temp = (format == :thumb) ? '/assets/aff-user-small.png' :'/assets/aff-user-large.png'
       temp
     else
       photos.first.image.url(format)
@@ -144,11 +144,11 @@ module ApplicationHelper
     session['menu_link'] = nil
 
     menu = ['profile info', 'billing info', 'notifications', 'change password']
-    temp =  menu.index(temp)
+    temp = menu.index(temp)
     temp.nil? ? 1 : temp + 1
   end
 
-  def event_date_time_format(event,format='date')
+  def event_date_time_format(event, format='date')
     return "" if event.date.blank?
     return global_date_format(event.date) if format=='date'
     return (event.date.strftime("%l:%M %p") unless event.date.blank?) if format=='time'
@@ -183,24 +183,24 @@ module ApplicationHelper
     session[:unread_messages_count] || 0
   end
 
-  def offer_activation_link(user,offer)
+  def offer_activation_link(user, offer)
     (user.plan == 'free' ? '#billing_info' : activate_offer_path(offer.id))
   end
 
   def message_with_links_and_paragraphs(body)
     formated_paragraphs = []
     body.split("\n").each do |paragraph|
-        x = []
-        #unless paragraph.empty?
-          paragraph.split(" ").each do |word|
-            if (word =~ URI::regexp).nil?
-              x << word
-            else
-              x << "<a href="+word+">"+word+"</a>"
-            end
-          end
-          formated_paragraphs << "<p>" + x.join(" ") + "</p>"
-        #end
+      x = []
+      #unless paragraph.empty?
+      paragraph.split(" ").each do |word|
+        if (word =~ URI::regexp).nil?
+          x << word
+        else
+          x << "<a href="+word+">"+word+"</a>"
+        end
+      end
+      formated_paragraphs << "<p>" + x.join(" ") + "</p>"
+      #end
     end
     return formated_paragraphs.join
   end

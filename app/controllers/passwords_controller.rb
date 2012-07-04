@@ -1,10 +1,10 @@
 class PasswordsController < Devise::PasswordsController
   layout "welcome"
 
-def new
+  def new
 
-  super
-end
-  
+    super
+  end
+
 end
   

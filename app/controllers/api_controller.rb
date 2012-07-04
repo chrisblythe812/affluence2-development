@@ -97,9 +97,9 @@ class ApiController < ApplicationController
     if access_grant
       user = User.where(:token => json["user_token"]).first
       if user && user.valid_api_token?
-        @vincompass_share = VincompassShare.new(:title => json["comment"],:comment => json["comment"],
+        @vincompass_share = VincompassShare.new(:title => json["comment"], :comment => json["comment"],
                                                 :wine_name => json["wine_name"],
-                                                :year =>json["year"],
+                                                :year => json["year"],
                                                 :grape => json["grape"],
                                                 :link => json["link"],
                                                 :restaurant_name => json["restaurant_name"],
@@ -107,7 +107,7 @@ class ApiController < ApplicationController
                                                 :producer => json["producer"])
         # adding photos to winshare posts
         #if json["media_type"] == ("Photo" || "photo") && json["media_url"].present?
-          #@vincompass_share.photo_url = json["media_url"]
+        #@vincompass_share.photo_url = json["media_url"]
         #end
 
         if @vincompass_share.valid?
@@ -128,12 +128,12 @@ class ApiController < ApplicationController
 
 
   def winshare_image(json)
-   if json["media_type"] == ("Photo" || "photo") && json["media_url"].present?
-     puts  json["media_url"]
-   return json["media_url"]
-   else
-    return nil
-   end
+    if json["media_type"] == ("Photo" || "photo") && json["media_url"].present?
+      puts json["media_url"]
+      return json["media_url"]
+    else
+      return nil
+    end
   end
 
 end
