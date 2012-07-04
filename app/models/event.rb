@@ -50,6 +50,10 @@ class Event < ActiveRecord::Base
     (!tickets_remaining.blank?) && (tickets_remaining.to_i > 0)
   end
 
+  def has_required_tickets?(required_tickets)
+    has_tickets? && (tickets_remaining >= required_tickets)
+  end
+
   def has_more_than_10_tickets?
     has_tickets? && tickets_remaining > 10
   end
