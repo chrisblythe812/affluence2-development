@@ -1,13 +1,18 @@
 // Active Admin CSS Styles
+
 @import "active_admin/mixins";
 @import "active_admin/base";
 
 // To customize the Active Admin interfaces, add your
 // styles here:
 
-.download_links{
-  color: white;  // Hides the 'Download text'. Pagination links are styled on their own
+.download_links {
+  color: white;
+// Hides the 'Download text'. Pagination links are styled on their own
+
   a {
-  display: none; // Hides the CSV .. links
+    display: none;
+  // Hides the CSV .. links
+
   }
 }

@@ -5,4 +5,4 @@ class MessageObserver < ActiveRecord::Observer
 #                           :resource_type => 'Message',
 #                           :resource_id => message.sender_id)
 #  end
- end  
+end

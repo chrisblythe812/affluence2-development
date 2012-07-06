@@ -14,7 +14,7 @@ class ActivitiesController < ApplicationController
     else
       @latest_activities = Activity.all_by_privacy_setting(params["last_activity"])
     end
-     render :partial => 'latest'
- end
+    render :partial => 'latest'
+  end
 end
  

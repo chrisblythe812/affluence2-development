@@ -9,7 +9,7 @@ class Promotion < ActiveRecord::Base
 
   #has_and_belongs_to_many :users
 
-  has_many :registered_members,  :class_name => 'PayablePromotion'
+  has_many :registered_members, :class_name => 'PayablePromotion'
 
   accepts_nested_attributes_for :photos
 
@@ -34,7 +34,7 @@ class Promotion < ActiveRecord::Base
   end
 
   def active_registered_members
-    registered_members.find(:all, :conditions => " users.id is not null",  :joins => "left join users on users.id = payable_promotions.user_id" )
+    registered_members.find(:all, :conditions => " users.id is not null", :joins => "left join users on users.id = payable_promotions.user_id")
   end
 
   def unique_registered_members

@@ -10,8 +10,9 @@ class AccessGrant < ActiveRecord::Base
   end
 
   before_create :gen_tokens, :update_expiration
+
   def self.prune!
-    where('created_at <= ?',3.days.ago).delete_all
+    where('created_at <= ?', 3.days.ago).delete_all
   end
 
   # def self.authenticate(client_application_id)

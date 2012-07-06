@@ -33,10 +33,10 @@ module DeviseJsonAdapter
   #
   def render_json_errors(model, model_name = nil)
     model_name ||= model.class.name.underscore
-    
+
     # Map the error keys into standard HTML element names (e.g., :password -> 'user[password]')
     form_errors = Hash[model.errors.collect { |attr, msg| ["#{model_name}[#{attr}]", msg] }]
-    
+
     render :status => :unprocessable_entity, :json => {:errors => form_errors}
   end
 end

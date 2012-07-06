@@ -10,22 +10,21 @@ class SubscriptionFeeTracker < ActiveRecord::Base
                  2 => 'subscription_failure',
   }
 
-  EMAIL_MODE_METHODS = { 1 => 'subscription_success',
-                         2 => 'subscription_failure',
+  EMAIL_MODE_METHODS = {1 => 'subscription_success',
+                        2 => 'subscription_failure',
 
 
   }
 
 
-
-  scope :pending, :conditions => {:status => 'pending'}
-  scope :failed, :conditions => {:status => 'failed'}
+  scope :pending, :conditions => {status: 'pending'}
+  scope :failed, :conditions => {status: 'failed'}
   scope :not_completed, :conditions => ["status like 'pending' OR status like 'failed'"]
 
 
-   def self.create_subscription(user,date)
-   create(:user_id => user.id,:renewal_date => date, :amount => user.plan_amount )
-   end
+  def self.create_subscription(user, date)
+    create(user_id: user.id, renewal_date: date, amount: user.plan_amount)
+  end
 
 
   def self.do_subscriptions(subscriptions)
@@ -53,37 +52,36 @@ class SubscriptionFeeTracker < ActiveRecord::Base
   end
 
 
-
   def update_with_number_of_trails_left
-    subscription_params = {:retry_date =>  self.renewal_date+calculate_renewal_date(self.retry_count),
-    :retry_count => self.retry_count+1,
-    :status => "failed"}
+    subscription_params = {retry_date: self.renewal_date+calculate_renewal_date(self.retry_count),
+                           :retry_count => self.retry_count+1,
+                           :status => "failed"}
     puts "Update the subscription with params:#{subscription_params}"
     self.update_attributes(subscription_params)
     #todo when retry_count = 3 then need to update
   end
 
   def calculate_renewal_date(retry_count)
-   return INTERVALS if retry_count == 0
-   return INTERVALS+2 if retry_count == 1
-   return INTERVALS+4 if retry_count == 2
+    return INTERVALS if retry_count == 0
+    return INTERVALS+2 if retry_count == 1
+    return INTERVALS+4 if retry_count == 2
   end
 
 
   def self.create_next_billing_record(subscription)
     next_billing_date = calculate_next_billing_date(subscription)
-    SubscriptionFeeTracker.create(:user_id => subscription.user_id,:renewal_date =>next_billing_date,:amount =>subscription.user.plan_amount)
+    SubscriptionFeeTracker.create(user_id: subscription.user_id, renewal_date: next_billing_date, amount: subscription.user.plan_amount)
   end
 
   def self.calculate_next_billing_date(subscription)
-   actual_bill_date =  subscription.renewal_date
-   days_to_add =  subscription.user.plan_period_in_days
-   next_billing_date =  actual_bill_date+days_to_add
+    actual_bill_date = subscription.renewal_date
+    days_to_add = subscription.user.plan_period_in_days
+    next_billing_date = actual_bill_date+days_to_add
   end
 
 
   def has_last_payment?
-    if !pending_payment.blank?  && (pending_payment.status == 'pending' || pending_payment.status == 'failed')# they may be failed or pending records
+    if !pending_payment.blank? && (pending_payment.status == 'pending' || pending_payment.status == 'failed') # they may be failed or pending records
       puts "Found #{pending_payments.size} pending/failed payments"
       return true
     else
@@ -94,14 +92,12 @@ class SubscriptionFeeTracker < ActiveRecord::Base
 
 
   def past_payment
-    Payment.where(:payable_id => id, :payable_type => 'SubscriptionFeeTracker').last
+    Payment.where(payable_id: id, payable_type: 'SubscriptionFeeTracker').last
   end
 
-   def self.schedule(user)
-     create(:user_id => user.id,:renewal_date => Date.today, :amount => user.plan_amount )
-   end
-
-
+  def self.schedule(user)
+    create(user_id: user.id, renewal_date: Date.today, amount: user.plan_amount)
+  end
 
 
 end

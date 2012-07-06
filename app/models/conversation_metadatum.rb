@@ -4,7 +4,7 @@ class ConversationMetadatum < ActiveRecord::Base
 
   before_update :update_unread_messages_counter
 
-private
+  private
 
   def update_unread_messages_counter
     if changed_attributes.keys.include?("read")

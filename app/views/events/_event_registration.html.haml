@@ -40,7 +40,7 @@
                       - 10.times do |x|
                         %option{:value => "#{x+1}"}= x+1
                   - else#if event.has_tickets?
-                    %select.span1{:name => 'payable_promotion[total_tickets]', :id => 'total_tickets'}
+                    %select.span1{:name => 'payable_promotion[total_tickets]', :id => "total_tickets_#{event.id}"}
                       - event.tickets_remaining.times do |x|
                         %option{:value => "#{x+1}"}= x+1
 

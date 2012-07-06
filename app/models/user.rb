@@ -26,8 +26,8 @@ class User < ActiveRecord::Base
   }
 
   def disconnect_with_user(friend_id)
-    connection1 = Connection.where("user_id=? and friend_id=?", id, friend_id)  
-    connection2 = Connection.where("user_id=? and friend_id=?", friend_id, id)  
+    connection1 = Connection.where("user_id=? and friend_id=?", id, friend_id)
+    connection2 = Connection.where("user_id=? and friend_id=?", friend_id, id)
     no_of_records_deleted = Connection.delete(connection1 + connection2)
     return no_of_records_deleted == 2
   end
@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   def connections_activities(last_activity = false)
     ids=[]
     ids<<self.id
-    self.connections.each{|x| ids<<x.friend.id}
+    self.connections.each { |x| ids<<x.friend.id }
 
     activity = nil
     if last_activity
@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
       next unless ids.include? activity.user.id
-      privacy =  activity.user.profile.privacy_setting
+      privacy = activity.user.profile.privacy_setting
       if activity.resource_type == 'Profile'
         #activities << activity
       else
@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
 
   def activities_by_privacy_settings(current_user, last_activity = false)
     ids = []
-    self.connections.each{|x| ids<<x.friend.id}
+    self.connections.each { |x| ids<<x.friend.id }
 
     activity = nil
     if last_activity
@@ -70,28 +70,29 @@ class User < ActiveRecord::Base
 
     activities = []
     is_friend = ids.include?(current_user.id)
-         
+
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
       next unless activity.user == self
-      privacy =  activity.user.profile.privacy_setting
+      privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
         #activities << activity
       else
         if is_friend
-          activities << activity if [0,1].include?(privacy.send(PrivacySetting::OPTS[activity.resource_type]))
+          activities << activity if [0, 1].include?(privacy.send(PrivacySetting::OPTS[activity.resource_type]))
         elsif (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
           activities << activity
         end
-      end             
+      end
 
     end while activities.length < 7
 
     activities
 
   end
+
   has_many :payments
   has_many :pending_alert_notifications, :class_name => NotificationTracker, :conditions => "channel = 'alert' and status = 'pending'"
 
@@ -104,7 +105,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role, :status, :created_at, :updated_at
@@ -123,9 +124,8 @@ class User < ActiveRecord::Base
   end
 
   def superadmin?
-    self.role == 'superadmin' 
+    self.role == 'superadmin'
   end
-
 
 
   scope :all_members, :conditions => ['role not like ?', 'superadmin']
@@ -133,12 +133,11 @@ class User < ActiveRecord::Base
   scope :suspended_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "suspended"]
   scope :deleted_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "deleted"]
 
-  scope :first_name_or_last_name, lambda {|query| {:conditions => ['role not like ? and status like ? email like ? ', 'superadmin', "deleted", query]}}
+  scope :first_name_or_last_name, lambda { |query| {:conditions => ['role not like ? and status like ? email like ? ', 'superadmin', "deleted", query]} }
 
-   def  first_name_or_last_name
+  def first_name_or_last_name
 
-   end
-
+  end
 
 
   has_permalink :permalink_name, :update => false
@@ -222,7 +221,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def self.create_user_with_braintree_id(user,braintree_customer_id)
+  def self.create_user_with_braintree_id(user, braintree_customer_id)
     user[:braintree_customer_id] = braintree_customer_id
     user = User.new(user)
     user.save
@@ -230,7 +229,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  def update_user_with_plan_and_braintree_id(plan,braintree_customer_id)
+  def update_user_with_plan_and_braintree_id(plan, braintree_customer_id)
     self.plan = !plan.blank? ? plan : 'Monthly'
     self.braintree_customer_id = braintree_customer_id if !braintree_customer_id.blank?
     self.save
@@ -238,9 +237,8 @@ class User < ActiveRecord::Base
   end
 
 
-
-  def change_current_plan(new_plan,braintree_customer_id=nil)
-    update_user_with_plan_and_braintree_id(new_plan,braintree_customer_id)
+  def change_current_plan(new_plan, braintree_customer_id=nil)
+    update_user_with_plan_and_braintree_id(new_plan, braintree_customer_id)
   end
 
   def create_or_update_subscription(user)
@@ -261,9 +259,6 @@ class User < ActiveRecord::Base
       SubscriptionFeeTracker.schedule(user)
     end
   end
-
-
-
 
 
   FIELDS = [:first_name, :last_name, :phone, :website, :company, :fax, :addresses, :credit_cards, :custom_fields]

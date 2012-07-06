@@ -28,8 +28,8 @@ gem 'tabs_on_rails'
 gem 'state_machine'
 gem "hominid"
 gem 'nokogiri'
-
-
+gem 'exception_notification', :require => 'exception_notifier'
+gem "rails_best_practices"
 
 
 

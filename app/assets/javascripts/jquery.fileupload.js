@@ -16,26 +16,26 @@
 
     var FileUpload,
         methods;
-        
+
     FileUpload = function (container) {
         var fileUpload = this,
             uploadForm = (container.is('form') ? container : container.find('form').first()),
             fileInput = uploadForm.find('input:file').first(),
             settings = {
-                namespace: 'file_upload',
-                cssClass: 'file_upload',
-                dragDropSupport: true,
-                dropZone: container,
-                url: uploadForm.attr('action'),
-                method: uploadForm.attr('method'),
-                fieldName: fileInput.attr('name'),
-                multipart: true,
-                multiFileRequest: false,
-                formData: function () {
+                namespace:'file_upload',
+                cssClass:'file_upload',
+                dragDropSupport:true,
+                dropZone:container,
+                url:uploadForm.attr('action'),
+                method:uploadForm.attr('method'),
+                fieldName:fileInput.attr('name'),
+                multipart:true,
+                multiFileRequest:false,
+                formData:function () {
                     return uploadForm.serializeArray();
                 },
-                withCredentials: false,
-                forceIframeUpload: false
+                withCredentials:false,
+                forceIframeUpload:false
             },
             documentListeners = {},
             dropZoneListeners = {},
@@ -58,7 +58,7 @@
             isXHRUploadCapable = function () {
                 return typeof XMLHttpRequest !== undef && typeof File !== undef && (
                     !settings.multipart || typeof FormData !== undef || typeof FileReader !== undef
-                );
+                    );
             },
 
             initEventHandlers = function () {
@@ -69,8 +69,8 @@
                     if (typeof settings.onDocumentDragLeave === func) {
                         documentListeners['dragleave.' + settings.namespace] = settings.onDocumentDragLeave;
                     }
-                    documentListeners['dragover.'   + settings.namespace] = fileUpload.onDocumentDragOver;
-                    documentListeners['drop.'       + settings.namespace] = fileUpload.onDocumentDrop;
+                    documentListeners['dragover.' + settings.namespace] = fileUpload.onDocumentDragOver;
+                    documentListeners['drop.' + settings.namespace] = fileUpload.onDocumentDrop;
                     $(document).bind(documentListeners);
                     if (typeof settings.onDragEnter === func) {
                         dropZoneListeners['dragenter.' + settings.namespace] = settings.onDragEnter;
@@ -78,11 +78,11 @@
                     if (typeof settings.onDragLeave === func) {
                         dropZoneListeners['dragleave.' + settings.namespace] = settings.onDragLeave;
                     }
-                    dropZoneListeners['dragover.'   + settings.namespace] = fileUpload.onDragOver;
-                    dropZoneListeners['drop.'       + settings.namespace] = fileUpload.onDrop;
+                    dropZoneListeners['dragover.' + settings.namespace] = fileUpload.onDragOver;
+                    dropZoneListeners['drop.' + settings.namespace] = fileUpload.onDrop;
                     settings.dropZone.bind(dropZoneListeners);
                 }
-                fileInputListeners['change.'    + settings.namespace] = fileUpload.onChange;
+                fileInputListeners['change.' + settings.namespace] = fileUpload.onChange;
                 fileInput.bind(fileInputListeners);
             },
 
@@ -129,7 +129,7 @@
                 } else if (settings.formData) {
                     var formData = [];
                     $.each(settings.formData, function (name, value) {
-                        formData.push({name: name, value: value});
+                        formData.push({name:name, value:value});
                     });
                     return formData;
                 }
@@ -143,7 +143,7 @@
                         index = url.indexOf(host, indexStart),
                         pathIndex = index + host.length;
                     if ((index === indexStart || index === url.indexOf('@', indexStart) + 1) &&
-                            (url.length === pathIndex || $.inArray(url.charAt(pathIndex), ['/', '?', '#']) !== -1)) {
+                        (url.length === pathIndex || $.inArray(url.charAt(pathIndex), ['/', '?', '#']) !== -1)) {
                         return true;
                     }
                     return false;
@@ -182,7 +182,7 @@
 
             buildMultiPartFormData = function (boundary, files, fields) {
                 var doubleDash = '--',
-                    crlf     = '\r\n',
+                    crlf = '\r\n',
                     formData = '';
                 $.each(fields, function (index, field) {
                     formData += doubleDash + boundary + crlf +
@@ -202,7 +202,7 @@
                 formData += doubleDash + boundary + doubleDash + crlf;
                 return formData;
             },
-            
+
             fileReaderUpload = function (files, xhr, settings) {
                 var boundary = '----MultiPartFormBoundary' + (new Date()).getTime(),
                     loader,
@@ -310,14 +310,18 @@
                         // concat is used here to prevent the "Script URL" JSLint error:
                         iframe.unbind('load').attr('src', 'javascript'.concat(':false;'));
                         if (typeof settings.onAbort === func) {
-                            settings.onAbort(e, [{name: input.val(), type: null, size: null}], 0, iframe, settings);
+                            settings.onAbort(e, [
+                                {name:input.val(), type:null, size:null}
+                            ], 0, iframe, settings);
                         }
                     })
                     .unbind('load')
                     .bind('load', function (e) {
                         iframe.readyState = 4;
                         if (typeof settings.onLoad === func) {
-                            settings.onLoad(e, [{name: input.val(), type: null, size: null}], 0, iframe, settings);
+                            settings.onLoad(e, [
+                                {name:input.val(), type:null, size:null}
+                            ], 0, iframe, settings);
                         }
                     });
                 uploadForm
@@ -332,29 +336,32 @@
             handleLegacyUpload = function (event, input) {
                 // javascript:false as iframe src prevents warning popups on HTTPS in IE6:
                 var iframe = $('<iframe src="javascript:false;" style="display:none" name="iframe_' +
-                    settings.namespace + '_' + (new Date()).getTime() + '"></iframe>'),
+                        settings.namespace + '_' + (new Date()).getTime() + '"></iframe>'),
                     uploadSettings = $.extend({}, settings);
                 iframe.readyState = 0;
                 iframe.abort = function () {
                     iframe.trigger('abort');
                 };
-                iframe.bind('load', function () {
-                    iframe.unbind('load');
-                    if (typeof settings.initUpload === func) {
-                        settings.initUpload(
-                            event,
-                            [{name: input.val(), type: null, size: null}],
-                            0,
-                            iframe,
-                            uploadSettings,
-                            function () {
-                                legacyUpload(input, iframe, uploadSettings);
-                            }
-                        );
-                    } else {
-                        legacyUpload(input, iframe, uploadSettings);
-                    }
-                }).appendTo(uploadForm);
+                iframe.bind('load',
+                    function () {
+                        iframe.unbind('load');
+                        if (typeof settings.initUpload === func) {
+                            settings.initUpload(
+                                event,
+                                [
+                                    {name:input.val(), type:null, size:null}
+                                ],
+                                0,
+                                iframe,
+                                uploadSettings,
+                                function () {
+                                    legacyUpload(input, iframe, uploadSettings);
+                                }
+                            );
+                        } else {
+                            legacyUpload(input, iframe, uploadSettings);
+                        }
+                    }).appendTo(uploadForm);
             },
 
             resetFileInput = function () {
@@ -366,15 +373,15 @@
 
         this.onDocumentDragOver = function (e) {
             if (typeof settings.onDocumentDragOver === func &&
-                    settings.onDocumentDragOver(e) === false) {
+                settings.onDocumentDragOver(e) === false) {
                 return false;
             }
             e.preventDefault();
         };
-        
+
         this.onDocumentDrop = function (e) {
             if (typeof settings.onDocumentDrop === func &&
-                    settings.onDocumentDrop(e) === false) {
+                settings.onDocumentDrop(e) === false) {
                 return false;
             }
             e.preventDefault();
@@ -382,7 +389,7 @@
 
         this.onDragOver = function (e) {
             if (typeof settings.onDragOver === func &&
-                    settings.onDragOver(e) === false) {
+                settings.onDragOver(e) === false) {
                 return false;
             }
             var dataTransfer = e.originalEvent.dataTransfer;
@@ -394,7 +401,7 @@
 
         this.onDrop = function (e) {
             if (typeof settings.onDrop === func &&
-                    settings.onDrop(e) === false) {
+                settings.onDrop(e) === false) {
                 return false;
             }
             var dataTransfer = e.originalEvent.dataTransfer;
@@ -403,10 +410,10 @@
             }
             e.preventDefault();
         };
-        
+
         this.onChange = function (e) {
             if (typeof settings.onChange === func &&
-                    settings.onChange(e) === false) {
+                settings.onChange(e) === false) {
                 return false;
             }
             if (!settings.forceIframeUpload && e.target.files && isXHRUploadCapable()) {
@@ -431,7 +438,7 @@
             settings.dropZone.addClass(settings.cssClass);
             initEventHandlers();
         };
-        
+
         this.destroy = function () {
             removeEventHandlers();
             container
@@ -442,13 +449,13 @@
     };
 
     methods = {
-        init : function (options) {
+        init:function (options) {
             return this.each(function () {
                 (new FileUpload($(this))).init(options);
             });
         },
-                
-        destroy : function (namespace) {
+
+        destroy:function (namespace) {
             return this.each(function () {
                 namespace = namespace ? namespace : 'file_upload';
                 var fileUpload = $(this).data(namespace);
@@ -461,7 +468,7 @@
 
         }
     };
-    
+
     $.fn.fileUpload = function (method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -471,5 +478,5 @@
             $.error('Method ' + method + ' does not exist on jQuery.fileUpload');
         }
     };
-    
+
 }(jQuery));
