@@ -40,8 +40,8 @@
 = yield(:javascripts)
 :javascript
   $(function () {
-    $('a[rel=tooltip]').tooltip({
-        live: true
+    $('body').tooltip({
+      selector: '[rel=tooltip]'
     });
   });
 
