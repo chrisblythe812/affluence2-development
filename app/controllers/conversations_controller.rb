@@ -48,7 +48,7 @@ class ConversationsController < ApplicationController
       status = @conversation.archived?(current_user)
 #      @other_conversations = Conversation.for_user(current_user).archived?(status)
       @first_message = @conversation.messages.first
-      @replies = @conversation.messages.order('created_at asc')
+      @replies = @conversation.messages.order('updated_at asc')
       #    @replies.shift
 
       #    authorize!(:view, @conversation)
