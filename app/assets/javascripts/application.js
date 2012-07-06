@@ -32,7 +32,7 @@ function getActivities(type_object, get_more){
       if(!get_more) {
         $("#latest_activities").html("<tr>" +
           "<td class='span1'>" +
-          "<div id='spinner' style='width:0px'>" +
+          "<div id='spinner' style='width:40px'>" +
           "<img src='/assets/ajax-loader.gif' class='ajax-loader' alt='Ajax-loader'>" +
           "<p>Loading....</p>" +
           "</div>" +
