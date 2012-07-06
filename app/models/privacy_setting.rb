@@ -32,7 +32,7 @@ class PrivacySetting < ActiveRecord::Base
 
   def method_missing(method)
     if OPTS.invert.include?("#{method}")
-    return true
+      return 0
     else
       super
     end

@@ -20,7 +20,11 @@ class Activity < ActiveRecord::Base
 #  end
 
 
-def self.all_by_privacy_setting
+def self.all_by_privacy_setting(last_activity = false)
+    activity = nil
+    if last_activity
+      activity = self.find(last_activity.to_i)
+    end
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
@@ -31,6 +35,9 @@ def self.all_by_privacy_setting
       if activity.resource_type == 'Profile'
         #activities << activity
       else
+
+        p '-------------------------------'
+        p privacy.send(PrivacySetting::OPTS[activity.resource_type])
         activities << activity if (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
       end
 

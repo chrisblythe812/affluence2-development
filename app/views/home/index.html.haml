@@ -47,8 +47,8 @@
         %h2 Activity
       .span4
         .btn-group.pull-right{"data-toggle" => "buttons-radio"}
-          %button.btn.btn-small.btn-primary.active#entire_network Entire Network
-          %button.btn.btn-small.btn-primary#my_connections my Connections
+          %button.get-activities.btn.btn-small.btn-primary.active#entire_network Entire Network
+          %button.get-activities.btn.btn-small.btn-primary#my_connections my Connections
     %hr.zero
       %table.table.table-striped
         %tbody#latest_activities
@@ -57,9 +57,8 @@
               #spinner
                 = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
                 %p Loading....
-      %p.pull-right
-        %a{:href => "/activities"} see more activities
-
+      %p
+        = button_tag 'more activities', :class => 'more-activities span9', :type => 'button', :style => "margin:0px"
 
 -content_for :javascripts do
   :javascript
@@ -70,38 +69,23 @@
       $("#latest_events").load("#{home_page_events_events_path}");
       $("#latest_activities").load("#{latest_activities_path}");
       
-      $('#activity button').click(function(){
-         getActivities($(this).text() == 'my Connections');
+      $('.get-activities').click(function(){
+         getActivities({"type" : $(this).text()}, false);
       });
-           $('a[rel=tooltip]').tooltip({
-                  live: true
-             });
 
-            });
-
-
-    function getActivities(text){
-      $.ajax({
-        type: "GET",
-        url: "#{latest_activities_path}",
-        data: "my_connections=" + text,
-        beforeSend: function ( xhr ) {
-          $("#latest_activities").html("<tr>" +
-                    "<td class='span1'>" +
-                      "<div id='spinner'>" +
-                        "<img src='/assets/ajax-loader.gif' class='ajax-loader' alt='Ajax-loader'>" +
-                        "<p>Loading....</p>" +
-                      "</div>" +
-                    "</td>" +
-                  "</tr>"  );
-         },
-        success: function(data) {
-           $("#latest_activities").html(data);
-        }
+      $('.more-activities').click(function(){
+         getActivities({"type" : $(this).text()}, true);
       });
-    }
+
+      $('a[rel=tooltip]').tooltip({
+        live: true
+      });
+
+    });
 
 
+
+  
 
 
 

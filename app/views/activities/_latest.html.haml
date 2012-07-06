@@ -1,5 +1,5 @@
 - @latest_activities.each do |activity|
-  %tr
+  %tr{:class => "#{activity.id}"}
     %td.span1
       %a.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
         = image_tag display_image(activity.user.profile.photos, :thumb)
@@ -10,10 +10,4 @@
     %td
       %p= time_ago_in_words(activity.updated_at) + " ago"
 
-:javascript
-  $(function () {
-    $('a[rel=tooltip]').tooltip({
-        live: true
-    });
-  });
 

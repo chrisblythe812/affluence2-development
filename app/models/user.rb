@@ -32,10 +32,15 @@ class User < ActiveRecord::Base
     return no_of_records_deleted == 2
   end
 
-  def connections_activities
+  def connections_activities(last_activity = false)
     ids=[]
     ids<<self.id
     self.connections.each{|x| ids<<x.friend.id}
+
+    activity = nil
+    if last_activity
+      activity = Activity.find(last_activity.to_i)
+    end
 
     activities = []
     begin
@@ -54,9 +59,14 @@ class User < ActiveRecord::Base
     activities
   end
 
-  def activities_by_privacy_settings(current_user)
+  def activities_by_privacy_settings(current_user, last_activity = false)
     ids = []
     self.connections.each{|x| ids<<x.friend.id}
+
+    activity = nil
+    if last_activity
+      activity = Activity.find(last_activity.to_i)
+    end
 
     activities = []
     is_friend = ids.include?(current_user.id)
