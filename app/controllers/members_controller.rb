@@ -29,7 +29,7 @@ class MembersController < ApplicationController
     else
       @size = current_user.connections.size
       @connections_list = true
-      @connections = current_user.connections.page(params[:page]).per(9)
+      @connections = current_user.connections.order('created_at desc').page(params[:page]).per(9)
       profiles = []
       @connections.each do |connection|
         profiles <<  connection.friend.profile
