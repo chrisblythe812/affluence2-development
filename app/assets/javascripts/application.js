@@ -16,11 +16,15 @@
 //= require bootstrap-tooltip
 //= require_tree .
 function getActivities(type_object, get_more){
-  last_activity = $('#latest_activities tr:last-child').attr('class');
-  params = {
-    "get_more"       : get_more,
-    "last_activity"  : last_activity
+  params = {};
+
+  if(get_more){
+    last_activity = $('#latest_activities tr:last-child').attr('class');
+     params = {
+      "last_activity"  : last_activity
+     }
   }
+ 
   $.extend(params, type_object);
 
 

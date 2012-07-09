@@ -71,10 +71,12 @@
       
       $('.get-activities').click(function(){
          getActivities({"type" : $(this).text()}, false);
+         $('.more-activities').text("more activities");
+         $('.more-activities').attr("disabled", false);
       });
 
       $('.more-activities').click(function(){
-         getActivities({"type" : $(this).text()}, true);
+         getActivities({"type" : $('.get-activities.active').text()}, true);
       });
 
       $('a[rel=tooltip]').tooltip({

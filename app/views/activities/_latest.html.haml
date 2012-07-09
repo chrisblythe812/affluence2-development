@@ -7,6 +7,12 @@
       %h5= activity.user.profile.name
       %p
         = activity.body
+        - unless activity.resource.nil?
+          - if activity.resource_type == "Offer"
+            = link_to "goto...", offers_path  
+          - else
+            = link_to "goto...", polymorphic_path(activity.resource)
+
     %td
       %p= time_ago_in_words(activity.updated_at) + " ago"
 
