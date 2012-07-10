@@ -14,7 +14,9 @@
             = link_to "goto...", discussions_path
           - elsif  activity.resource_type == "Discussion"
             = link_to "goto...", discussions_path
-          - else 
+          - elsif  activity.resource_type == "VincompassShare"
+    
+          - else
             = link_to "goto...", polymorphic_path(activity.resource)
 
     %td
