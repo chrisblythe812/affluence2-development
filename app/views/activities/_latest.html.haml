@@ -10,7 +10,11 @@
         - unless activity.resource.nil?
           - if activity.resource_type == "Offer"
             = link_to "goto...", offers_path  
-          - else
+          - elsif  activity.resource_type == "Comment"
+            = link_to "goto...", discussions_path
+          - elsif  activity.resource_type == "Discussion"
+            = link_to "goto...", discussions_path
+          - else 
             = link_to "goto...", polymorphic_path(activity.resource)
 
     %td
