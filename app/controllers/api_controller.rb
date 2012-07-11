@@ -15,7 +15,12 @@ class ApiController < ApplicationController
   end
 
   def authorize_application
+    begin
     json = ActiveSupport::JSON.decode(request.body)
+    rescue
+    json = ActiveSupport::JSON.decode(string_to_json(request.body))
+    end
+
     if json["key"] && json["secret"]
       if application = ClientApplication.where("application_key = ? AND secret = ?", json["key"], json["secret"]).first
         AccessGrant.prune!
@@ -31,7 +36,11 @@ class ApiController < ApplicationController
   end
 
   def authorize_user
-    params = ActiveSupport::JSON.decode(request.body)
+    begin
+      params = ActiveSupport::JSON.decode(request.body)
+    rescue
+      params = ActiveSupport::JSON.decode(string_to_json(request.body))
+    end
     access_grant = AccessGrant.find_access(params["access_token"])
     if access_grant && access_grant.valid_token?
       user = User.where(:email => params["email"]).first
@@ -48,7 +57,11 @@ class ApiController < ApplicationController
 
 
   def validate_tokens
-    params = ActiveSupport::JSON.decode(request.body)
+    begin
+      params = ActiveSupport::JSON.decode(request.body)
+    rescue
+      params = ActiveSupport::JSON.decode(string_to_json(request.body))
+    end
     access_grant = AccessGrant.find_access(params["access_token"])
     user = User.where(:token => params["user_token"]).first
     if user && access_grant
@@ -65,7 +78,11 @@ class ApiController < ApplicationController
   end
 
   def activity_post
-    json = ActiveSupport::JSON.decode(request.body)
+    begin
+      json = ActiveSupport::JSON.decode(request.body)
+    rescue
+      json = ActiveSupport::JSON.decode(string_to_json(request.body))
+    end
     access_grant = AccessGrant.find_access(json["access_token"])
     if access_grant
       user = User.where(:token => json["user_token"]).first
@@ -92,7 +109,11 @@ class ApiController < ApplicationController
   end
 
   def activity_post_v2
-    json = ActiveSupport::JSON.decode(request.body)
+    begin
+      json = ActiveSupport::JSON.decode(request.body)
+    rescue
+      json = ActiveSupport::JSON.decode(string_to_json(request.body))
+    end
     access_grant = AccessGrant.find_access(json["access_token"])
     if access_grant
       user = User.where(:token => json["user_token"]).first
@@ -134,6 +155,15 @@ class ApiController < ApplicationController
     else
       return nil
     end
+  end
+
+  def string_to_json(text)
+    body_sting = text.string.gsub(/\{|\}/,"").split(",")
+    st = String.new
+    st << "{"
+    body_sting.map{ |x| st << '"'+x.split(':')[0].strip+'"'+':'+'"'+x.split(':')[1].strip+'",' }
+    st = st.chomp(',')
+    st << "}"
   end
 
 end
