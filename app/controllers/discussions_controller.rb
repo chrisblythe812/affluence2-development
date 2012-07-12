@@ -5,7 +5,7 @@ class DiscussionsController < ApplicationController
     @discussion = Discussion.new
     unless params[:search].blank?
       query = Discussion.build_search_query(params[:search])
-      @discussions = Kaminari.paginate_array(Discussion.search(query)).page(params[:page]).per(3)
+      @discussions = Kaminari.paginate_array(Discussion.search(query)).page(params[:page]).per(10)
       @discussions_size = Discussion.search(query).size
       @search = true
     else
@@ -22,7 +22,7 @@ class DiscussionsController < ApplicationController
     params[:discussion][:question].strip! unless params[:discussion][:question].nil?
     @discussion = Discussion.new(params[:discussion])
     @discussion.user_id = current_user.id
-
+ 
     respond_to do |format|
       if @discussion.save
         @discussion.last_comment_at = @discussion.created_at
