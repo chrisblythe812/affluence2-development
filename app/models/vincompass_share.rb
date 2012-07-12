@@ -10,10 +10,21 @@ class VincompassShare < ActiveRecord::Base
 
   def post_activity(user)
     Activity.create(:user_id => user.id,
-                    :body => user.profile.name + ' has tried ' + self.wine_share.name + ' at ' + self.wine_share.restaurant_name + ' via Vincompass',
+                    :body => user.profile.name + ' has tried ' + wine_share_name + ' at ' + wine_share_restaurant_name + ' via Vincompass',
                     :resource_type => 'VincompassShare',
                     :resource_id => self.id)
   end
+
+  def wine_share_name
+  return ' ' unless self.wine_share.name
+  self.wine_share.name
+  end
+
+  def wine_share_restaurant_name
+    return ' ' unless self.wine_share.restaurant_name
+    self.wine_share.restaurant_name
+  end
+
 
 
   private

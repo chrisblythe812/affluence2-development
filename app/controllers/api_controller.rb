@@ -161,7 +161,7 @@ class ApiController < ApplicationController
     body_sting = text.string.gsub(/\{|\}/,"").split(",")
     st = String.new
     st << "{"
-    body_sting.map{ |x| st << '"'+x.split(':')[0].strip+'"'+':'+'"'+x.split(':')[1].strip+'",' }
+    body_sting.map{ |x| st << '"'+x.partition(':')[0].strip+'"'+':'+'"'+x.partition(':')[2].strip+'",' }
     st = st.chomp(',')
     st << "}"
   end
