@@ -14,8 +14,9 @@
     #Discussions
       %h2
         Discussions
-        %small.label.label-success{:style => "font-size:18px"}
-          = @discussions_size
+        - if @discussions_size
+          %small.label.label-success{:style => "font-size:18px"}
+            = @discussions_size
       %hr.zero
       #accordion2.accordion
         - @discussions.each do |discussion|
