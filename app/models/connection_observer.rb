@@ -2,9 +2,9 @@ class ConnectionObserver < ActiveRecord::Observer
 
   def after_create(connection)
     Activity.create(:user_id => connection.user_id,
-                    :body => connection.user.profile.name + ' is now connected to ' + connection.friend.name,
+                    :body => connection.user.profile.name + ' is now connected to ',
                     :resource_type => 'Connection',
-                    :resource_id => connection.friend.id)
+                    :resource_id => connection.id)
 #
 #    reciprocate_connection(connection)
 #    remove_associated_friend_requests(connection)

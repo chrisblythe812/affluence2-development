@@ -51,7 +51,7 @@ def self.all_by_privacy_setting(last_activity = false)
 
   def self.create_user_event(user, event)
     create(:user_id => user.id,
-           :body => "has registered for the #{event.title} Event",
+           :body => " has registered for the ",
            :resource_type => 'Event',
            :resource_id => event.id)
 
@@ -60,7 +60,7 @@ def self.all_by_privacy_setting(last_activity = false)
 
   def self.create_user_offer(user, offer)
     create(:user_id => user.id,
-           :body => "has activated  #{offer.title} Offer",
+           :body => " has activated ",
            :resource_type => 'Offer',
            :resource_id => offer.id)
 
