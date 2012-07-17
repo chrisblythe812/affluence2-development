@@ -3,7 +3,7 @@ class Photo < ActiveRecord::Base
   attr_accessor :parent_type
   attr_accessible :image, :title, :description, :photoable_type, :image_type
 
-#  validates_attachment_presence :image
+  validates_attachment_presence :image, :if => lambda { |images| !images.image_file_name.nil?}
   validates_attachment_size :image, :less_than => 5.megabyte
   validates_attachment_content_type :image, :content_type => ['image/jpeg', 'image/png', 'image/gif']
 
