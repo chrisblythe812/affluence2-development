@@ -17,7 +17,7 @@
           = link_to activity.resource_type, discussions_path(:id => activity.resource_id)
         - elsif  activity.resource_type == "Connection"
           - break if activity.resource.friend != current_user
-          = link_to activity.resource.friend.profile.full_name, profile_path(activity.resource)
+          = link_to activity.resource.friend.profile.full_name, profile_path(activity.resource.friend.profile.user.permalink) 
         - elsif  activity.resource_type == "VincompassShare"
 
         - else

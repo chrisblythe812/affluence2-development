@@ -20,12 +20,15 @@ class Activity < ActiveRecord::Base
 #  end
 
 
-def self.all_by_privacy_setting(last_activity = false)
+def self.all_by_privacy_setting(current_user, last_activity = false)
+    ids = []
+    current_user.connections.each { |x| ids<<x.friend.id }
+
     activity = nil
     if last_activity
       activity = self.find(last_activity.to_i)
     end
-
+ 
     activities = []
     begin
       activity = activity ? self.previous(activity).first : self.last
@@ -36,12 +39,17 @@ def self.all_by_privacy_setting(last_activity = false)
       if activity.resource_type == 'Profile'
         #activities << activity
       else
-
-        p '-------------------------------'
-        p privacy.send(PrivacySetting::OPTS[activity.resource_type])
-        activities << activity if (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
+        if current_user == activity.user
+          activities << activity 
+        elsif (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 0)
+          activities << activity 
+        elsif (privacy.send(PrivacySetting::OPTS[activity.resource_type]) == 1)
+          if ids.include?(activity.user_id)
+            activities << activity
+          end
+        end
       end
-
+   
     end while activities.length < 7
 
     activities
