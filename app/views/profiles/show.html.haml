@@ -132,6 +132,12 @@
                 = f.submit "Send Message", :class => "btn btn-primary"
 :javascript
   $(function(){
+    if($("#latest_activities tr").size() != 0){
+          $('.more-activities').show();
+    }
+    else{
+      $('.more-activities').hide();
+    }
     $('.more-activities').click(function(){
       getActivities({"type" : "profile", "profile_id" : "#{@profile.id}"}, true);
     });
