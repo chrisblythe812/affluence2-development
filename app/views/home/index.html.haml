@@ -71,6 +71,8 @@
       $("#latest_activities").load("#{latest_activities_path}");
       
       $('.get-activities').click(function(){
+        $('.ajax-loader').hide();
+        $('.more-activities').show();
         if(!$(this).hasClass('active')){
          getActivities({"type" : $(this).text()}, false);
          $('.more-activities').text("more activities");
