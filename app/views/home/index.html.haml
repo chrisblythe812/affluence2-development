@@ -68,11 +68,15 @@
       $("#latest_members").load("#{latest_members_path}");
       $("#latest_offers").load("#{latest_offers_path}");
       $("#latest_events").load("#{home_page_events_events_path}");
-      $("#latest_activities").load("#{latest_activities_path}");
+      $('.more-activities').hide();
+      $("#latest_activities").load("#{latest_activities_path}", function() {
+        if($("#latest_activities tr").size() != 0){
+          $('.more-activities').show();
+        }
+      });
       
       $('.get-activities').click(function(){
         $('.ajax-loader').hide();
-        $('.more-activities').show();
         if(!$(this).hasClass('active')){
          getActivities({"type" : $(this).text()}, false);
          $('.more-activities').text("more activities");

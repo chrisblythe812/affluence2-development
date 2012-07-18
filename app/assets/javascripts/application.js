@@ -51,7 +51,6 @@ function getActivities(type_object, get_more){
     },
     success: function(data) {
       $('.ajax-loader').hide();
-      $('.more-activities').show();
       if(get_more) {
         $("#latest_activities").append(data);
         if ($('#latest_activities tr:last-child').attr('class') == last_activity) {
@@ -63,6 +62,12 @@ function getActivities(type_object, get_more){
       }
       else {
         $("#latest_activities").html(data);
+      }
+      if($("#latest_activities tr").size() == 0){
+        $('.more-activities').hide();
+      }
+      else{
+        $('.more-activities').show();
       }
     }
   });
