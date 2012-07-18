@@ -46,11 +46,13 @@ function getActivities(type_object, get_more){
       else if(get_more) {
         $('.ajax-loader').show();
         $('.more-activities').attr("disabled", true);
+        $('.more-activities').hide();
       }
     },
     success: function(data) {
       if(get_more) {
         $('.ajax-loader').hide();
+        $('.more-activities').show();
         $("#latest_activities").append(data);
         if ($('#latest_activities tr:last-child').attr('class') == last_activity) {
           $('.more-activities').text("no more activities");
