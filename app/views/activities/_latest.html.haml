@@ -1,5 +1,5 @@
 - @latest_activities.each do |activity|
-  - next if activity.resource_type == "Connection" && activity.resource.friend != current_user
+  - next if activity.resource.nil? || (activity.resource_type == "Connection" && activity.resource.friend != current_user)
   %tr{:class => "#{activity.id}"}
     %td.span1
       %a.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}

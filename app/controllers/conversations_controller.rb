@@ -133,9 +133,10 @@ class ConversationsController < ApplicationController
 
   def archive
     @conversation = Conversation.find(params[:conversation_id])
-
-#    authorize! :edit, @conversation
-
+    unread_messages_count = ConversationMetadatum.where(:user_id => current_user.id, :read => false).size
+    current_user.update_attributes(:unread_messages_counter => unread_messages_count)
+    #    authorize! :edit, @conversation
+ 
     @conversation.archive!(current_user)
 
     respond_to do |format|
