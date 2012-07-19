@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!  
   autocomplete :expertise, :name, :class_name => 'ActsAsTaggableOn::Tag'
   autocomplete :interest, :name, :class_name => 'ActsAsTaggableOn::Tag'
 
@@ -7,21 +7,21 @@ class ProfilesController < ApplicationController
     term = params[:term]
 
     if term && !term.blank?
-      items = ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
-                                                    "left outer join taggings on tags.id=taggings.tag_id where lower(tags.name) LIKE lower('%" +
-                                                    term + "%') and taggings.context = 'associations' order by tags.id desc limit 10")
+      items =  ActsAsTaggableOn::Tag.find_by_sql("select distinct tags.* from tags " +
+          "left outer join taggings on tags.id=taggings.tag_id where lower(tags.name) LIKE lower('%" +
+          term + "%') and taggings.context = 'associations' order by tags.id desc limit 10")
     else
       items = {}
     end
     render :json => json_for_autocomplete(items, 'name', [])
   end
-
+        
 
   ssl_required :confirm, :check_avilability, :profile_session
 
-  before_filter :authenticate_user!, :except => [:profile_session, :confirm, :check_avilability]
-  before_filter :set_profile_navigation, :except => [:settings, :confirm, :confirm_credit_card_info, :profile_billing]
-  before_filter :create_braintree_object, :only => [:edit, :update]
+  before_filter :authenticate_user! , :except => [:profile_session, :confirm, :check_avilability]
+  before_filter :set_profile_navigation, :except => [:settings,:confirm,:confirm_credit_card_info,:profile_billing]
+  before_filter :create_braintree_object, :only =>  [:edit, :update]
 
   def index
 
@@ -39,13 +39,20 @@ class ProfilesController < ApplicationController
       end
     end
     @user = @profile.user
-  end
+  end 
 
   def update
     session['menu_link'] = params["value"]
+    logger.info '------remove photo-attributes if image is nil--------'
+    logger.info params[:profile][:photos_attributes]["0"][:image]
+    if params[:profile][:photos_attributes]["0"][:image].nil?
+      params[:profile].delete("photos_attributes") 
+    else
+      @profile.photos.build
+    end
+    logger.info params[:profile][:photos_attributes]  
     @user = resource
     @profile = resource.profile
-    @profile.photos.build
     if params[:user].blank?
       @profile = Profile.find(params[:id])
 
@@ -55,7 +62,7 @@ class ProfilesController < ApplicationController
           format.html { redirect_to profile_path(@profile.user.permalink), notice: 'Profile was successfully updated.' }
           format.json { head :ok }
         else
-          format.html { render action: "edit" }
+          format.html { render action: "edit"}
           format.json { render json: @profile.errors, status: :unprocessable_entity }
         end
       end
@@ -74,19 +81,19 @@ class ProfilesController < ApplicationController
         end
       else
         respond_to do |format|
-          @user = resource
+          @user = resource  
           resource.password = resource.password_confirmation = nil
-          format.html { render action: "edit" }
+          format.html { render action: "edit"}
           format.json { render json: @user.errors, status: :unprocessable_entity }
         end
       end
-    end
+    end 
 
   end
 
   def show
-    @conversation = Conversation.new
-    @conversation.messages.build
+         @conversation = Conversation.new
+      @conversation.messages.build
 
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
@@ -97,7 +104,7 @@ class ProfilesController < ApplicationController
       @notication_settings = current_user.profile.notification_setting
       @notication_settings.update_attributes(params["name"].to_sym => params["value"])
       render :json => {'notice' => 'updated successfully'}.to_json
-    rescue
+    rescue   
       render :json => {'notice' => 'not updated successfully'}.to_json
     end
   end
@@ -108,6 +115,7 @@ class ProfilesController < ApplicationController
     user.save
     sign_in user
   end
+
 
 
   def confirm
@@ -130,7 +138,7 @@ class ProfilesController < ApplicationController
 
     if @result.success?
       if User.new(session[:user_info][:user]).valid?
-        user = User.create_user_with_braintree_id(session[:user_info][:user], @result.customer.id)
+        user = User.create_user_with_braintree_id(session[:user_info][:user],@result.customer.id)
         sign_in user
         session[:user_info] = nil
         redirect_to profile_path(current_user.permalink)
@@ -182,12 +190,12 @@ class ProfilesController < ApplicationController
 
   def get_paln(plan)
     return false if plan == 'free'
-    return 'AFLNCE-M' if plan == 'Monthly'
-    return 'AFLNCE-Y' if plan == 'Yearly'
+    return 'AFLNCE-M'if plan == 'Monthly'
+    return 'AFLNCE-Y'if plan == 'Yearly'
   end
 
   def check_avilability
-    user = User.active_members.find_all_by_email(params[:email])
+    user = User.find_all_by_email(params[:email])
     avilability = !user.blank? ? false : true
     respond_to do |format|
       format.json do
@@ -197,12 +205,14 @@ class ProfilesController < ApplicationController
   end
 
 
+
+
   def billing_info_confirm
 
     begin
       @result = Braintree::TransparentRedirect.confirm(request.query_string)
       if @result.success?
-        current_user.change_current_plan(session[:user_plan], @result.customer.id)
+        current_user.change_current_plan(session[:user_plan],@result.customer.id)
         flash[:success]= "You have successfully converted to #{current_user.plan} plan."
         redirect_to edit_profile_path(current_user.permalink)
       else
@@ -219,12 +229,14 @@ class ProfilesController < ApplicationController
   end
 
 
+
+
   def billing_info_update_confirm
 
     begin
       @result = Braintree::TransparentRedirect.confirm(request.query_string)
       if @result.success?
-        if !session[:user_plan].blank? && (current_user.plan != session[:user_plan])
+        if !session[:user_plan].blank? && (current_user.plan !=  session[:user_plan])
           current_user.change_current_plan(session[:user_plan])
         end
       else
@@ -244,7 +256,7 @@ class ProfilesController < ApplicationController
 
 
   def update_plan
-    if !params[:user_plan].blank? && (current_user.plan != params[:user_plan])
+    if !params[:user_plan].blank? && (current_user.plan !=  params[:user_plan])
       current_user.change_current_plan(params[:user_plan])
       flash[:success]= "Your Plan has been successfully updated to #{params[:user_plan]}."
     end
@@ -290,5 +302,5 @@ class ProfilesController < ApplicationController
     flash[:success] = "Your account has been deleted successfully"
     redirect_to root_path
   end
-
+          
 end
