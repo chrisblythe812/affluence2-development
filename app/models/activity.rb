@@ -33,7 +33,8 @@ def self.all_by_privacy_setting(current_user, last_activity = false)
     begin
       activity = activity ? self.previous(activity).first : self.last
       break unless activity
-
+      next if activity.resource.nil?
+ 
       privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
