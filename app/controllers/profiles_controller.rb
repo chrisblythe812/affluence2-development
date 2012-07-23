@@ -43,8 +43,6 @@ class ProfilesController < ApplicationController
 
   def update
     session['menu_link'] = params["value"]
-    logger.info '------remove photo-attributes if image is nil--------'
-    logger.info params[:profile][:photos_attributes]["0"][:image]
     if params[:profile][:photos_attributes]["0"][:image].nil?
       params[:profile].delete("photos_attributes") 
     else

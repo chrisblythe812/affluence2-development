@@ -10,7 +10,7 @@
       %h6
         %i.icon-map-marker>
         = "#{@profile.city}, #{@profile.state}"
-        %small= @profile.country
+        %small= @profile.country if @profile.country.downcase != "null"
     - if @profile.user != current_user
       .span2
         %p.pull-right
@@ -22,7 +22,7 @@
     .span9
       %h3 About
       %hr.zero
-        %p= @profile.bio
+        %p= @profile.bio if @profile.bio.downcase != "null"
     / span9
   / row
   .row
