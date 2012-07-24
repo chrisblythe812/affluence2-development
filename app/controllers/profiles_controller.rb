@@ -43,15 +43,15 @@ class ProfilesController < ApplicationController
 
   def update
     session['menu_link'] = params["value"]
-    if params[:profile][:photos_attributes]["0"][:image].nil?
-      params[:profile].delete("photos_attributes") 
-    else
-      @profile.photos.build
-    end
-    logger.info params[:profile][:photos_attributes]  
+
     @user = resource
     @profile = resource.profile
     if params[:user].blank?
+      if params[:profile][:photos_attributes]["0"][:image].nil?
+        params[:profile].delete("photos_attributes")
+      else
+        @profile.photos.build
+      end
       @profile = Profile.find(params[:id])
 
       respond_to do |format|
@@ -90,8 +90,8 @@ class ProfilesController < ApplicationController
   end
 
   def show
-         @conversation = Conversation.new
-      @conversation.messages.build
+    @conversation = Conversation.new
+    @conversation.messages.build
 
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
