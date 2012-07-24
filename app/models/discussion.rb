@@ -5,21 +5,22 @@ class Discussion < ActiveRecord::Base
 
   validates :question, :presence => true
   validates :user_id, :presence => true
-  #scope :search, lambda { |query|
-    #find_by_sql ["SELECT *
-     # FROM discussions
-      #WHERE to_tsvector('english', question )
-      #@@ plainto_tsquery('english', ?)
 
-      #order by discussions.last_comment_at", query]
-  #}
 
   def self.build_search_query(query_text)
     array_elements =  query_text.split(" ")
     array_elements.join(" | ")
   end
-  scope :search, lambda { |query|
-    find_by_sql (" SELECT *, ts_rank_cd(to_tsvector('english',question), to_tsquery('english',' #{query}' )) as rank
-  FROM discussions WHERE to_tsvector('english',question) @@ to_tsquery('#{query}') ORDER BY rank DESC, last_comment_at DESC")
-  }
+
+
+  scope :search, lambda { |query| {
+      :conditions => ["(to_tsvector('english',discussions.question) @@ to_tsquery(?)) or (to_tsvector('english',comments.body) @@ to_tsquery(?))", query, query],
+      :select => "discussions.id as id, discussions.user_id as user_id, discussions.question as question, discussions.created_at as created_at, discussions.updated_at as updated_at, discussions.last_comment_at as last_comment_at, ts_rank_cd(to_tsvector('english',discussions.question), to_tsquery('english','#{query}' )) + ts_rank_cd(to_tsvector('english',comments.body), to_tsquery('english','#{query}' )) as rank",
+      :order => "rank DESC, last_comment_at DESC",
+      :joins => "LEFT  JOIN comments ON comments.commentable_id = discussions.id AND comments.commentable_type='Discussion'"
+  } }
+
+
+
+
 end
