@@ -15,9 +15,12 @@ class Discussion < ActiveRecord::Base
 
   scope :search, lambda { |query| {
       :conditions => ["(to_tsvector('english',discussions.question) @@ to_tsquery(?)) or (to_tsvector('english',comments.body) @@ to_tsquery(?))", query, query],
-      :select => "*, ts_rank_cd(to_tsvector('english',discussions.question), to_tsquery('english','#{query}' )) + ts_rank_cd(to_tsvector('english',comments.body), to_tsquery('english','#{query}' )) as rank",
+      :select => "discussions.id as id, discussions.user_id as user_id, discussions.question as question, discussions.created_at as created_at, discussions.updated_at as updated_at, discussions.last_comment_at as last_comment_at, ts_rank_cd(to_tsvector('english',discussions.question), to_tsquery('english','#{query}' )) + ts_rank_cd(to_tsvector('english',comments.body), to_tsquery('english','#{query}' )) as rank",
       :order => "rank DESC, last_comment_at DESC",
-      :joins => :comments
+      :joins => "LEFT  JOIN comments ON comments.commentable_id = discussions.id AND comments.commentable_type='Discussion'"
   } }
+
+
+
 
 end
