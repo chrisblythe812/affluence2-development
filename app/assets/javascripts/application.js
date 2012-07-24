@@ -44,10 +44,13 @@ function getActivities(type_object, get_more){
           "</tr>"  );
       }
       else if(get_more) {
+        $('.ajax-loader').show();
         $('.more-activities').attr("disabled", true);
+        $('.more-activities').hide();
       }
     },
     success: function(data) {
+      $('.ajax-loader').hide();
       if(get_more) {
         $("#latest_activities").append(data);
         if ($('#latest_activities tr:last-child').attr('class') == last_activity) {
@@ -59,6 +62,12 @@ function getActivities(type_object, get_more){
       }
       else {
         $("#latest_activities").html(data);
+      }
+      if($("#latest_activities tr").size() == 0){
+        $('.more-activities').hide();
+      }
+      else{
+        $('.more-activities').show();
       }
     }
   });

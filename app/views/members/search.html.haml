@@ -30,7 +30,7 @@
                       %i.icon-map-marker>
                       = "#{profile.city}, #{profile.state}."
                     %div
-                      %small= profile.country
+                      %small= profile.country if profile.country.downcase != "null"
                   %div
                     - if @connections
                       %a.close{:href => "#{delete_connection_members_path(:id=>profile.user.id)}",

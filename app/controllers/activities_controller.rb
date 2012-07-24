@@ -12,7 +12,7 @@ class ActivitiesController < ApplicationController
       profile = Profile.find params['profile_id'].to_i
       @latest_activities = profile.user.activities_by_privacy_settings(current_user, params["last_activity"])
     else
-      @latest_activities = Activity.all_by_privacy_setting(params["last_activity"])
+      @latest_activities = Activity.all_by_privacy_setting(current_user, params["last_activity"])
     end
     render :partial => 'latest'
   end

@@ -57,9 +57,10 @@
               #spinner
                 = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
                 %p Loading....
-      %p
+      %p{:id => 'ajax-more-activities'}
+        = image_tag 'ajax-loader.gif', :class => 'ajax-loader', :style => 'margin:0 0 0 48%;display:none', :align => 'middle'
         = button_tag 'more activities', :class => 'more-activities span9', :type => 'button', :style => "margin:0px"
-
+           
 -content_for :javascripts do
   :javascript
     $(function () {
@@ -67,11 +68,19 @@
       $("#latest_members").load("#{latest_members_path}");
       $("#latest_offers").load("#{latest_offers_path}");
       $("#latest_events").load("#{home_page_events_events_path}");
-      $("#latest_activities").load("#{latest_activities_path}");
+      $('.more-activities').hide();
+      $("#latest_activities").load("#{latest_activities_path}", function() {
+        if($("#latest_activities tr").size() != 0){
+          $('.more-activities').show();
+        }
+      });
       
       $('.get-activities').click(function(){
+        $('.ajax-loader').hide();
+        if(!$(this).hasClass('active')){
          getActivities({"type" : $(this).text()}, false);
          $('.more-activities').text("more activities");
+        }
          $('.more-activities').attr("disabled", false);
       });
 

@@ -1,6 +1,6 @@
 require "base64"
 class User < ActiveRecord::Base
-
+  attr_accessible :unread_messages_counter 
   has_one :profile, :dependent => :destroy
   has_many :activities, :dependent => :destroy
   has_many :sent_messages, :foreign_key => "sender_id", :class_name => "Message"
@@ -46,9 +46,12 @@ class User < ActiveRecord::Base
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
-      next unless ids.include? activity.user.id
+      next unless (ids.include?(activity.user.id) || !activity.resource.nil?)
       privacy = activity.user.profile.privacy_setting
-      if activity.resource_type == 'Profile'
+       
+      if self == activity.user
+        activities << activity
+      elsif activity.resource_type == 'Profile'
         #activities << activity
       else
         activities << activity if [0, 1].include? (privacy.send(PrivacySetting::OPTS[activity.resource_type]))
@@ -74,7 +77,8 @@ class User < ActiveRecord::Base
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
-      next unless activity.user == self
+      next unless (activity.user == self || !activity.resource.nil?)
+      next if activity.resource.nil?
       privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'

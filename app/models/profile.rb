@@ -6,7 +6,7 @@ class Profile < ActiveRecord::Base
   #  has_one :photo_stream, :dependent => :destroy
 
   attr_accessible :invitation_source, :photos_attributes, :first_name, :last_name, :city, :country, :state, :company, :bio,
-                  :middle_name, :phone, :title, :association_list, :interest_list, :expertise_list, :full_name
+    :middle_name, :phone, :title, :association_list, :interest_list, :expertise_list, :full_name
   acts_as_taggable_on :interests, :expertises, :associations
   accepts_nested_attributes_for :photos
 
@@ -44,11 +44,11 @@ class Profile < ActiveRecord::Base
 
   before_create :create_associated_records
 
-#TODO friends_profiles
-#  scope :friends_profiles, lambda { |user_id|
-#    joins(:user => :friendships).
-#    where("friendships.friend_id = ?", user_id)
-#  }
+  #TODO friends_profiles
+  #  scope :friends_profiles, lambda { |user_id|
+  #    joins(:user => :friendships).
+  #    where("friendships.friend_id = ?", user_id)
+  #  }
 
   validates_presence_of :first_name, :last_name, :city, :country
 
@@ -70,8 +70,7 @@ class Profile < ActiveRecord::Base
     # Add the profile related direct search items
     query_text = ""
     query_params = []
-    if (matched_name != nil && matched_name.chop.size > 0)
-      query_text << "select profiles.* from profiles
+    query_text << "select profiles.* from profiles
       INNER JOIN users ON users.id = profiles.user_id
       where (user_id is not null)
       and (users.status = 'active')
@@ -88,8 +87,7 @@ class Profile < ActiveRecord::Base
               @@ plainto_tsquery('english', ?)
             )
           )"
-      query_params = [matched_name, matched_name]
-    end
+    query_params = [matched_name, matched_name]
 
     recursive_count == 0 ? query_text << "  INTERSECT  " : query_text << "  UNION  "
     query_text << "select profiles.* from profiles
