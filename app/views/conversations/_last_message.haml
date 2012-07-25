@@ -7,7 +7,7 @@
     %td
       -if conversation.messages.length > 1
         %h5{:class => "#{'unread_msg' unless conversation.read?(current_user)} tk-ff-tisa-web-pro" }
-          Last reply by <span>#{last_reply_name(conversation.messages.first.sender)}:</span>
+          Last reply by <span>#{last_reply_name(conversation.messages.last.sender)}:</span>
       -else
         %span{:class => "#{'unread_msg' unless conversation.read?(current_user)} last-reply tk-ff-tisa-web-pro" }
           = link_to message.sender.profile.full_name, user_conversation_path(current_user, conversation), :class => "desc"

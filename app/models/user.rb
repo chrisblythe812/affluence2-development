@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
     begin
       activity = activity ? Activity.previous(activity).first : Activity.last
       break unless activity
-      next unless (ids.include?(activity.user.id) || !activity.resource.nil?)
+      next unless (ids.include?(activity.user.id) && !activity.resource.nil?)
       privacy = activity.user.profile.privacy_setting
        
       if self == activity.user
@@ -68,16 +68,15 @@ class User < ActiveRecord::Base
 
     activity = nil
     if last_activity
-      activity = Activity.find(last_activity.to_i)
+      activity = self.activities.find(last_activity.to_i)
     end
 
     activities = []
     is_friend = ids.include?(current_user.id)
 
     begin
-      activity = activity ? Activity.previous(activity).first : Activity.last
+      activity = activity ? self.activities.previous(activity).first : self.activities.last
       break unless activity
-      next unless (activity.user == self || !activity.resource.nil?)
       next if activity.resource.nil?
       privacy = activity.user.profile.privacy_setting
 
