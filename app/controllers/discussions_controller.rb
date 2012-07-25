@@ -13,7 +13,7 @@ class DiscussionsController < ApplicationController
     elsif params[:id]
       @discussions = Discussion.where(:id => params[:id]).page(params[:page]).per(10)
     else
-      @discussions = Discussion.includes(:comments).order("last_comment_at Desc").page(params[:page]).per(2)
+      @discussions = Discussion.includes(:comments).order("last_comment_at Desc").page(params[:page]).per(10)
       @discussions_size  = @discussions.total_count
     end
   end
