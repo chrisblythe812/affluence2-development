@@ -12,7 +12,7 @@ def connect_to_old_db
     :host     => "localhost",
     :username => "postgres",
     :password => "vegpuf",
-    :database => "affluence_staging"
+    :database => "affluence_staging_23july"
   )
 end
 
@@ -22,7 +22,7 @@ def connect_to_new_db
     :host     => "localhost",
     :username => "postgres",
     :password => "vegpuf",
-    :database => "affluence2_migration_13_jun_mid_night"
+    :database => "affluence_19july"
   )
 end
 
@@ -53,7 +53,10 @@ end
 
 namespace :affluence do
   desc "This will dump Affluenece conversations  to  data into Affluence2."
-  task :message_dumper_start => :environment do
+  task :message_dumper_delta_start , :start, :end, :needs => :environment do |t, args|
+
+    p "hi #{args[:start]}"
+    p "hi #{args[:end]}"
     puts "Rake Started.."
     connect_to_new_db
 
@@ -112,7 +115,7 @@ namespace :affluence do
      
     connect_to_old_db
     #old_conversations = ProdConversation.where(:id => 29984)
-    old_conversations = ProdConversation.find(:all,:conditions => "id >= 37986",:order => 'ID ASC')
+    old_conversations = ProdConversation.find(:all,:conditions => "created_at > '#{args[:start]}' and created_at <= '#{args[:end]}'",:order => 'ID ASC')
 
 
     old_conversations.each do |old_conversation|
