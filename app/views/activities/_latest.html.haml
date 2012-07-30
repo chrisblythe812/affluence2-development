@@ -19,7 +19,7 @@
           - break if activity.resource.friend != current_user
           = link_to activity.resource.friend.profile.full_name, profile_path(activity.resource.friend.profile.user.permalink) 
         - elsif  activity.resource_type == "VincompassShare"
-
+          = link_to activity.resource_type, "vincompass.com"
         - elsif  activity.resource_type == "Event"
           = link_to activity.resource.title, polymorphic_path(activity.resource)
           = " Event"
