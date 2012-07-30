@@ -43,7 +43,7 @@ class ProfilesController < ApplicationController
 
   def update
     session['menu_link'] = params["value"]
-
+      
     @user = resource
     @profile = resource.profile
     if params[:user].blank?
@@ -95,6 +95,7 @@ class ProfilesController < ApplicationController
 
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
+    @latest_activities =  current_user != @profile.user ? @profile.user.activities_by_privacy_settings(current_user): current_user.activities.last(7).reverse
   end
 
   def update_notifications
