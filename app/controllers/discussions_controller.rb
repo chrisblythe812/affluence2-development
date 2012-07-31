@@ -6,7 +6,7 @@ class DiscussionsController < ApplicationController
     if !params[:search].blank?
       query = Discussion.build_search_query(params[:search])
       records = Discussion.search_with_comments(query)
-      @discussions = Kaminari.paginate_array(records).page(params[:page]).per(2)
+      @discussions = Kaminari.paginate_array(records).page(params[:page]).per(10)
       @discussions_size = records.count
       @search = true
     elsif params[:id]
