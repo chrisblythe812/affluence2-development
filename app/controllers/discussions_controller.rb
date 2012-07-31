@@ -5,10 +5,9 @@ class DiscussionsController < ApplicationController
     @discussion = Discussion.new
     if !params[:search].blank?
       query = Discussion.build_search_query(params[:search])
-       @discussions = Discussion.search(query).page(params[:page]).per(10)
-       @discussions_size  = @discussions.total_count
-      #@discussions = Kaminari.paginate_array(Discussion.search(query)).page(params[:page]).per(10)
-      #@discussions_size = Discussion.search(query).size
+      records = Discussion.search_with_comments(query)
+      @discussions = Kaminari.paginate_array(records).page(params[:page]).per(2)
+      @discussions_size = records.count
       @search = true
     elsif params[:id]
       @discussions = Discussion.where(:id => params[:id]).page(params[:page]).per(10)
