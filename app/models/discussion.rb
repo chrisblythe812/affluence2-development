@@ -25,7 +25,7 @@ find_by_sql("
    select distinct x.id, x.user_id as user_id, x.question as question, x.created_at as created_at,
  x.updated_at as updated_at, x.last_comment_at as last_comment_at, sum(x.r3)/count(x.r3) as r4 from (
 
-   SELECT discussions.*,
+   SELECT DISTINCT discussions.*,
 (case
 when
 	ts_rank_cd(to_tsvector('english',comments.body), to_tsquery('english','#{query}' )) is NULL
