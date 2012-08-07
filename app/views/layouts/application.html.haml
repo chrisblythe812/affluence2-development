@@ -25,6 +25,7 @@
   %body
     = render 'shared/header'
     .container
+      = yield(:verification_message)
       = render 'shared/flash_message'
       = render 'shared/notification_tracker_alert'
       .row
