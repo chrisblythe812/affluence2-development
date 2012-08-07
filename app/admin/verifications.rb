@@ -53,8 +53,11 @@ ActiveAdmin.register Verfication do
   end
 
   member_action :mark_as_rejected, :method => :get do
-    @user = User.find(params[:id])
-    @user.verfication.update_attribute(:status,'rejected')
+    @verfication = Verfication.find(params[:id])
+    @verfication.update_attribute(:status,'rejected')
+    #user = @verfication.user
+    #user.verified = false
+    #user.save
     flash[:notice] = "Member was rejected"
     redirect_to :action => :index
   end
