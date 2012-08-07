@@ -1,0 +1,49 @@
+- if !current_user.verified?
+  - if current_user.submitted_for_verification?
+    #errorExplanation.alert.alert-flash
+      %a.close{"data-dismiss" => "alert"}×
+      %h4.alert-heading
+        You have submitted your account verification and it is in progress.
+  -else
+    #errorExplanation.alert.alert-flash
+      %a.close{"data-dismiss" => "alert"}×
+      %h4.alert-heading
+        You have not verified your account.
+        %a.btn.btn-large.btn-success{"data-toggle" => "modal", :href => "#user-verification"} Verify now
+    #user-verification.modal.hide.fade{:style => "display:none;"}
+      .modal-header
+        %a.close{"data-dismiss" => "modal", :href => "#"} ×
+        %h3 Verification form
+      .modal-body
+        = form_for(Verfication.new ,:html => {:class => 'form-horizontal'}) do |f|
+
+          %fieldset
+            .control-group
+              %label.control-label{:for => "input01"} Question 1 :
+              .controls
+                "#{Question.question1}"
+            .control-group
+              %label.control-label{:for => "input01"} Answer :
+              .controls
+                %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer1]'}
+            .control-group
+              %label.control-label{:for => "input01"} Question 2 :
+              .controls
+                "#{Question.question2}"
+            .control-group
+              %label.control-label{:for => "input01"} Answer :
+              .controls
+                %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer2]'}
+            .control-group
+              %label.control-label{:for => "input01"} Question 3 :
+              .controls
+                "#{Question.question3}"
+            .control-group
+              %label.control-label{:for => "input01"} Answer :
+              .controls
+                %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer3]'}
+                %input#input01.input-xlarge{:type => "hidden",:name => 'verfication[user_id]',:value => current_user.id}
+              .form-actions
+                %button.btn.btn-primary{:type => "submit"}Submit
+                %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel
+

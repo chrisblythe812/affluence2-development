@@ -1,0 +1,36 @@
+#event1-register.modal
+  .modal-header
+    %a.close{"data-dismiss" => "modal", :href => "#"} ×
+    %h3 Verification form
+  .modal-body
+    = form_for(@verfication,:html => {:class => 'form-horizontal'}) do |f|
+
+      %fieldset
+        .control-group
+          %label.control-label{:for => "input01"} Question 1 :
+          .controls
+            "#{Question.question1}"
+        .control-group
+          %label.control-label{:for => "input01"} Answer :
+          .controls
+            %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer1]'}
+        .control-group
+          %label.control-label{:for => "input01"} Question 2 :
+          .controls
+            "#{Question.question2}"
+        .control-group
+          %label.control-label{:for => "input01"} Answer :
+          .controls
+            %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer2]'}
+        .control-group
+          %label.control-label{:for => "input01"} Question 3 :
+          .controls
+            "#{Question.question3}"
+        .control-group
+          %label.control-label{:for => "input01"} Answer :
+          .controls
+            %input#input01.input-xlarge{:type => "text",:name => 'verfication[answer3]'}
+            %input#input01.input-xlarge{:type => "hidden",:name => 'verfication[user_id]',:value => current_user.id}
+          .form-actions
+            %button.btn.btn-primary{:type => "submit"}Submit
+            %button.btn{"data-dismiss" => "modal", :type => "reset"} Cancel

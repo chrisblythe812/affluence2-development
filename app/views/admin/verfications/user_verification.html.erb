@@ -1,0 +1,46 @@
+<% if @verfication %>
+
+
+<div> 
+Here are the verfication answers submitted by user: <b><%= @verfication.user.name %></b>
+<div/>
+<br/>
+<br/>
+<p> <b>Question 1 : <%= Question.question1 %></b></p>
+<p> Answer : <%= @verfication.answer2 %></p>
+<br/>
+<p> <b>Question 2 : <%= Question.question2 %></b></p>
+<p> Answer : <%= @verfication.answer2 %></p>
+<br/>
+<p> <b>Question 3 : <%= Question.question3 %></b></p>
+<p> Answer : <%= @verfication.answer3 %></p>
+<br/>
+
+<% if @verfication.status == 'submited' %>
+
+<%= link_to "Mark as Verified", mark_as_verified_admin_verfication_path(@verfication)%> ||
+<%= link_to "Mark as Rejected", mark_as_rejected_admin_verfication_path(@verfication)%>
+
+<% else %>
+<p> Present status : <%= @verfication.status %>. Click here to
+<% if @user.verfication.status == 'rejected' %>
+<%= link_to "Mark as Verified", mark_as_verified_admin_verfication_path(@verfication)%>
+<% else %>
+<%= link_to "Mark as Rejected", mark_as_rejected_admin_verfication_path(@verfication)%>
+<% end %>
+
+<% end %>
+
+
+<% else %>
+<div> 
+User has not submitted verfication answers till now.
+<div/>
+
+<% end %>
+
+||
+
+<%= link_to "Cancel", admin_verfications_path %>
+
+</p>

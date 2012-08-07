@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
     #    }
   }
 
+  has_many :verfication, :dependent => :destroy
+
   def disconnect_with_user(friend_id)
     connection1 = Connection.where("user_id=? and friend_id=?", id, friend_id)
     connection2 = Connection.where("user_id=? and friend_id=?", friend_id, id)
@@ -137,6 +139,8 @@ class User < ActiveRecord::Base
   scope :deleted_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "deleted"]
 
   scope :first_name_or_last_name, lambda { |query| {:conditions => ['role not like ? and status like ? email like ? ', 'superadmin', "deleted", query]} }
+
+
 
   def first_name_or_last_name
 
@@ -320,5 +324,14 @@ class User < ActiveRecord::Base
     self.token.present? && self.token_expiration_date > Date.today
   end
 
+
+  def verifications_with_state(state)
+    verfication.where(:status => state)
+  end
+
+
+  def submitted_for_verification?
+    !verifications_with_state('submited').blank?
+  end
 
 end
