@@ -9,7 +9,7 @@ class VerficationsController < ApplicationController
   def create
     @verfication = Verfication.new(params[:verfication])
     if @verfication.save
-      redirect_to profile_path(current_user.permalink)
+      redirect_to profile_path(current_user.permalink), notice: 'Your profile was submitted for verification. Our administration team will check and get back to you soon.'
     end
 
   end
