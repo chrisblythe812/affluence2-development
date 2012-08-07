@@ -81,6 +81,8 @@ Affluence2::Application.routes.draw do
 
   end
 
+  resources :verfications
+
   resources :profiles  do
     collection do
       get :confirm
