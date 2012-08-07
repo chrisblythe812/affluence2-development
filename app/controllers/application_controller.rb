@@ -1,7 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_unread_messages_count, :if => :current_user?
+  before_filter :persist_activity_in_session
   include SslRequirement
+  before_filter :set_cache_buster
+
+  def set_cache_buster
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 
   def authenticate_admin_user!
     authenticate_user!
@@ -65,5 +73,40 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def persist_activity_in_session
+    init_activity_in_session
+    if session["activity"].nil?
+      session["activity"] = {
+        "entire_network" => {"ids" => [], "time" => ""},
+        "my_connections" => {"ids" => [], "time" => ""}
+      }
+    end
+    check_activity_load_time_for("entire_network")
+    check_activity_load_time_for("my_connections")
+   
+  end
 
+  protected
+
+  def check_activity_load_time_for(type)
+    find_or_create_activity_in_session(type)
+
+    if (session["activity"][type]["time"] != "")
+      time_diff = (Time.now - Time.parse(session["activity"][type]["time"]))/60
+      if time_diff > 10
+        session["activity"][type]["ids"] = []
+        session["activity"][type]["time"] = ""
+      end
+    end
+
+
+  end
+  def find_or_create_activity_in_session(type)
+    if session["activity"][type].nil?
+      session["activity"][type] = {"ids" => [], "time" => ""}
+    end
+  end
+  def init_activity_in_session
+    session["activity"] = {} if session["activity"].nil?
+  end
 end
