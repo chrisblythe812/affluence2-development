@@ -52,10 +52,10 @@
       %h3 Activity
       %table.table.table-striped
         %tbody#latest_activities
-          = render :partial => "activities/latest", :object => @latest_activities
+          
       %p{:id => 'ajax-more-activities'}
         = image_tag 'ajax-loader.gif', :class => 'ajax-loader', :style => 'margin:0 0 0 48%;display:none', :align => 'middle'
-        = button_tag 'more activities', :class => 'more-activities span9', :type => 'button', :style => "margin:0px"
+        = button_tag 'more activities', :class => 'btn more-activities span9', :type => 'button', :style => "margin:0px"
     / span9
   / row
   .row
@@ -136,6 +136,8 @@
                 = f.submit "Send Message", :class => "btn btn-primary"
 :javascript
   $(function(){
+    getActivities({"type" : "profile", "profile_id" : "#{@profile.id}"}, false);
+
     if($("#latest_activities tr").size() != 0){
           $('.more-activities').show();
     }
@@ -145,7 +147,7 @@
     $('.more-activities').click(function(){
       getActivities({"type" : "profile", "profile_id" : "#{@profile.id}"}, true);
     });
-
+ 
   });
 :javascript
   $(function () {
