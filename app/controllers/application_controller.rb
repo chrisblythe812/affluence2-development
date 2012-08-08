@@ -75,15 +75,8 @@ class ApplicationController < ActionController::Base
 
   def persist_activity_in_session
     init_activity_in_session
-    if session["activity"].nil?
-      session["activity"] = {
-        "entire_network" => {"ids" => [], "time" => ""},
-        "my_connections" => {"ids" => [], "time" => ""}
-      }
-    end
     check_activity_load_time_for("entire_network")
     check_activity_load_time_for("my_connections")
-   
   end
 
   protected
@@ -98,14 +91,14 @@ class ApplicationController < ActionController::Base
         session["activity"][type]["time"] = ""
       end
     end
-
-
   end
+
   def find_or_create_activity_in_session(type)
-    if session["activity"][type].nil?
+    if session["activity"][type].nil? || session["activity"][type]["ids"].blank?
       session["activity"][type] = {"ids" => [], "time" => ""}
     end
   end
+
   def init_activity_in_session
     session["activity"] = {} if session["activity"].nil?
   end

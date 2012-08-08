@@ -53,13 +53,13 @@ class ActivitiesController < ApplicationController
   end
 
   def update_session_activities_id_of(type)
-    p 'sssssssssssssssssss;;;;'
+    logger.info 'update_session_activities_id_of;;;;'
     @latest_activities.each do |activity|
       session["activity"][type]["ids"] << activity.id
       session["activity"][type]["time"] = Time.now.strftime("%Y %B %d, %H:%M")
     end
     session["activity"][type]["ids"].uniq!
-    p session["activity"][type]
+    logger.info session["activity"]
   end
 end
  
