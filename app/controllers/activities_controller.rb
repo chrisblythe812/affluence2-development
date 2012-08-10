@@ -6,13 +6,11 @@ class ActivitiesController < ApplicationController
   end
 
   def latest
-    init_activity_in_session
 
     if params["type"] == 'my Connections'
       get_my_connections_activities
     elsif params['type'] == 'profile'
       profile = Profile.find params['profile_id'].to_i
-
       check_activity_load_time_for(profile.user.email)
 
       if !session["activity"][profile.user.email]["ids"].blank? && params["last_activity"].nil?
@@ -53,13 +51,11 @@ class ActivitiesController < ApplicationController
   end
 
   def update_session_activities_id_of(type)
-    logger.info 'update_session_activities_id_of;;;;'
     @latest_activities.each do |activity|
       session["activity"][type]["ids"] << activity.id
       session["activity"][type]["time"] = Time.now.strftime("%Y %B %d, %H:%M")
     end
     session["activity"][type]["ids"].uniq!
-    logger.info session["activity"]
   end
 end
  
