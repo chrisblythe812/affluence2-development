@@ -329,3 +329,32 @@ a.msg_counter {
 .discussion-img {
   display: inline;
 }
+
+ a.verified_icon {
+    background: url("verified_icon.jpg") no-repeat scroll 0 0 transparent;
+    background-size:25px 25px;
+
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    height: 25px;
+    left: 48px;
+    top: 70px;
+    line-height: 22px;
+    padding-left: 4px;
+    position: relative;
+    text-decoration: none;
+    width: 20px;
+    z-index:2;
+
+}
+
+
+
+
+
+
+
+
+

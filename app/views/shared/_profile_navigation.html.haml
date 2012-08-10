@@ -1,6 +1,8 @@
 
 .span3
   %div
+    - if current_user.verified?
+      %a.verified_icon.label.label-important{:style => "left:0px;top:30px"}
     = image_tag display_image(@profile.nil? ? current_user.profile.photos : @profile.photos, :medium)
   .well
     %ul.nav.nav-list
