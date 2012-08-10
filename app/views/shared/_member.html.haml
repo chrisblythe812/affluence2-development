@@ -1,6 +1,8 @@
 %li.span1
   - if member.verified?
     %a.verified_icon.label.label-important
+  - else
+    %a.verified_icon.label.label-important{:style=>"background-image: url("");"}
   - unless @total.nil?
     %br
     %a.msg_counter.label.label-important
