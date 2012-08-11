@@ -301,24 +301,7 @@ form .clearfix:before, form .clearfix:after {
   }
 }
 
-a.msg_counter {
-  background: url("circle_red.png") no-repeat scroll 0 0 transparent;
-  background-size: 25px 25px;
 
-  color: #FFFFFF;
-  display: inline-block;
-  font-size: 10px;
-  font-weight: bold;
-  height: 25px;
-  left: 48px;
-  top: 10px;
-  line-height: 22px;
-  padding-left: 4px;
-  position: relative;
-  text-decoration: none;
-  width: 20px;
-  z-index: 2;
-}
 
 .controls ul {
   padding: 0px !important;
@@ -330,31 +313,78 @@ a.msg_counter {
   display: inline;
 }
 
- a.verified_icon {
-    background: url("verified_icon.jpg") no-repeat scroll 0 0 transparent;
-    background-size:25px 25px;
+  
 
+.thumbnail-div{
+  cursor:pointer;
+  position:relative;
+  background:url(rockingvideo.jpg) no-repeat center;
+  left: 0px;
+  top: 0px;
+
+  .image-a-link {
+    position: relative;
+  }
+
+  .image-link-span {
+    background: url("verified_icon.jpg") no-repeat scroll left top transparent;
+    display: block;
+    font: 10px Arial,Helvetica,sans-serif;
+    padding: 3px 5px;
+    position: absolute;
+    right: -22px;
+    top: 36px;
+    z-index: 99;
+    width: 30px;
+    height: 45px;
+  }
+
+  .tickets-link-span {
+    background: url("circle_red.png") no-repeat scroll 0 0 transparent;
+    background-size: 25px 25px;
     color: #FFFFFF;
     display: inline-block;
     font-size: 10px;
     font-weight: bold;
     height: 25px;
-    left: 48px;
-    top: 70px;
+    left: 20px;
+    top: -60px;
     line-height: 22px;
     padding-left: 4px;
     position: relative;
     text-decoration: none;
     width: 20px;
-    z-index:2;
-
+    z-index: 2;
+  }
 }
 
+.member-div{
+  cursor:pointer;
+  position:relative;
+  background:url(rockingvideo.jpg) no-repeat center;
+  width: 210px;
+  height: 210px;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
 
+  .image-a-link {
+    position: relative;
+  }
 
+  .image-link-span {
+    background: url("verified_icon.jpg") no-repeat scroll left top transparent;
+    display: block; 
+    font: 10px Arial,Helvetica,sans-serif;
+    padding: 3px 5px;
+    position: absolute;
+    right: 8px;
+    top: -200px;
+    z-index: 99;
+    width: 30px;
+    height: 45px;
+  }
 
-
-
-
+}
 
 

@@ -1,9 +1,11 @@
 
 .span3
   %div
-    - if (@profile.nil? ? current_user.verified? : @profile.user.verified?) 
-      %a.verified_icon.label.label-important{:style => "left:0px;top:30px"}
-    = image_tag display_image(@profile.nil? ? current_user.profile.photos : @profile.photos, :medium)
+    .member-div
+      %a.image-a-link
+        = image_tag display_image(@profile.nil? ? current_user.profile.photos : @profile.photos, :medium)
+        - if (@profile.nil? ? current_user.verified? : @profile.user.verified?)
+          %span.image-link-span
   .well
     %ul.nav.nav-list
       %li.nav-header Socialize

@@ -18,8 +18,11 @@
           - x.each do |profile|
             %li.span3#members_search_profile
               .thumbnail
-                %a{"data-original-title" => "#{profile.name}", "data-placement" => "bottom", :href => "#{profile_path(profile.user.permalink)}", :rel => "tooltip"}
-                  = image_tag display_image(profile.photos, :medium)
+                .member-div
+                  %a.image-a-link{"data-original-title" => "#{profile.name}", "data-placement" => "bottom", :href => "#{profile_path(profile.user.permalink)}", :rel => "tooltip"}
+                    = image_tag display_image(profile.photos, :medium)
+                    - if (profile.nil? ? current_user.verified? : profile.user.verified?)
+                      %span.image-link-span
                 %h5
                   = profile.first_name + " " + profile.last_name
                 %h6

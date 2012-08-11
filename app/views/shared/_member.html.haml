@@ -1,16 +1,10 @@
 %li.span1
-  - if member.verified?
-    %a.verified_icon.label.label-important
-  - else
-    %a.verified_icon.label.label-important{:style=>"background-image: url("");"}
-  - unless @total.nil?
-    %br
-    %a.msg_counter.label.label-important
-      = "+#{@total}"
-  %a.thumbnail{"data-original-title" => "#{member.profile.full_name}", "data-placement" => "bottom", :href => "#{profile_path(member.permalink)}", :rel => "tooltip"}
-    = image_tag display_image(member.profile.photos, :thumb)
-- if params[:controller] == "events"
-  :javascript
-    $(function(){
-      $('.verified_icon').css('top', '100px');
-    });
+  %div
+    .thumbnail-div
+      %a.image-a-link.thumbnail{"data-original-title" => "#{member.profile.full_name}", "data-placement" => "bottom", :href => "#{profile_path(member.permalink)}", :rel => "tooltip"}
+        = image_tag display_image(member.profile.photos, :thumb)
+        - if member.verified?
+          %span.image-link-span
+        - unless @total.nil?
+          %span.tickets-link-span
+            = "+#{@total}"
