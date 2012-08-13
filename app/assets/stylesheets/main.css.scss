@@ -328,6 +328,7 @@ form .clearfix:before, form .clearfix:after {
 
   .image-link-span {
     background: url("verified_icon.jpg") no-repeat scroll left top transparent;
+    background-size: 25px 25px;
     display: block;
     font: 10px Arial,Helvetica,sans-serif;
     padding: 3px 5px;
@@ -374,7 +375,8 @@ form .clearfix:before, form .clearfix:after {
 
   .image-link-span {
     background: url("verified_icon.jpg") no-repeat scroll left top transparent;
-    display: block; 
+    background-size: 25px 25px;
+    display: block;
     font: 10px Arial,Helvetica,sans-serif;
     padding: 3px 5px;
     position: absolute;
