@@ -38,30 +38,37 @@ class User < ActiveRecord::Base
     ids=[]
     ids<<self.id
     self.connections.each { |x| ids<<x.friend.id }
-
-    activity = nil
-    if last_activity
-      activity = Activity.find(last_activity.to_i)
-    end
-
     activities = []
+    temp = false
+ 
+    pro_activities = []
     begin
-      activity = activity ? Activity.previous(activity).first : Activity.last
-      break unless activity
-      next unless (ids.include?(activity.user.id) && !activity.resource.nil?)
-      privacy = activity.user.profile.privacy_setting
-       
-      if self == activity.user
-        activities << activity
-      elsif activity.resource_type == 'Profile'
-        #activities << activity
-      else
-        activities << activity if [0, 1].include? (privacy.send(PrivacySetting::OPTS[activity.resource_type]))
+      if !last_activity && pro_activities.blank?
+        activities = Activity.where(:user_id => ids).order("id desc").limit(20)
+      elsif last_activity && !temp
+        activities = Activity.where(:user_id => ids).order("id desc").where("id < ?", last_activity.to_i).limit(20)
+        temp = true
+      elsif !pro_activities.blank?
+        activities = Activity.where(:user_id => ids).order("id desc").where("id < ?", pro_activities.last.id).limit(20)
       end
 
-    end while activities.length < 7
+      break if activities.blank?
 
-    activities
+      activities.each do |activity|
+        break if (pro_activities.length == 7)
+        next unless (!activity.resource.nil?)
+        privacy = activity.user.profile.privacy_setting
+        if self == activity.user
+          pro_activities << activity
+        else
+          pro_activities << activity if [0, 1].include? (privacy.send(PrivacySetting::OPTS[activity.resource_type]))
+        end
+      end
+      temp = true
+
+    end while pro_activities.length < 7
+
+    pro_activities
   end
 
   def activities_by_privacy_settings(current_user, last_activity = false)
