@@ -1,4 +1,4 @@
-ActiveAdmin.register PromotionsUser do
+ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
 
   menu :label => "Concierge"
 
@@ -8,15 +8,15 @@ ActiveAdmin.register PromotionsUser do
 
 
 
-  scope :for_concierge, :default => true
-  #scope :verified
+  scope :concierge, :default => true
+
 
 
   config.clear_sidebar_sections!
 
 
-  index :download_links => false do
-    column(:Member, :sortable => false){|promotions_user| display_image(promotions_user.user.profile.photos, :thumb)}
+  index :download_links => false  do
+    column(:Member, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
     #column('Total calls', :sortable => false) { |promotion_user| promotion_user.calls_count }
     #column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
     #column('Actions', :sortable => false) do |concierge|

@@ -7,7 +7,7 @@ class PromotionsUser < ActiveRecord::Base
 
 
 
-  scope :for_concierge, :conditions => "promotions.promotionable_type like 'Concierge' ",
+  scope :concierge, :conditions => "promotions.promotionable_type like 'Concierge' ",
         :joins => 'left join promotions on promotions.id = promotions_users.promotion_id'
 
 

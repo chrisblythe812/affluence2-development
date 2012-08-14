@@ -6,7 +6,7 @@ class ConciergesController < ApplicationController
     @concierge = Concierge.find(params[:id])
     if current_user.plan == 'free'
       flash[:error] = "You need to Become a Premium Member to utilize the Concierge service"
-      redirect_to profile_path and return
+      redirect_to profile_path(current_user.permalink) and return
     end
 
 
