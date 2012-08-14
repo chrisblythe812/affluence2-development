@@ -20,7 +20,8 @@ class PrivacySetting < ActiveRecord::Base
       "Invitation" => "invitations",
       "VincompassShare" => "vincompass_share",
       "Discussion" => "discussions",
-      "Comment" => "comments"
+      "Comment" => "comments",
+      "Concierge" => "concierge"
   }
 
 

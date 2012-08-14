@@ -78,7 +78,7 @@ def self.all_by_privacy_setting(current_user, last_activity = false)
   def self.create_user_concierge(user,concierge)
     create(:user_id => user.id,
            :body => " has utilized service",
-           :resource_type => 'concierge',
+           :resource_type => 'Concierge',
            :resource_id => concierge.id)
   end
 
