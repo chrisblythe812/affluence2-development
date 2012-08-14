@@ -2,7 +2,7 @@ ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
 
   menu :label => "Concierge"
 
-  actions :all#, :except => [:new,:show,:edit]
+  actions :all, :except => [:new,:show,:edit]
 
   #config.sort_order = 'user_id_desc'
 
