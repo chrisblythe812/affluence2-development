@@ -6,7 +6,7 @@ class Promotion < ActiveRecord::Base
   has_many :promotions_users
   has_many :users, :through => :promotions_users
 
-
+  scope :concierge, :conditions => "promotionable_type like 'Concierge'"
   #has_and_belongs_to_many :users
 
   has_many :registered_members, :class_name => 'PayablePromotion'

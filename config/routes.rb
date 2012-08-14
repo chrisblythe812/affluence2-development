@@ -83,6 +83,13 @@ Affluence2::Application.routes.draw do
 
   resources :verfications
 
+  resources :concierges do
+    member do
+      post :call
+    end
+  end
+
+
   resources :profiles  do
     collection do
       get :confirm

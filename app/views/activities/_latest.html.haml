@@ -23,6 +23,9 @@
         - elsif  activity.resource_type == "Event"
           = link_to activity.resource.title, polymorphic_path(activity.resource)
           = " Event"
+        - elsif  activity.resource_type == "Concierge"
+          = link_to activity.resource.title, polymorphic_path(activity.resource)
+          = " Concierge"
     %td
       %p= time_ago_in_words(activity.updated_at) + " ago"
 

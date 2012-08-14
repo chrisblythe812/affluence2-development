@@ -30,7 +30,7 @@ gem "hominid"
 gem 'nokogiri'
 gem 'exception_notification', :require => 'exception_notifier'
 gem "rails_best_practices"
-
+gem "twilio-ruby"
 
 
 
