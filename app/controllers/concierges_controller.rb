@@ -14,6 +14,7 @@ class ConciergesController < ApplicationController
     @concierge.promotion.activate_promotion_for_member(current_user)
     Activity.create_user_concierge(current_user, @concierge)
     #NotificationTracker.schedule_concierge_emails(current_user, @concierge)
+    session["activity"]
     flash[:success]= 'Thank you for utilizing Concierge service'
     redirect_to profile_path(current_user.permalink)
     else
