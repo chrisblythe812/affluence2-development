@@ -22,7 +22,7 @@ class Activity < ActiveRecord::Base
 
 def self.all_by_privacy_setting(current_user, last_activity = false)
     ids = []
-    current_user.connections.each { |x| ids<<x.friend.id }
+    current_user.connections.each { |x| ids << x.friend.id }
 
     activity = nil
     if last_activity
