@@ -2,8 +2,11 @@
   - next if activity.resource.nil? || (activity.resource_type == "Connection" && activity.resource.friend != current_user)
   %tr{:class => "#{activity.id}"}
     %td.span1
-      %a.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
-        = image_tag display_image(activity.user.profile.photos, :thumb)
+      .thumbnail-div
+        %a.image-a-link.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
+          = image_tag display_image(activity.user.profile.photos, :thumb)
+          - if activity.user.verified?
+            %span.image-link-span{:style=>"top:48px"}
     %td
       %h5= activity.user.profile.name
       %p
@@ -24,7 +27,7 @@
           = link_to activity.resource.title, polymorphic_path(activity.resource)
           = " Event"
         - elsif  activity.resource_type == "Concierge"
-          =# activity.resource.title
+          =# link_to activity.resource.title, polymorphic_path(activity.resource)
           = " Concierge service"
     %td
       %p= time_ago_in_words(activity.updated_at) + " ago"
