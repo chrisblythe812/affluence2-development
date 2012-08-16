@@ -64,7 +64,7 @@ class DiscussionsController < ApplicationController
       end
     end
     else
-      flash[:notice]= "Discussion was deleted."
+      flash[:notice]= "Your comment was not posted as the Discussion was deleted."
       redirect_to discussions_path and return
     end
   end
