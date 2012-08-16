@@ -42,7 +42,7 @@ class DiscussionsController < ApplicationController
   end
 
   def update
-    @discussion = Discussion.find(params[:id].to_i)
+    @discussion = Discussion.find_by_id(params[:id].to_i)
     if !@discussion.blank?
     comments = params[:discussion][:comments]
     comments["user_id"] = current_user.id
