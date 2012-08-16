@@ -11,6 +11,10 @@ class DiscussionsController < ApplicationController
       @search = true
     elsif params[:id]
       @discussions = Discussion.where(:id => params[:id]).page(params[:page]).per(10)
+      if @discussions.blank?
+        flash[:notice] = "Discussion was deleted."
+        redirect_to discussions_path and return
+      end
     else
       @discussions = Discussion.includes(:comments).order("last_comment_at Desc").page(params[:page]).per(10)
       @discussions_size  = @discussions.total_count
