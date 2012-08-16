@@ -121,7 +121,7 @@ Affluence2::Application.routes.draw do
 
 
 
-  resources :members do
+  resources :members, :except => [:show] do
     collection do
       get :latest
       get :find_members
