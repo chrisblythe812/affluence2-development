@@ -1,5 +1,7 @@
 ActiveAdmin.register User do
-  actions :all, :except => [:new]
+  actions :all, :except => [:new, :destroy]
+
+  #actions :index, :show, :new, :create, :update, :edit
 
 
   filter :email
@@ -18,22 +20,22 @@ ActiveAdmin.register User do
     end
     column("Email", :email)
     #column("Member ID", :id)
-    column("Location") { |user| user.profile.city+", "+user.profile.country }
+    column("Location") {|user| user.profile.city+", "+user.profile.country}
     column("Status", :status) do |user|
-      user.account_active? ? icon(:check) : icon(:x)
+       user.account_active? ? icon(:check) : icon(:x)
     end
     column("Membership plan", :plan)
-    column('Actions', :sortable => false) do |event|
+    column('Actions',:sortable => false) do |event|
       link_to 'details', admin_user_path(event)
     end
   end
 
 
-  form :html => {:enctype => "multipart/form-data"} do |f|
+  form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Edit User Details" do
-      f.input :email, :label => "Email"
-      f.input :status, :as => :select, :collection => [['Active', 'active'], ['Suspended', 'suspended']], :include_blank => false
-    end
+      f.input :email , :label => "Email"
+      f.input :status,:as => :select, :collection => [['Active', 'active'], ['Suspended', 'suspended']] , :include_blank => false
+     end
 
     f.inputs :name => "Profile", :for => :profile do |profile_form|
       profile_form.input :first_name
@@ -49,12 +51,12 @@ ActiveAdmin.register User do
     end
 
     #f.inputs :name => "Notification Settings", :for => :notification_settings do |notification_settings_form|
-    #notification_settings_form.input :newsletter
-    #notification_settings_form.input :offers
-    #notification_settings_form.input :events
-    #notification_settings_form.input :messages
-    #notification_settings_form.input :event_reminders
-    #notification_settings_form.input :site_news
+      #notification_settings_form.input :newsletter
+      #notification_settings_form.input :offers
+      #notification_settings_form.input :events
+      #notification_settings_form.input :messages
+      #notification_settings_form.input :event_reminders
+      #notification_settings_form.input :site_news
     #end
 
 
@@ -64,7 +66,7 @@ ActiveAdmin.register User do
 
   action_item :only => [:show] do
     if user.account_active?
-      link_to('Suspend', suspend_admin_user_path(user.id))
+    link_to('Suspend', suspend_admin_user_path(user.id))
     elsif user.account_suspended?
       link_to('Active', unsuspend_admin_user_path(user.id))
     end
@@ -85,7 +87,8 @@ ActiveAdmin.register User do
   end
 
 
-  member_action :update, :method => :post do
+
+  member_action :update,  :method => :post do
     @user = User.find(params[:id]) unless params[:id].blank?
     if @user.update_attributes(params[:user])
       redirect_to :action => :show, :id => @user.id
@@ -95,39 +98,45 @@ ActiveAdmin.register User do
   end
 
 
-  member_action :destroy, :method => :post do
+  member_action :destroy,  :method => :post do
     @user = User.find(params[:id]) unless params[:id].blank?
     if @user.plan != 'free'
       @user.cancel_membership
     end
+
+    if @user.status == 'suspended'
+    @user.unsuspended
+    end
+
+
     @user.deleted
     flash[:notice] = "Member was successfully deleted"
     redirect_to :action => :index
   end
 
 
-  show :title => "User details" do |user|
+  show :title => "User details" do | user |
     panel "Profile Info" do
-      attributes_table_for user do
-        row("Name") { |user| user.name }
-        row :email
-        row("Unique ID(permalink)") { |user| user.permalink }
-        #row("Member ID") {|user| user.id}
-        row("Payment type") { |user| user.plan }
-        row("Location") { |user| user.profile.city+", "+user.profile.country }
-        row("Phone Number") { |user| user.profile.phone }
-        row("Bio") { |user| user.profile.bio }
-        row("Company") { |user| user.profile.company }
-        row("Invitation Source") { |user| user.profile.invitation_source }
-        row("Account created on") { |user| global_date_format(user.created_at) }
-        row("Last logged on") { |user| global_date_format(user.last_sign_in_at) }
-        row("Associations") { |user| user.profile.association_list }
-        row("Interests") { |user| user.profile.interest_list }
-        row("Expertise") { |user| user.profile.expertise_list }
-      end
+    attributes_table_for user do
+      row("Name") {|user| user.name}
+      row :email
+      row("Unique ID(permalink)") {|user| user.permalink}
+      #row("Member ID") {|user| user.id}
+      row("Payment type") {|user| user.plan}
+      row("Location") {|user| user.profile.city+", "+user.profile.country}
+      row("Phone Number") {|user| user.profile.phone}
+      row("Bio") {|user| user.profile.bio}
+      row("Company") {|user| user.profile.company}
+      row("Invitation Source")  {|user| user.profile.invitation_source}
+      row("Account created on") {|user| global_date_format(user.created_at)}
+      row("Last logged on") {|user| global_date_format(user.last_sign_in_at)}
+      row("Associations") {|user| user.profile.association_list }
+      row("Interests") {|user| user.profile.interest_list}
+      row("Expertise") {|user| user.profile.expertise_list}
+    end
     end
 
-    panel "Email Notifications" do
+    panel "Email Notifications"  do
       attributes_table_for user do
         row("News Letter") { |user| user_email_notifications(user.profile.notification_setting.newsletter) }
         row("New Events") { |user| user_email_notifications(user.profile.notification_setting.events) }
@@ -139,14 +148,14 @@ ActiveAdmin.register User do
     end
 
     if user.promotions.count > 0
-      panel "Orders History" do
-        table_for user.promotions do |promotion|
-          column("Promotion ID") { |promotion| promotion.promotionable.id }
-          column("Promotion Type") { |promotion| promotion.promotionable_type }
-          column("Promotion") { |promotion| promotion.promotionable.title }
-          #column("Cost") { |order| "$#{order.amount}" }
-        end
+    panel "Orders History"  do
+      table_for user.promotions do |promotion |
+        column("Promotion ID") { |promotion| promotion.promotionable.id }
+        column("Promotion Type") { |promotion| promotion.promotionable_type }
+        column("Promotion") { |promotion| promotion.promotionable.title }
+        #column("Cost") { |order| "$#{order.amount}" }
       end
+    end
     else
       panel "Orders History" do
         "No Orders"
@@ -154,5 +163,7 @@ ActiveAdmin.register User do
     end
 
 
+
   end
 end
+
