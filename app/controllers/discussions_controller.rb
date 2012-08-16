@@ -43,8 +43,7 @@ class DiscussionsController < ApplicationController
 
   def update
     @discussion = Discussion.find(params[:id].to_i)
-
-    params[:discussion][:comments]
+    if !@discussion.blank?
     comments = params[:discussion][:comments]
     comments["user_id"] = current_user.id
     @discussion.comments.build(comments)
@@ -52,17 +51,22 @@ class DiscussionsController < ApplicationController
       if @discussion.save
         @discussion.last_comment_at = @discussion.comments.last.created_at
         @discussion.save
-        flash[:success]= "Reply was successfully created."
+        flash[:success]= "Reply was successfully posted."
 
 
         format.html { redirect_to discussions_path }
         format.json { head :ok }
       else
-        flash[:error]= "Reply was not created."
+        flash[:error]= "Unable to post the reply."
 
         format.html { redirect_to discussions_path }
         format.json { render json: @discussion.errors, status: :unprocessable_entity }
       end
     end
+    else
+      flash[:notice]= "Discussion was deleted."
+      redirect_to discussions_path and return
+    end
   end
+
 end
