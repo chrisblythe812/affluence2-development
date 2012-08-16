@@ -24,7 +24,7 @@ class ProfilesController < ApplicationController
   before_filter :create_braintree_object, :only =>  [:edit, :update]
 
   def index
-
+    redirect_to home_index_path
   end
 
   def edit
