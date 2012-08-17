@@ -27,7 +27,7 @@ Affluence2::Application.routes.draw do
   ActiveAdmin.routes(self)
 
 
-  get "home/index"
+  match 'home' => 'home#index'
 
 
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions", :passwords => 'passwords'} do
@@ -121,7 +121,7 @@ Affluence2::Application.routes.draw do
 
 
 
-  resources :members do
+  resources :members, :except => [:show] do
     collection do
       get :latest
       get :find_members
