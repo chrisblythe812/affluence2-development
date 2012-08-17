@@ -2,11 +2,12 @@
   - next if activity.resource.nil? || (activity.resource_type == "Connection" && activity.resource.friend != current_user)
   %tr{:class => "#{activity.id}"}
     %td.span1
-      .thumbnail-div
-        %a.image-a-link.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
-          = image_tag display_image(activity.user.profile.photos, :thumb)
-          - if activity.user.verified?
-            %span.image-link-span{:style=>"top:48px"}
+      %div{:style => "min-height:70px;min-width:70px"}
+        .thumbnail-div
+          %a.image-a-link.thumbnail{"data-original-title" => "#{activity.user.profile.name}", "data-placement" => "bottom", :href => "#{profile_path(activity.user.permalink)}", :rel => "tooltip"}
+            = image_tag display_image(activity.user.profile.photos, :thumb)
+            - if activity.user.verified?
+              %span.image-link-span{:style=>"top:48px"}
     %td
       %h5= activity.user.profile.name
       %p
