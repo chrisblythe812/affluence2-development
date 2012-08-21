@@ -341,4 +341,12 @@ class User < ActiveRecord::Base
     !verifications_with_state('submited').blank?
   end
 
+  def concierge_calls_count
+    concierge_calls.count
+  end
+
+  def concierge_calls
+    promotions_users.where("promotions.promotionable_type like 'Concierge' ").joins('left join promotions on promotions.id = promotions_users.promotion_id')
+  end
+
 end

@@ -8,7 +8,8 @@ class PromotionsUser < ActiveRecord::Base
 
 
   scope :concierge, :conditions => "promotions.promotionable_type like 'Concierge' ",
-        :joins => 'left join promotions on promotions.id = promotions_users.promotion_id'
+        :joins => 'left join promotions on promotions.id = promotions_users.promotion_id',
+        :select => "distinct(user_id)"
 
 
 end

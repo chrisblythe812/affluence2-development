@@ -16,24 +16,23 @@ ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
 
 
   index :download_links => false  do
-    column(:Member, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
-    #column('Total calls', :sortable => false) { |promotion_user| promotion_user.calls_count }
+    column(:Member, :sortable => false){|promotions_user| promotions_user.user.name}
+    column(:Profile, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
+    column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
     #column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
-    #column('Actions', :sortable => false) do |concierge|
-      #link_to 'details', admin_concierge_path(concierge)
-    #end
+    column('Actions', :sortable => false) do |promotions_user|
+      link_to 'View call history', view_call_info_admin_concierge_path(promotions_user.user)
+    end
   end
 
-  #show :title => :title do |concierge|
-    #attributes_table_for concierge do
-      #row :title
-      #row :description
-      #row :number
-      #row :created_at
-    #end
+  member_action :view_call_info,  :method => :get do
+  @user = User.find(params[:id])
+  @calls = @user.concierge_calls
+  end
 
-    #section "Members utilized this service" do
-      #table_for concierge.promotion.promotions_users do |promotions_user|
+  #show do |user|
+    #section "Calls made by the member" do
+     #table_for @promotions_user do |concierge_call|
         #column("Name") { |promotions_user| promotions_user.user.profile.first_name }
         #column("profile") { |promotions_user| display_image(promotions_user.user.profile.photos, :thumb) }
       #end
