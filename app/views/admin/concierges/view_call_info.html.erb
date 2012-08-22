@@ -1,0 +1,54 @@
+<div id="active_admin_content" class="with_sidebar">
+  <div id="main_content_wrapper">
+    <div id="main_content">
+      <div class="attributes_table event" id="attributes_table_event_65">
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th>User</th>
+            <td><%= @user.name %></td>
+          </tr>
+          <tr>
+            <th>EMAIL</th>
+            <td><%= @user.email %></td>
+          </tr>
+          <tr>
+            <th>PLAN</th>
+            <td><%= @user.plan %></td>
+          </tr>
+          <tr>
+            <th>Account Created On</th>
+            <td><%= global_date_format(@user.created_at) %></td>
+          </tr>
+          <tr>
+            <th>Last Logged On</th>
+            <td><%= global_date_format(@user.last_sign_in_at) %></td>
+          </tr>
+          </table>
+          </div >
+
+
+      <section>
+        Calls History
+        <table cellpadding="0" cellspacing="0" border="0">
+        <thead>
+        <tr>
+          <th class="">Date</th>
+          <th class="">Time</th>
+          <th class=""></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @calls.each do |call | %>
+        <tr class="odd" id="schedule_50">
+          <td class=""><%= global_date_format(call.created_at) %></td>
+          <td class=""><%= global_time_format(call.created_at) %></td>
+          <td class=""><%#= call.user_id %></td>
+        </tr>
+            <% end  %>
+        </tbody>
+      </table>
+
+
+
+
+    </div ></div ></div >
