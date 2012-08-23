@@ -7,12 +7,14 @@ class ConversationMetadatum < ActiveRecord::Base
   private
 
   def update_unread_messages_counter
-    if changed_attributes.keys.include?("read") || changed_attributes.keys.include?("archived")
-      if was_marked_as_unread? || archived_was
+    self.read = true if self.archived && !self.read 
+    if changed_attributes.keys.include?("read")  
+      if was_marked_as_unread?
         user.increment(:unread_messages_counter).save
       else
         user.decrement(:unread_messages_counter).save
       end
+  
     end
   end
 
