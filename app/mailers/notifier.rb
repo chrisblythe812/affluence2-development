@@ -38,5 +38,17 @@ class Notifier < ActionMailer::Base
          :subject => EMAIL_CONTENT['new_message']['subject'] %{:member_name => @message.sender.name})
   end
 
+  def verification_accepted(email, message)
+    @message = message
+    mail(:to => email,
+         :subject => 'You have been successfully verified')
+  end
+
+  def verification_rejected(email, message)
+    @message = message
+    mail(:to => email,
+         :subject => 'Your verification has been rejected!')
+  end
+
 
 end

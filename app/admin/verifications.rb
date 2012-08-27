@@ -23,7 +23,6 @@ ActiveAdmin.register Verfication do
       verification.user.email
     end
     column("Status", :status, :sortable => false)
-    column("ada") { |verfication| verfication.status}
     column("Membership plan") do |verification|
       verification.user.plan
     end
@@ -34,30 +33,29 @@ ActiveAdmin.register Verfication do
   end
 
 
-
-
-
   member_action :user_verification, :method => :get do
     @verfication = Verfication.find(params[:id])
   end
 
 
-  member_action :mark_as_verified, :method => :get do
+  member_action :mark_as_verified, :method => :post do
     @verfication = Verfication.find(params[:id])
     @verfication.update_attribute(:status,'verified')
     user = @verfication.user
     user.verified = true
     user.save
+    Notifier.verification_accepted(user.email, params[:body]).deliver
     flash[:notice] = "Member was successfully marked as verified"
     redirect_to :action => :index
   end
 
-  member_action :mark_as_rejected, :method => :get do
+  member_action :mark_as_rejected, :method => :post do
     @verfication = Verfication.find(params[:id])
     @verfication.update_attribute(:status,'rejected')
-    #user = @verfication.user
-    #user.verified = false
-    #user.save
+    user = @verfication.user
+    user.verified = false
+    user.save
+    Notifier.verification_rejected(user.email, params[:body]).deliver
     flash[:notice] = "Member was rejected"
     redirect_to :action => :index
   end
