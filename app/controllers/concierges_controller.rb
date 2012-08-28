@@ -9,8 +9,11 @@ class ConciergesController < ApplicationController
       redirect_to profile_path(current_user.permalink) and return
     end
 
-
-    if !current_user.profile.phone.blank? && @concierge.make_call(current_user)
+    if params[:phone_number].blank?
+      flash[:error] = "PLease provide the correct phone number"
+      redirect_to profile_path(current_user.permalink) and return
+    end
+    if !params[:phone_number].blank? && @concierge.make_call(current_user, params[:phone_number])
     @concierge.promotion.activate_promotion_for_member(current_user)
     Activity.create_user_concierge(current_user, @concierge)
     #NotificationTracker.schedule_concierge_emails(current_user, @concierge)
