@@ -102,4 +102,8 @@ class ApplicationController < ActionController::Base
   def init_activity_in_session
     session["activity"] = {} if session["activity"].nil?
   end
+
+  def reset_session_activity
+    session["activity"] = {}
+  end
 end

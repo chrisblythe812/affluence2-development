@@ -34,7 +34,8 @@ class DiscussionsController < ApplicationController
       if @discussion.save
         @discussion.last_comment_at = @discussion.created_at
         @discussion.save
-        flash[:success]= "Discussion was successfully created."
+        reset_session_activity
+       flash[:success]= "Discussion was successfully created."
         format.html { redirect_to discussions_path }
         format.json { head :ok }
       else
@@ -55,6 +56,7 @@ class DiscussionsController < ApplicationController
       if @discussion.save
         @discussion.last_comment_at = @discussion.comments.last.created_at
         @discussion.save
+        reset_session_activity
         flash[:success]= "Reply was successfully posted."
 
 

@@ -98,8 +98,7 @@ class ConversationsController < ApplicationController
   end
 
   def update
-    logger.info 'ssssssssssssssssssssss'
-    logger.info params
+
     @conversation = Conversation.find(params[:id])
     #    @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
 
@@ -125,6 +124,10 @@ class ConversationsController < ApplicationController
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message
       @conversation.save
+      if ((Time.now - Connection.where(:user_id => @message.sender_id, :recipient_id => @message.recipient_id).first.created_at) < 60)
+
+        reset_session_activity
+      end
       redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}
     else
       render :show

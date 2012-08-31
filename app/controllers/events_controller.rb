@@ -46,6 +46,8 @@ class EventsController < ApplicationController
         Event.process_tickets(@event, params[:payable_promotion], 'success')
         @event.promotion.activate_promotion_for_member(current_user)
         Activity.create_user_event(current_user, @event)
+        reset_session_activity
+
         NotificationTracker.schedule_event_emails(current_user, @event)
         flash[:success]= 'Your have successfully registered for the event'
         redirect_to orders_path()

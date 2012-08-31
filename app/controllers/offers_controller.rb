@@ -25,6 +25,7 @@ class OffersController < ApplicationController
     end
     offer.promotion.activate_promotion_for_member(current_user)
     Activity.create_user_offer(current_user, offer)
+    reset_session_activity 
     redirect_to offer.link
   end
 
