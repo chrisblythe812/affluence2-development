@@ -7,7 +7,9 @@ class ApplicationController < ActionController::Base
 
 
   def admin_ssl_required
+    if !request.ssl?
     redirect_to url_for params.merge({:protocol => 'https://'}) unless request.host == 'localhost'
+    end
   end
 
   def set_cache_buster
