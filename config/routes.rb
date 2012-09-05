@@ -30,9 +30,14 @@ Affluence2::Application.routes.draw do
   match 'home' => 'home#index'
 
 
-  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions", :passwords => 'passwords'} do
-
+  devise_for :users, :controllers => {:registrations => "registrations", :sessions => "sessions", :passwords => 'passwords', :invitations => 'users/invitations'}
+  devise_scope :user do
     get "/users/sign_in" => "welcome#index"
+
+    get "/invitations/contacts" => "invitations#get_contacts", :as => :get_contacts
+    post "/invitations/contacts" => "invitations#import_contacts", :as => :import_contacts
+
+    match "/invitations/contacts_provider_callback" => "invitations#contacts_provider_callback", :as => :contacts_provider_callback
 
   end
  

@@ -27,7 +27,7 @@
           Discussions
       %li{:class => "#{(params[:controller] == 'conversations') ? 'active':''}"}
         %a{:href => "#{user_conversations_path(current_user)}"}
-          %i.icon-comment>
+          %i.icon-inbox>
           Messages
           - if (unread_messages_count > 0)
             %span{:class => "label label-important"}
@@ -36,6 +36,10 @@
         %a{:href => "#"}   
           %i.icon-glass>
           Concierge
+      %li{:class => "#{(params[:controller] == 'invitations') ? 'active':''}"}
+        %a{:href => "#{new_user_invitation_path}"}
+          %i.icon-envelope>
+          Invites
   / side bar nav
   %div
     = form_for(Concierge.new, :url => call_concierge_path(Concierge.last), :html => {:class => 'well'}) do |f|

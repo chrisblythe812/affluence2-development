@@ -9,6 +9,7 @@ gem 'haml-rails'
 
 gem 'pg', :group => [:development, :production]
 gem 'devise'
+gem 'devise_invitable', :git => 'git://github.com/aashish/devise_invitable.git'
 gem 'activeadmin', '=0.4.0' 
 gem 'aasm'
 gem "paperclip", "~> 2.3"
@@ -32,6 +33,7 @@ gem 'exception_notification', :require => 'exception_notifier'
 gem "rails_best_practices"
 gem "twilio-ruby"
 
+gem 'freiden-contacts',  :require => "contacts"
 
 
 
