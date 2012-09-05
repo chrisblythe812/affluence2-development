@@ -156,14 +156,14 @@ Affluence2::Application.routes.draw do
   end
 
 
-  match "api/user/sign_in" => "api#user_sign_in"
-  match "api/postback" => "api#postback"
-  match "api/callback_test" => "api#callback_test"
-  post "api/vincompass/validate_tokens" => "api#validate_tokens"
-  post "api/vincompass/authorize/application" => "api#authorize_application"
-  post "api/vincompass/authorize/user" => "api#authorize_user"
-  post "api/vincompass/activity_post" => "api#activity_post"
-  post "api/vincompass/v2/activity_post" => "api#activity_post_v2"
+  match "api/user/sign_in" => "api#user_sign_in", :ssl => :required
+  match "api/postback" => "api#postback", :ssl => :required
+  match "api/callback_test" => "api#callback_test", :ssl => :required
+  post "api/vincompass/validate_tokens" => "api#validate_tokens", :ssl => :required
+  post "api/vincompass/authorize/application" => "api#authorize_application", :ssl => :required
+  post "api/vincompass/authorize/user" => "api#authorize_user", :ssl => :required
+  post "api/vincompass/activity_post" => "api#activity_post", :ssl => :required
+  post "api/vincompass/v2/activity_post" => "api#activity_post_v2", :ssl => :required
 
   # Sample resource route with sub-resources:
   #   resources :products do
@@ -196,4 +196,6 @@ Affluence2::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
+
+  match '*url' => 'welcome#index'
 end
