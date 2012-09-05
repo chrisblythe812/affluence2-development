@@ -34,9 +34,11 @@ gem "rails_best_practices"
 gem "twilio-ruby"
 
 gem 'freiden-contacts',  :require => "contacts"
+gem "awesome_print"
+gem 'rack-ssl-enforcer'
 
 
-
+  
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -42,6 +42,10 @@ Affluence2::Application.configure do
   config.action_mailer.default_url_options = { :host => 'affluence2-development.herokuapp.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
+
+  #config.middleware.use Rack::SslEnforcer, :only => %r{^/admin}, :strict => true
+
+
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
     :port           => "25",

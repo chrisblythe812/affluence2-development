@@ -54,6 +54,7 @@ Affluence2::Application.configure do
   #config.action_controller.asset_host = Proc.new do |source|
    #'http://affluence-demo.s3.amazonaws.com'
   #end
+  config.middleware.use Rack::SslEnforcer, :only => %r{^/admin}
 end
 
 

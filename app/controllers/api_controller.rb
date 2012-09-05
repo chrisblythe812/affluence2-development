@@ -1,11 +1,11 @@
 class ApiController < ApplicationController
-
+  ssl_required
   skip_before_filter :authenticate_user!
-
   layout "mobile"
   #todo need to add related styles
 
   def user_sign_in
+    ap request.ssl?
     access_grant = AccessGrant.find_access(params["access_token"])
     if access_grant
       render "api/sign_in", :locals => {:callback_url => params["callback_url"]}
@@ -15,6 +15,7 @@ class ApiController < ApplicationController
   end
 
   def authorize_application
+    ap request.ssl?
     begin
     json = ActiveSupport::JSON.decode(request.body)
     rescue

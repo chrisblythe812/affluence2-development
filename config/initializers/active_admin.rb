@@ -7,7 +7,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Affluence2"
+  #config.site_title = "Affluence2"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -42,9 +42,10 @@ ActiveAdmin.setup do |config|
   # a namespace block. For example, to change the site title
   # within a namespace:
   #
-  #   config.namespace :admin do |admin|
-  #     admin.site_title = "Custom Admin Title"
-  #   end
+     config.namespace :admin do |admin|
+       admin.site_title = "Affluence Admin Section"
+       #admin.site_title_image = "/assets/admin_affluence.png"
+     end
   #
   # This will ONLY change the title for the admin section. Other
   # namespaces will continue to use the main "site_title" configuration.
