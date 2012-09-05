@@ -5,6 +5,7 @@ class ApiController < ApplicationController
   #todo need to add related styles
 
   def user_sign_in
+    ap request.ssl?
     access_grant = AccessGrant.find_access(params["access_token"])
     if access_grant
       render "api/sign_in", :locals => {:callback_url => params["callback_url"]}
