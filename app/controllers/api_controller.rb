@@ -15,6 +15,7 @@ class ApiController < ApplicationController
   end
 
   def authorize_application
+    ap request.ssl?
     begin
     json = ActiveSupport::JSON.decode(request.body)
     rescue
