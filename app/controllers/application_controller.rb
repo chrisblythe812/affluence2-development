@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
   include SslRequirement
   before_filter :set_cache_buster
 
+
+  def admin_ssl_required
+    redirect_to url_for params.merge({:protocol => 'https://'}) unless request.host == 'localhost'
+  end
+
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
