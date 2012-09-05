@@ -1,0 +1,107 @@
+
+.span9
+  .row
+    .span6
+      %h2
+        Invite Friends
+        %small Earn Credit
+      %hr.zero
+        %p
+          %em For every new member you have sign up, Affluence will credit your account 1 month of free membership.
+    .span3
+      .well
+        %h6 Credits Earned
+        %hr.zero
+          %h3 14 Free Months
+  / row
+  .tabbable
+    %ul.nav.nav-tabs
+      %li.active
+        %a{"data-toggle" => "tab", :href => "#lA"} Send Multiple
+      %li
+        %a{"data-toggle" => "tab", :href => "#lB"} Single Invite
+      %li
+        %a{"data-toggle" => "tab", :href => "#lC"} Invite History
+    .tab-content
+      #lA.tab-pane.active
+        .span2.well
+          %h6 Gmail
+          %hr.zero
+            %p
+              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+                %i.icon-ok.icon-white
+                Activate
+        .span2.well
+          %h6 Yahoo
+          %hr.zero
+            %p
+              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+                %i.icon-ok.icon-white
+                Activate
+        .span2.well
+          %h6 AOL
+          %hr.zero
+            %p
+              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+                %i.icon-ok.icon-white
+                Activate
+        .span2.well
+          %h6 MSN
+          %hr.zero
+            %p
+              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
+                %i.icon-ok.icon-white
+                Activate
+      / lA
+      #lB.tab-pane
+        = form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f|
+          = devise_error_messages!
+          - resource.class.invite_key_fields.each do |field|
+            %p
+              = f.label field
+            %br/
+            = f.text_field field
+          %p= f.submit t("devise.invitations.new.submit_button")
+
+        %form.form-horizontal
+          %fieldset
+            .control-group
+              %label.control-label{:for => "input01"} To:
+              .controls
+                %input#input01.input-xlarge{:type => "text"}
+                  %p.help-block Add multiple Emails separated by a comma
+            .control-group
+              %label.control-label{:for => "input01"} From:
+              .controls
+                %input#input01.input-xlarge{:placeholder => "blake.macleod@gmail.com", :type => "text"}
+            .control-group
+              %label.control-label{:for => "textarea"} Textarea
+              .controls
+                %textarea#textarea.input.span6{:placeholder => "You have been invited to join the exclusive network Affluence by Blake Macleod.  To accept this invitation click here.", :rows => "5"}
+            .form-actions
+              %button.btn.btn-primary{:type => "submit"} Send Invite
+      / lB
+      #lC.tab-pane
+        %table.table.table-striped
+          %thead
+            %tr
+              %th #
+              %th Date
+              %th To
+              %th Status
+          %tbody
+            - @invited_users.each_with_index do |x, i|
+              %tr
+                %td= i
+                %td= time_ago_in_words(x.created_at) + " ago"
+                %td= x.email
+                %td
+                  %i.icon-green{:class => "#{get_invitation_status_icon(x.status)}"}
+                  = x.get_status
+      / lC
+    / tab-content
+  / tabbable
+
+
+
+  
