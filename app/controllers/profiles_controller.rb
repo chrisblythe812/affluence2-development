@@ -56,6 +56,7 @@ class ProfilesController < ApplicationController
 
       respond_to do |format|
         if @profile.update_attributes(params[:profile])
+          @user.save
           #          @profile.photos.first.delete
           format.html { redirect_to profile_path(@profile.user.permalink), notice: 'Profile was successfully updated.' }
           format.json { head :ok }

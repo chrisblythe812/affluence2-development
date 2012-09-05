@@ -205,6 +205,16 @@ module ApplicationHelper
     return formated_paragraphs.join
   end
 
+  def get_invitation_status_icon(status)
+    case status
+      when 0
+        "icon-question-sign"
+      when 1
+        "icon-ok-sign"
+      when 2
+        "Expired"
+    end
+  end
 end
  
  

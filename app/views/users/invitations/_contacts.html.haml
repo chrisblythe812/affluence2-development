@@ -1,0 +1,9 @@
+%div.page.visible{:id => "page-#{@page}"}
+  -@contacts.in_groups_of(2, false) do |row|
+    %ul.contact-row
+      -row.each do |contact|
+        -contact["emails"].each do |email|
+          %li.contact
+            =check_box_tag 'users[]', email
+            %label= email
+      .clear

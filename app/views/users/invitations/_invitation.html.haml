@@ -1,0 +1,8 @@
+%ul.sent_invite_row
+  %li=invited_user.invitation_sent_at.strftime("%B %e, %Y")
+  %li
+    =invited_user.profile.name if invited_user.profile
+    %br/
+    =invited_user.email
+  %li=invitation_status(invited_user)
+  %hr

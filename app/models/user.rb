@@ -1,5 +1,6 @@
 require "base64"
 class User < ActiveRecord::Base
+
   attr_accessible :unread_messages_counter 
   has_one :profile, :dependent => :destroy
   has_many :activities, :dependent => :destroy
@@ -24,6 +25,7 @@ class User < ActiveRecord::Base
     #      LIMIT 6 OFFSET 0;
     #    }
   }
+  has_many :invitations, :class_name => "InvitationHistory"
 
   has_many :verfication, :dependent => :destroy
 
@@ -116,7 +118,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
@@ -154,7 +156,7 @@ class User < ActiveRecord::Base
   end
 
 
-  has_permalink :permalink_name, :update => false
+  has_permalink :permalink_name, :update => true
 
   state_machine :status, :initial => :active do
 

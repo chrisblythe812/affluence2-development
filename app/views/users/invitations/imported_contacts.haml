@@ -1,0 +1,82 @@
+- content_for :left_column do
+  -content_for :javascripts do
+    :javascript
+      $('#invite_accordion').accordion({ active: 1 });
+      $('#select_all').click(function() {
+          $(':checkbox:not(:checked)').attr('checked', 'checked');
+      });
+      $('#deselect_all').click(function() {
+          $(':checkbox(:checked)').attr('checked', '');
+      });
+
+  =form_tag(import_contacts_path) do
+    %fieldset.inline
+      #invitations
+        %ol
+          %li
+            %label.invite_label
+              Invite Friends
+            %p.caption
+              Lorem Ipsum delas itasca delmar it comsumios ipsum sirtue nadan malou ipsum itasca.
+
+            #contacts_container
+              // This is the start of the accordion
+              #invite_accordion.panel.ui-accordion
+                %header
+                  %h3 1. Select how to Import
+                %div
+                  %table.import_options
+                    %thead
+                      %tr
+                        %th{ :scope => 'row', :class => 'label', :colspan => 3 }
+                          %span Select how you want to import contacts:
+                    %tbody
+                      %tr
+                        %td
+                          %input{:name => "provider", :type => "radio", :value => @google_oauth_url, :checked => "checked" }/
+                          %label{:for => "google"} Google
+                        %td
+                          %input{:name => "provider", :type => "radio", :value => @yahoo_oauth_url}/
+                          %label{:for => "yahoo"} Yahoo
+                        %td
+                          -if $rollout.active?(:contact_invitations_msn, current_user)
+                            %input{:name => "radio", :type => "radio", :value => "msn"}/
+                            %label{:for => "msn"} MSN
+
+                      %tr
+                        %td{ :colspan => 3 }
+                          %input#import_contacts.ui-button.submit.update.ui-widget.ui-state-default.ui-corner-all{"aria-disabled" => "false", :name => "commit", :role => "button", :type => "submit", :value => "Import Contacts"}/
+
+                          // Link to import from Google
+                          //= link_to "Import from Google", @google_oauth_url
+
+                %header
+                  %h3 2. Select Your Contacts
+                %div
+                  #import_contacts_container
+                    #select_buttons
+                      %input#select_all.submit{:type => "button", :value => "Select All"}/
+                      %input#deselect_all.submit{:type => "button", :value => "Deselect All"}/
+
+                    %header
+                      %h3 Import your contacts:
+                    #imported-contacts
+                      = render "contacts"
+                    #paginator
+                      = paginate @contacts, :remote => true
+                    .clear
+                  #import_button_container
+                    %input#import_contacts.ui-button.submit.update.ui-widget.ui-state-default.ui-corner-all{"aria-disabled" => "false", :name => "commit", :role => "button", :type => "submit", :value => "Send Invitations!"}/
+
+        #sent_invites
+          %h3 Sent Invitations
+          %hr/
+          %ul.header
+            %li Sent:
+            %li To:
+            %li Status:
+            %hr
+          =render :partial =>  "users/invitations/invitation", :collection => @invited_users, :as => :invited_user
+
+
+%a{:href => "#", :id => "link_test"} test

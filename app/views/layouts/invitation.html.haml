@@ -1,0 +1,36 @@
+!!!
+%html{:lang => "en"}
+  %head
+    = stylesheet_link_tag 'bootstrap', 'main', 'tagit'
+    = javascript_include_tag :application
+
+    :css
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      #spinner
+        {
+          margin:33px 0;
+          position:relative;
+          width:800px;
+          left:50%;
+
+        }
+      .ajax-loader
+        {
+          margin:0 7px;
+
+        }
+  %body
+ 
+    .container
+      = render 'shared/flash_message'
+
+
+      .row
+
+        = yield
+      = render 'shared/footer'
+
+
