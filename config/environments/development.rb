@@ -43,7 +43,7 @@ Affluence2::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
-  config.middleware.use Rack::SslEnforcer, :only => %r{^/admin}, :strict => true
+  #config.middleware.use Rack::SslEnforcer, :only => %r{^/admin}, :strict => true
 
 
   ActionMailer::Base.smtp_settings = {
