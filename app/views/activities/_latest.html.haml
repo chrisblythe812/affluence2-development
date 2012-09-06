@@ -14,6 +14,7 @@
         = activity.body
         - if activity.resource_type == "Offer"
           = link_to activity.resource.title, offers_path
+          = " Offer"
         - elsif  activity.resource_type == "Comment"
           = link_to activity.resource_type, discussions_path(:id => activity.resource.commentable.id)
           on a discussion
