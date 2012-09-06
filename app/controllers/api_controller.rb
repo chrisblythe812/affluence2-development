@@ -124,7 +124,9 @@ class ApiController < ApplicationController
                                                 :link => json["link"],
                                                 :restaurant_name => json["restaurant_name"],
                                                 :region => json["region"],
-                                                :producer => json["producer"])
+                                                :producer => json["producer"],
+                                                :media_type => json["media_type"],
+                                                :media_url => json["media_url"])
         # adding photos to winshare posts
         #if json["media_type"] == ("Photo" || "photo") && json["media_url"].present?
         #@vincompass_share.photo_url = json["media_url"]
