@@ -43,7 +43,7 @@ Affluence2::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
-  config.middleware.use Rack::SslEnforcer, :except => ['/events', '/offers', '/orders'], :strict => true
+  config.middleware.use Rack::SslEnforcer, :except => ['/events', '/offers', '/orders', '/users/sign_out'], :strict => true
 
 
   ActionMailer::Base.smtp_settings = {
