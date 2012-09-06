@@ -4,7 +4,7 @@ class VincompassShare < ActiveRecord::Base
 
 
   has_one :wine_share, :dependent => :destroy
-  attr_accessor :wine_name, :year, :region, :grape, :producer, :link, :comment, :restaurant_name
+  attr_accessor :wine_name, :year, :region, :grape, :producer, :link, :comment, :restaurant_name, :media_type, :media_url
   before_create :build_promotion, :attach_wine
 
 
