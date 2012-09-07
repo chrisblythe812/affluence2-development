@@ -11,6 +11,9 @@ class Users::InvitationsController < Devise::InvitationsController
     #    end
     build_resource
     resource.build_profile
+    current_user.invitations.where(:status => 1).each do |invite_history|
+      invite_history.update_attributes(:status => 0) if (Time.now - invite_history.created_at) > User.invite_for.to_i
+    end
     @invited_users = current_user.invitations.order("created_at DESC")
     render :new
   end
@@ -64,23 +67,23 @@ class Users::InvitationsController < Devise::InvitationsController
   # POST /resource/invitation
   def create
     user = User.where(:email => params[:user][:email]).first
-    #    p "----#{Time.now - user.invitation_sent_at > 2.minutes} --------------"
-#    if (user.nil?) || (user && ((Time.now - user.invitation_sent_at) > 2.minutes))
-#      p 'in if ==========='
-#      self.resource = resource_class.invite!(params[:user].merge({"status" => "active", :plan => "free"}), current_inviter)
-#      flash[:notice] = "Your invite has sucessfully been sent to #{self.resource.email}."
-#      self.resource.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US")
-#      self.resource.save!
-#    end
-    if (user.nil?)  || (user && ((Time.now - user.invitation_sent_at) > 2.minutes.to_i))
-      p 'in if ==========='
-      self.resource = resource_class.invite!(params[:user].merge({"status" => "active", :plan => "free"}), current_inviter)
-      flash[:notice] = "Your invite has sucessfully been sent to #{self.resource.email}."
-      self.resource.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US")
-      current_user.invitations.build(:email => self.resource.email)
-      current_user.save!
-      self.resource.save!
+
+    if user.present?
+      if user.invited_by.present?
+        if user.invitation_accepted_at.nil?
+          if user.invitation_expired?
+            send_invitation
+          else
+            flash[:error] = "Some one already invited #{user.email}."
+          end
+        else
+           flash[:error] = "#{user.email} is already registered."
+        end
+      end
+    else
+      send_invitation
     end
+
     redirect_to new_user_invitation_path
   end
 
@@ -94,21 +97,21 @@ class Users::InvitationsController < Devise::InvitationsController
     end
   end
 
-#   PUT /resource/invitation
-    def update
-      self.resource = resource_class.accept_invitation!(params[resource_name])
-      resource.status
+  #   PUT /resource/invitation
+  def update
+    self.resource = resource_class.accept_invitation!(params[resource_name])
+    resource.status
   
-      if resource.errors.empty?
-        update_invitation_history_of_invited_to(1)
-        set_flash_message :notice, :updated
-        sign_in(resource_name, resource)
-        respond_with resource, :location => after_accept_path_for(resource)
-      else
-        update_invitation_history_of_invited_to(2)
-        respond_with_navigational(resource){ render :edit }
-      end
+    if resource.errors.empty?
+      update_invitation_history_of_invited_to(2)
+      set_flash_message :notice, :updated
+      sign_in(resource_name, resource)
+      respond_with resource, :location => after_accept_path_for(resource)
+    else
+      update_invitation_history_of_invited_to(0)
+      respond_with_navigational(resource){ render :edit }
     end
+  end
 
 
   private
@@ -137,6 +140,17 @@ class Users::InvitationsController < Devise::InvitationsController
 
   def update_invitation_history_of_invited_to(status = 0)
     invitation_history = InvitationHistory.find_by_user_id(self.resource.invited_by_id)
-    invitation_history.update_attributes(:status => 1)
+    invitation_history.update_attributes(:status => status)
+  end
+
+  private
+
+  def send_invitation
+    self.resource = resource_class.invite!(params[:user].merge({"status" => "active", :plan => "free"}), current_inviter)
+    flash[:success] = "Your invite has sucessfully been sent to #{self.resource.email}."
+    self.resource.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US")
+    current_user.invitations.build(:email => self.resource.email, :status => 1)
+    current_user.save!
+    self.resource.save!
   end
 end
