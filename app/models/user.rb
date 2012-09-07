@@ -351,4 +351,11 @@ class User < ActiveRecord::Base
     promotions_users.where("promotions.promotionable_type like 'Concierge' ").joins('left join promotions on promotions.id = promotions_users.promotion_id')
   end
 
+  #invite methods
+  def invitation_expired?
+    if invitation_sent_at.present?
+      return (Time.now - invitation_sent_at) > User.invite_for.to_i
+    end
+    return true
+  end
 end

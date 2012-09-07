@@ -79,6 +79,8 @@ class Users::InvitationsController < Devise::InvitationsController
         else
            flash[:error] = "#{user.email} is already registered."
         end
+      else
+        flash[:error] = "#{user.email} is already registered."
       end
     else
       send_invitation
