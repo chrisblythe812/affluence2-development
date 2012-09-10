@@ -119,10 +119,10 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+    :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role, :status, :created_at, :updated_at
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :profile_attributes, :card_number, :expiry_month, :expiry_year, :zip_code, :plan, :role, :status, :points, :created_at, :updated_at
   accepts_nested_attributes_for :profile
 
 
@@ -154,6 +154,32 @@ class User < ActiveRecord::Base
   def first_name_or_last_name
 
   end
+  state_machine :plan, :initial => :free do
+    after_transition :on => [:monthly, :yearly] do |user, transition|
+      inviter = user.invited_by
+      if inviter.present?
+        inviter_invitation_history = inviter.invitations.where(:status => 2, :email => user.email).first
+
+        if inviter_invitation_history
+          case transition.to
+            when "Monthly"
+              inviter.update_attributes(:points => 50)
+            when "Yearly"
+              inviter.update_attributes(:points => 100)
+          end
+          inviter_invitation_history.update_attributes(:status => 3)
+        end
+      end
+
+    end
+ 
+
+    event :monthly do
+      transition :free => :Monthly
+    end
+    event :yearly do
+      transition :free => :Yearly
+    end  end
 
 
   has_permalink :permalink_name, :update => true

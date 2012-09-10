@@ -96,7 +96,7 @@ class ProfilesController < ApplicationController
 
     user = User.find_by_permalink(params[:id])
     @profile = user.profile unless user.blank?
-#    @latest_activities =  current_user != @profile.user ? @profile.user.activities_by_privacy_settings(current_user): current_user.activities.last(7).reverse
+    #    @latest_activities =  current_user != @profile.user ? @profile.user.activities_by_privacy_settings(current_user): current_user.activities.last(7).reverse
   end
 
   def update_notifications
@@ -209,23 +209,23 @@ class ProfilesController < ApplicationController
 
   def billing_info_confirm
 
-    begin
-      @result = Braintree::TransparentRedirect.confirm(request.query_string)
-      if @result.success?
-        current_user.change_current_plan(session[:user_plan],@result.customer.id)
-        flash[:success]= "You have successfully converted to #{current_user.plan} plan."
-        redirect_to edit_profile_path(current_user.permalink)
-      else
-        @profile = current_user.profile
-        @profile.photos.build if @profile.photos.blank?
-        @user = @profile.user
-        create_braintree_object
-        session['menu_link'] = 'billing info'
-        render action: :edit and return
-      end
-    rescue
+
+    @result = Braintree::TransparentRedirect.confirm(request.query_string)
+    if @result.success?
+      logger.info session[:user_plan]
+      current_user.send(session[:user_plan].downcase)
+      current_user.change_current_plan(session[:user_plan],@result.customer.id)
+      flash[:success]= "You have successfully converted to #{current_user.plan} plan."
       redirect_to edit_profile_path(current_user.permalink)
+    else
+      @profile = current_user.profile
+      @profile.photos.build if @profile.photos.blank?
+      @user = @profile.user
+      create_braintree_object
+      session['menu_link'] = 'billing info'
+      render action: :edit and return
     end
+
   end
 
 
