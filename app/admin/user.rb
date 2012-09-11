@@ -25,6 +25,7 @@ ActiveAdmin.register User do
        user.account_active? ? icon(:check) : icon(:x)
     end
     column("Membership plan", :plan)
+    column("Invitation Points", :points)
     column('Actions',:sortable => false) do |event|
       link_to 'details', admin_user_path(event)
     end
