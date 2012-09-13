@@ -99,6 +99,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
   # POST /resource/invitation
   def create
+    if params[:user][:email].present?
     user = User.where(:email => params[:user][:email]).first
     if user.present?
       if user.invited_by.present?
@@ -121,6 +122,10 @@ class Users::InvitationsController < Devise::InvitationsController
     end
 
     redirect_to new_user_invitation_path
+    else
+      flash[:error] = "Enter email."
+      redirect_to new_user_invitation_path
+    end
   end
 
   # GET /resource/invitation/accept?invitation_token=abcdef
@@ -161,7 +166,6 @@ class Users::InvitationsController < Devise::InvitationsController
     self.resource = resource_class.invite!({:email => email}.merge({"status" => "active", :plan => "free"}), current_inviter)
     self.resource.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US")
     current_user.invitations.build(:email => self.resource.email, :status => 1)
-    current_user.save!
-    self.resource.save!
+    current_user.save! if self.resource.save!
   end
 end  
