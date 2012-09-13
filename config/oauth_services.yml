@@ -1,0 +1,49 @@
+common: &default_settings
+  google:
+      consumer_key: "anonymous"
+      consumer_secret: "anonymous"
+  yahoo:
+      consumer_key: "dj0yJmk9YUpNMm1pQTFqVXIxJmQ9WVdrOVZWbDRlR0ZXTmpRbWNHbzlPRGs1TURjek9UWXkmcz1jb25zdW1lcnNlY3JldCZ4PWRj"
+      consumer_secret: "094e74e19dc112dbc903be9924a20ab787712cd4"
+  windows_live:
+    application_id: "000000004C07AE17"
+    secret_key: "Z3T3zL3PPgEuvPuSpclZ-vWYmnHO7Tot"
+    privacy_policy_url: http://affluence.dev/404.html
+  # yahoo:
+  #     consumer_key: your_key
+  #     consumer_secret: your_secret_key
+  #     return_url: 'http://phaseiii.mine.nu:3000/friends/load_contacts'
+
+development:
+  <<: *default_settings
+
+livedev:
+  <<: *default_settings
+
+staging:
+  google:
+      consumer_key: "anonymous"
+      consumer_secret: "anonymous"
+  yahoo:
+      consumer_key: "dj0yJmk9a0R0TXhNdkU5VlFUJmQ9WVdrOVoxSlVRbEpSTlRJbWNHbzlNVGN3TVRZNE9EazJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD1iZg--"
+      consumer_secret: "d7f80800497d3a4862419e7865f96280db5d73a2"
+  windows_live:
+    application_id: "000000004C07C814"
+    secret_key: "jjLbOI1ZTXCcBcdqaShTDQVMabm"
+    privacy_policy_url: http://affluence-staging.herokuapp.com/privacy.html
+
+production:
+  google:
+      consumer_key: "affluence.org"
+      consumer_secret: "0a9AIP4waz7d3jodtvi6Q+Ud"
+  yahoo:
+      consumer_key: "dj0yJmk9c01HWjR0QlEzck5uJmQ9WVdrOVl6Sm9ZVGgxTjJVbWNHbzlNakUwTWpNd09EazJNZy0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hNQ--"
+      consumer_secret: "8ff111d4a3d15c790d1cd921b0bfcdc9805ad1c1"
+  windows_live:
+    application_id: "000000004008BE20"
+    secret_key: "2zEPC2X9201xmuQIK4CoUvR7w-eOgjfG"
+    privacy_policy_url: http://affluence.org/privacy.html
+
+test:
+  <<: *default_settings
+

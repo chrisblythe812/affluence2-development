@@ -1,0 +1,31 @@
+.span9
+  %div
+    %h2.small
+      = "#{params[:provider].camelcase} Contacts"
+    %hr.zero 
+  %div
+    %ul.nav{:class => "nav-pills"}
+      %li.span4
+        %label.checkbox
+          = check_box_tag 'users[]', "Select all", false, {:class => 'select_all'}
+          = "Select all"
+    = form_tag(import_contacts_path) do
+      - @contacts.in_groups_of(2, false) do |row|
+        %ul.nav{:class => "nav-pills"}
+          -row.each do |email|
+            %li.span4
+              %label.checkbox
+                = check_box_tag 'users[]', email, false, {:class => 'email'}
+                = email
+      .form-actions
+        = submit_tag "Send Invitation", :class => "btn btn-primary"
+        .clear 
+    = paginate @contacts, :theme => "bootstrap"
+:javascript
+  $(function(){
+    $('.select_all').click(function(){
+      $('.email').attr('checked', !!$('.select_all').attr('checked'));
+    });
+
+
+  });
