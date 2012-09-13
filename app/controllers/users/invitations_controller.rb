@@ -57,22 +57,29 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def contacts_provider_callback
+    logger.info '111111111111111111111111111111111111'
     if current_user.has_imported_contacts?(params[:provider])
+      logger.info '2222222222222222222222222222'
       @contacts = Kaminari.paginate_array(current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')).page(params[:page]).per(20)
 
       respond_to do |format|
         format.html{render :imported_contacts}
       end
     else
+      logger.info '3333333333333333333333333333'
       consumer = Contacts.deserialize_consumer(params[:provider].to_sym, session[:consumer][params[:provider]])
       if consumer.authorize(params)
         begin
+          logger.info '4444444444444444444444'
+          logger.info consumer.contacts
           contacts = []
           consumer.contacts.each do |contact|
             contact.emails.each do |email|
               contacts << email
             end
           end
+          logger.info '55555555555555555555'
+          logger.info contacts
 
           contact = Contact.new 
           contact.user_id = current_user.id
@@ -80,6 +87,8 @@ class Users::InvitationsController < Devise::InvitationsController
           contact.emails_list = contacts.join(', ')
  
           if contact.save!
+            logger.info '66666666666666666666'
+            logger.info contact.emails_list
             @contacts = current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')
             @contacts = Kaminari.paginate_array(@contacts).page(params[:page]).per(20)
           else
