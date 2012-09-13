@@ -34,10 +34,10 @@ Affluence2::Application.routes.draw do
   devise_scope :user do
     get "/users/sign_in" => "welcome#index"
 
-    get "/invitations/contacts" => "invitations#get_contacts", :as => :get_contacts
-    post "/invitations/contacts" => "invitations#import_contacts", :as => :import_contacts
+    get "/users/invitations/contacts" => "users/invitations#get_contacts", :as => :get_contacts
+    post "/users/invitations/contacts" => "users/invitations#import_contacts", :as => :import_contacts
 
-    match "/invitations/contacts_provider_callback" => "invitations#contacts_provider_callback", :as => :contacts_provider_callback
+    match "/users/invitations/contacts_provider_callback" => "users/invitations#contacts_provider_callback", :as => :contacts_provider_callback
 
   end
  

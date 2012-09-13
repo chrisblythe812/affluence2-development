@@ -24,55 +24,27 @@
         %a{"data-toggle" => "tab", :href => "#lC"} Invite History
     .tab-content
       #lA.tab-pane.active
-        .span2.well
+        .span5.well
           = form_tag(get_contacts_path, :method => :get) do 
-            %table.import_options
-              %tbody
-                %tr
-                  %td
-                    %input{:name => "provider", :type => "radio", :value => @google_oauth_url, :checked => "checked" }
-                      %label{:for => "google"} Google
+            %ul.nav{:class => "nav-pills"}
+              %li.span4
+                %label.radio
+                  = radio_button_tag 'provider', "google"
+                  Google
+              %li.span4
+                %label.radio
+                  = radio_button_tag 'provider', "yahoo"
+                  Yahoo
+              %li.span4
+                %label.radio
+                  = radio_button_tag 'provider', "msn"  
+                  MSN
+            .form-actions
+              = submit_tag "Import", :class => "btn btn-primary"
 
-                %tr
-                  %td{ :colspan => 3 }
-                    %input#import_contacts.ui-button.submit.update.ui-widget.ui-state-default.ui-corner-all{"aria-disabled" => "false", :name => "commit", :role => "button", :type => "submit", :value => "Import Contacts"}
 
-
-                  %header
-                    %h3 2. Select Your Contacts
-                  %div
-                    #import_contacts_container
-                      %header#test_header
-                        %h3 Import your contacts:
  
-        .span2.well
-          %h6 Gmail
-          %hr.zero
-            %p
-              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                %i.icon-ok.icon-white
-                Activate
-        .span2.well
-          %h6 Yahoo
-          %hr.zero
-            %p
-              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                %i.icon-ok.icon-white
-                Activate
-        .span2.well
-          %h6 AOL
-          %hr.zero
-            %p
-              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                %i.icon-ok.icon-white
-                Activate
-        .span2.well
-          %h6 MSN
-          %hr.zero
-            %p
-              %a.btn.btn-info{"data-toggle" => "modal", :href => "#premium-sign-up"}
-                %i.icon-ok.icon-white
-                Activate
+
       / lA
       #lB.tab-pane
         = form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:class => "form-horizontal", :method => :post} do |f|
@@ -113,6 +85,6 @@
     / tab-content
   / tabbable
 
-
+  
 
   
