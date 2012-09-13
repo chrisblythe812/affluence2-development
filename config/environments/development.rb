@@ -43,8 +43,6 @@ Affluence2::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
-  config.middleware.use Rack::SslEnforcer, :except => ['/events', '/offers', '/orders'], :strict => true
-
 
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
@@ -54,9 +52,6 @@ Affluence2::Application.configure do
     :password       => "password",
     :domain         => "heroku.com"
   }
-
-  SslRequirement.disable_ssl_check = true
-
 
 
 end

@@ -35,7 +35,7 @@ gem "twilio-ruby"
 
 gem 'freiden-contacts',  :require => "contacts"
 gem "awesome_print"
-gem 'rack-ssl-enforcer'
+gem 'rack-ssl'
 
 
   

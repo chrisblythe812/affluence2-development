@@ -81,5 +81,6 @@ Affluence2::Application.configure do
       :domain         => "heroku.com"
   }
 
-
+  require 'rack/ssl'
+  config.middleware.use Rack::SSL
 end
