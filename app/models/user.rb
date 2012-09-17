@@ -387,7 +387,7 @@ class User < ActiveRecord::Base
   end
   def has_imported_contacts?(provider)
     contact = contacts.where(:provider => provider).limit(1).first
-    return contact.present? && ((Time.now - contact.created_at) < 1.hour)
+    return contact.present?  
   end
   def can_receive_invitation?
    return invited_by.present? && invitation_accepted_at.nil? && invitation_expired?
