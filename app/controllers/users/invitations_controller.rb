@@ -59,6 +59,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def contacts_provider_callback
+
     if current_user.has_imported_contacts?(params[:provider]) && session[:imported_from].include?(params[:provider])
       @contacts = Kaminari.paginate_array(current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')).page(params[:page]).per(20)
 
@@ -77,10 +78,11 @@ class Users::InvitationsController < Devise::InvitationsController
           end
           emails = []
           
-          User.select(:email).registered_users do |user|
+          User.select(:email).registered_users.each do |user|
             emails << user.email
           end
-          contacts = contacts - emails  
+
+          contacts = contacts - emails
 
           contact = current_user.contacts.find_or_initialize_by_provider_and_user_id(params[:provider], current_user.id)
 
