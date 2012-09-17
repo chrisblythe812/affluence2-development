@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
   scope :deleted_members, :conditions => ['role not like ? and status like ? ', 'superadmin', "deleted"]
 
   scope :first_name_or_last_name, lambda { |query| {:conditions => ['role not like ? and status like ? email like ? ', 'superadmin', "deleted", query]} }
-
+  scope :registered_users, where("(invited_by_id is null) or (invited_by_id is not null and invitation_sent_at is not null)")
 
 
   def first_name_or_last_name

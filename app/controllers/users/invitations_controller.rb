@@ -7,6 +7,8 @@ class Users::InvitationsController < Devise::InvitationsController
   # GET /resource/invitation/new
   def new
     session[:consumer] = {}
+    session[:imported_from] = [] if session[:imported_from].nil?
+
     build_resource
     resource.build_profile
     current_user.invitations.where(:status => 1).each do |invite_history|
@@ -57,7 +59,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def contacts_provider_callback
-    if current_user.has_imported_contacts?(params[:provider])
+    if current_user.has_imported_contacts?(params[:provider]) && session[:imported_from].include?(params[:provider])
       @contacts = Kaminari.paginate_array(current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')).page(params[:page]).per(20)
 
       respond_to do |format|
@@ -73,15 +75,18 @@ class Users::InvitationsController < Devise::InvitationsController
               contacts << email
             end
           end
+          emails = []
+          
+          User.select(:email).registered_users do |user|
+            emails << user.email
+          end
+          contacts = contacts - emails  
 
-          contact = Contact.new 
-          contact.user_id = current_user.id
-          contact.provider = params[:provider]
-          contact.emails_list = contacts.join(', ')
- 
-          if contact.save!
-            @contacts = current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')
-            @contacts = Kaminari.paginate_array(@contacts).page(params[:page]).per(20)
+          contact = current_user.contacts.find_or_initialize_by_provider_and_user_id(params[:provider], current_user.id)
+
+          if contact.update_attributes(:emails_list => contacts.join(', '))
+            @contacts = Kaminari.paginate_array(contact.emails_list.split(', ')).page(params[:page]).per(20)
+            session[:imported_from] << params[:provider]
           else
             redirect_to new_user_invitation_path, :notice => "Could not save contacts from #{params[:provider].camelcase}."
           end

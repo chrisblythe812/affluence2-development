@@ -24,23 +24,25 @@
         %a{"data-toggle" => "tab", :href => "#lC"} Invite History
     .tab-content
       #lA.tab-pane.active
-        .span5.well
-          = form_tag(get_contacts_path, :method => :get) do 
-            %ul.nav{:class => "nav-pills"}
-              %li.span4
-                %label.radio
-                  = radio_button_tag 'provider', "google"
-                  Google
-              %li.span4
-                %label.radio
-                  = radio_button_tag 'provider', "yahoo"
-                  Yahoo
-              %li.span4
-                %label.radio
-                  = radio_button_tag 'provider', "msn"  
-                  MSN
-            .form-actions
-              = submit_tag "Import", :class => "btn btn-primary"
+        = form_tag(get_contacts_path, :method => :get, :id => "contacts") do
+          = hidden_field_tag "provider"
+          #lA.tab-pane.active
+            .span2.well
+              %h6 Gmail
+              %hr.zero
+                %p
+                  = button_tag "Import", :class => "btn btn-primary import", :id => "google"
+            .span2.well
+              %h6 Yahoo
+              %hr.zero
+                %p
+                  = button_tag "Import", :class => "btn btn-primary import", :id => "yahoo"
+            .span2.well
+              %h6 MSN
+              %hr.zero
+                %p
+                  = button_tag "Import", :class => "btn btn-primary import", :id => "msn"
+
 
 
  
@@ -84,7 +86,11 @@
       / lC
     / tab-content
   / tabbable
+:javascript
+  $(function(){
+    $('.import').click(function(){
+      $("#provider").val($(this).attr('id'));
+    });  
 
-  
 
-  
+  });
