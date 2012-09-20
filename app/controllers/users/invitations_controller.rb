@@ -20,6 +20,10 @@ class Users::InvitationsController < Devise::InvitationsController
 
   def get_contacts
     if params[:provider]
+
+      contact = current_user.contacts.find_by_provider(params[:provider])
+      contact.delete if contact.present?
+
       case params[:provider]
       when "google"
         consumer = Contacts::Google.new

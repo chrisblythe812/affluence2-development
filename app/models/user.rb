@@ -163,10 +163,8 @@ class User < ActiveRecord::Base
 
         if inviter_invitation_history
           case transition.to
-            when "Monthly"
-              inviter.update_attributes(:points => 50)
-            when "Yearly"
-              inviter.update_attributes(:points => 100)
+          when "Monthly", "Yearly"
+            User.increment_counter(:points, inviter.id)
           end
           inviter_invitation_history.update_attributes(:status => 3)
         end
@@ -390,6 +388,6 @@ class User < ActiveRecord::Base
     return contact.present?  
   end
   def can_receive_invitation?
-   return invited_by.present? && invitation_accepted_at.nil? && invitation_expired?
+    return invited_by.present? && invitation_accepted_at.nil? && invitation_expired?
   end
 end

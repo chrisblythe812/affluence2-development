@@ -12,7 +12,8 @@
       .well
         %h6 Credits Earned
         %hr.zero
-          %h3 14 Free Months
+          %h3
+            = "#{current_user.points.to_s} Free Months"
   / row
   .tabbable
     %ul.nav.nav-tabs
