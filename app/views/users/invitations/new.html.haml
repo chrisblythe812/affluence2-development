@@ -19,8 +19,8 @@
     %ul.nav.nav-tabs
       %li.active
         %a{"data-toggle" => "tab", :href => "#lA"} Send Multiple
-      %li
-        %a{"data-toggle" => "tab", :href => "#lB"} Single Invite
+      %li#single-invite
+        %a{"data-toggle" => "tab", :href => "#lB"} Invite by Email 
       %li
         %a{"data-toggle" => "tab", :href => "#lC"} Invite History
     .tab-content
@@ -56,16 +56,15 @@
             .control-group
               %label.control-label{:for => "input01"} To:
               .controls
-                - resource.class.invite_key_fields.each do |field|
-                  = f.text_field field, :class => "input-xlarge"
-                  %p.help-block Add multiple Emails separated by a comma
+                = text_field_tag "user[emails]", nil, :class => "input-xlarge"
+                %p.help-block Add multiple Emails separated by a comma 
             .control-group
               %label.control-label{:for => "textarea"} Textarea
               .controls
-                %textarea#textarea.input.span6{:placeholder => "You have been invited to join the exclusive network Affluence by Blake Macleod.  To accept this invitation click here.", :rows => "5"}
+                = text_area_tag "user[invitation_email_body]", nil, :id => "textarea", :class => "input span6", :placeholder => "You have been invited to join the exclusive network Affluence by Blake Macleod.  To accept this invitation click here.", :rows => "5"
           .form-actions
             = f.submit t("devise.invitations.new.submit_button"), :class => "btn btn-primary"
- 
+
       / lB
       #lC.tab-pane
         %table.table.table-striped
@@ -93,5 +92,9 @@
       $("#provider").val($(this).attr('id'));
     });  
 
+    if(#{params[:temp].nil? ? 'false' : params[:temp]}) {
+      $('#user_email').addClass('error');
+      $('#single-invite a').click();
+    }
 
   });

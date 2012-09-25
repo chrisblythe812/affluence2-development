@@ -15,6 +15,12 @@ class Users::InvitationsController < Devise::InvitationsController
       invite_history.update_attributes(:status => 0) if (Time.now - invite_history.created_at) > User.invite_for.to_i
     end
     @invited_users = current_user.invitations.order("created_at DESC")
+ 
+    if session[:temp] 
+      params[:temp] = session[:temp]
+      session[:temp] = nil
+    end
+ 
     render :new
   end
 
@@ -44,22 +50,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def import_contacts
-    sent_email_to = []
-    skipped_emails = []
-    if params[:users] && !params[:users].empty?
-      params[:users].keep_if{|email| email.match(/^.+@.+$/)}.each do |invite_email|
-        user = User.where(:email => invite_email).first
-        if (user.nil?) || (user.present? && user.can_receive_invitation?)
-          send_invitation(invite_email)
-          sent_email_to << invite_email
-        else
-          skipped_emails << invite_email
-        end
-      end
-    end
-    flash[:success] = "Invitations sent to #{sent_email_to.join(', ')}" unless sent_email_to.blank?
-    flash[:error] = "Could not sent mail to #{skipped_emails.join(', ')}" unless skipped_emails.blank?
-    redirect_to new_user_invitation_path
+    check_emails_and_send_invitation params[:users]
   end
 
   def contacts_provider_callback
@@ -110,35 +101,16 @@ class Users::InvitationsController < Devise::InvitationsController
 
   # POST /resource/invitation
   def create
-    if params[:user][:email].present?
-    user = User.where(:email => params[:user][:email]).first
-    if user.present?
-      if user.invited_by.present?
-        if user.invitation_accepted_at.nil?
-          if user.invitation_expired?
-            send_invitation(params[:user][:email])
-            flash[:success] = "Your invite has sucessfully been sent to #{self.resource.email}."
-          else
-            flash[:error] = "Some one already invited #{user.email}."
-          end
-        else
-          flash[:error] = "#{user.email} is already registered."
-        end
-      else
-        flash[:error] = "#{user.email} is already registered."
-      end
+    if params[:user][:emails].present?
+      user_emails = params[:user][:emails].split(',')
+      check_emails_and_send_invitation user_emails, params[:user][:invitation_email_body]
     else
-      send_invitation(params[:user][:email])
-      flash[:success] = "Your invite has sucessfully been sent to #{self.resource.email}."
-    end
-
-    redirect_to new_user_invitation_path
-    else
+      session[:temp] = true
       flash[:error] = "Enter email."
       redirect_to new_user_invitation_path
     end
   end
-
+ 
   # GET /resource/invitation/accept?invitation_token=abcdef
   def edit
     if params[:invitation_token] && self.resource = resource_class.to_adapter.find_first( :invitation_token => params[:invitation_token] )
@@ -172,11 +144,31 @@ class Users::InvitationsController < Devise::InvitationsController
     invitation_history = InvitationHistory.find_by_user_id(self.resource.invited_by_id)
     invitation_history.update_attributes(:status => status)
   end
-
-  def send_invitation(email)
-    self.resource = resource_class.invite!({:email => email}.merge({"status" => "active", :plan => "free"}), current_inviter)
+    
+  def send_invitation(email, body)
+    self.resource = resource_class.invite!({:email => email}.merge({"status" => "active", :plan => "free", :invitation_email_body => body}), current_inviter)
     self.resource.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US")
     current_user.invitations.build(:email => self.resource.email, :status => 1)
     current_user.save! if self.resource.save!
   end
-end  
+
+  def check_emails_and_send_invitation(emails, body = nil)
+    sent_email_to = []
+    skipped_emails = []
+    if emails && !emails.empty?
+      emails.keep_if{|email| email.match(/^.+@.+$/)}.each do |invite_email|
+        user = User.where(:email => invite_email.strip).first
+
+        if (user.nil?) || (user.present? && user.can_receive_invitation?)
+          send_invitation(invite_email, body)
+          sent_email_to << invite_email
+        else
+          skipped_emails << invite_email
+        end
+      end
+    end
+    flash[:success] = "Your invite has sucessfully been sent to #{sent_email_to.join(', ')}." unless sent_email_to.blank?
+    flash[:error] = "#{skipped_emails.join(', ')} is already registered or invited." unless skipped_emails.blank?
+    redirect_to new_user_invitation_path
+  end
+end

@@ -1,7 +1,10 @@
 require "base64"
 class User < ActiveRecord::Base
 
-  attr_accessible :unread_messages_counter 
+  attr_accessible :unread_messages_counter, :invitation_email_body
+  attr_accessor :invitation_email_body
+
+  
   has_one :profile, :dependent => :destroy
   has_many :activities, :dependent => :destroy
   has_many :sent_messages, :foreign_key => "sender_id", :class_name => "Message"
