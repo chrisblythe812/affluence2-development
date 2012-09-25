@@ -10,10 +10,10 @@ images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2
 
 # Events seed data
 #Event.all.each{|event| event.destroy}
-
-#<Event id: nil, title: nil, description: nil, price: nil, created_at: nil, updated_at: nil>
-#<Promotion id: nil, promotionable_id: nil, promotionable_type: "Event", created_at: nil, updated_at: nil>
-#<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
+#
+##<Event id: nil, title: nil, description: nil, price: nil, created_at: nil, updated_at: nil>
+##<Promotion id: nil, promotionable_id: nil, promotionable_type: "Event", created_at: nil, updated_at: nil>
+##<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
 #if Event.all.blank?
 #  events_seed =[
 #    {
@@ -72,7 +72,7 @@ images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2
 #    ran.rand(2..8).times do
 #      event.includes.build({title: titles.sample})
 #    end
-##    event.save!
+#    event.save!
 ##    p event.errors
 #    promotions << event.promotion
 #  end
@@ -95,6 +95,78 @@ images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2
 #      description: 'Join Affluence for an all access pass to the 2012 New Year Party. Walk the red carpet, enjoy the show and party the night away at the exclusive after hours party at the W.'
 #    }]
 #
+#p '--------------------'
+#p promotions
+#  promotions.each do |promotion|
+#    promotion.photos.build(photos)
+#    promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
+#    promotion.save!
+#  end
+#
+#end
+#
+## Offers seed data
+#Offer.all.each{|offer| offer.destroy}
+#
+##<Offer id: nil, title: nil, description: nil, created_at: nil, updated_at: nil>
+##<Promotion id: nil, promotionable_id: nil, promotionable_type: "Offer", created_at: nil, updated_at: nil>
+##<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
+#
+#if Offer.all.blank?
+#
+#  offers_seed =[
+#    {
+#      title: '60% Off Flying Private',
+#      description: 'Fly private for as little as $3,000/hr.',
+#      link: 'www.google.com'
+#    },
+#    {
+#      title: 'Small Luxury Hotel Upgrades',
+#      description: 'Free room upgrade, late checkout & more.',
+#      link: 'www.google.com'
+#    },
+#    {
+#      title: '30% Off Lifelock',
+#      description: 'Protect your identity for less than $7 a month.',
+#      link: 'www.google.com'
+#    },
+#    {
+#      title: '5% off on ebay',
+#      description: 'Buy any electronic gadgets and get 5% off.',
+#      link: 'www.google.com'
+#    }]
+#  offers =[]
+#  offers_seed.each do |offer|
+#    offers << Offer.create(offer)
+#  end
+#
+#  promotions = []
+#  offers.each do |offer|
+#    offer.build_promotion
+#    offer.save!
+#    promotions << offer.promotion
+#  end
+#
+#
+#  photos=[
+#    {
+#      title: '60% Off Flying Private',
+#      description: 'Fly private for as little as $3,000/hr.'
+#    },
+#    {
+#      title: 'Small Luxury Hotel Upgrades',
+#      description: 'Free room upgrade, late checkout & more.'
+#    },
+#    {
+#      title: '30% Off Lifelock',
+#      description: 'Protect your identity for less than $7 a month.'
+#    },
+#    {
+#      title: '5% off on ebay',
+#      description: 'Buy any electronic gadgets and get 5% off.'
+#    }]
+#
+#  offers.each {|offer| offer.save!}
 #
 #  promotions.each do |promotion|
 #    promotion.photos.build(photos)
@@ -103,73 +175,6 @@ images =['events-1.jpg', 'events-2.jpg', 'events-3.jpg', 'offer-1.jpg', 'offer-2
 #  end
 #
 #end
-
-# Offers seed data
-Offer.all.each{|offer| offer.destroy}
-
-#<Offer id: nil, title: nil, description: nil, created_at: nil, updated_at: nil>
-#<Promotion id: nil, promotionable_id: nil, promotionable_type: "Offer", created_at: nil, updated_at: nil>
-#<Photo id: nil, photoable_id: nil, photoable_type: "Promotion", title: nil, description: nil, created_at: nil, updated_at: nil, image_file_name: nil, image_content_type: nil, image_file_size: nil, image_updated_at: nil>
-
-if Offer.all.blank?
-
-  offers_seed =[
-    {
-      title: '60% Off Flying Private',
-      description: 'Fly private for as little as $3,000/hr.'
-    },
-    {
-      title: 'Small Luxury Hotel Upgrades',
-      description: 'Free room upgrade, late checkout & more.'
-    },
-    {
-      title: '30% Off Lifelock',
-      description: 'Protect your identity for less than $7 a month.'
-    },
-    {
-      title: '5% off on ebay',
-      description: 'Buy any electronic gadgets and get 5% off.'
-    }]
-  offers =[]
-  offers_seed.each do |offer|
-    offers << Offer.create(offer)
-  end
-
-  promotions = []
-  offers.each do |offer|
-    offer.build_promotion
-    offer.save!
-    promotions << offer.promotion
-  end
-
-
-  photos=[
-    {
-      title: '60% Off Flying Private',
-      description: 'Fly private for as little as $3,000/hr.'
-    },
-    {
-      title: 'Small Luxury Hotel Upgrades',
-      description: 'Free room upgrade, late checkout & more.'
-    },
-    {
-      title: '30% Off Lifelock',
-      description: 'Protect your identity for less than $7 a month.'
-    },
-    {
-      title: '5% off on ebay',
-      description: 'Buy any electronic gadgets and get 5% off.'
-    }]
-
-  offers.each {|offer| offer.save!}
-
-  promotions.each do |promotion|
-    promotion.photos.build(photos)
-    promotion.photos.each {|x| x.image = File.new(Rails.root.join("app", "assets", "images", images.sample).to_s)}
-    promotion.save!
-  end
-
-end
 
 # user seed data
 User.all.each {|user| user.destroy unless user.role == 'superadmin'}
@@ -280,7 +285,7 @@ be an advantage.",
 user = User.where(:email => "john+1@gmail.com").first
 conversations = []
 users = []
-User.members.each do |user|
+User.active_members.each do |user|
   user.touch
   users << user.id
 end
