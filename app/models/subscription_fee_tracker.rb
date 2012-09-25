@@ -32,10 +32,42 @@ class SubscriptionFeeTracker < ActiveRecord::Base
       puts "Found #{subscriptions.size} subscriptions "
       subscriptions.each do |subscription|
         puts "Making transaction for subscription : #{subscription.id} "
-        make_payment_for_subscription(subscription)
+        if subscription.user.points == 0
+          make_payment_for_subscription(subscription)
+        else
+          make_points_to_be_used_by_adjusting_subscription_date(subscription)
+        end
       end
     end
   end
+
+
+  def self.make_points_to_be_used_by_adjusting_subscription_date(subscription)
+    if subscription.user.points > 0
+      puts "making use of points - #{subscription.user.points} "
+      adjust_subscription_date_by_points(subscription,subscription.user.points)
+    end
+  end
+
+
+
+  def self.adjust_subscription_date_by_points(subscription,points,decrement_points=true)
+    SubscriptionFeeTracker.transaction do
+      new_date = subscription.renewal_date+points.to_i.months
+      puts "adjusting date to - #{new_date} "
+      subscription.renewal_date = new_date
+      subscription.save!
+      if decrement_points
+        user = subscription.user
+        user.points = 0
+        user.save!
+        puts "made user points to zero. "
+      end
+      #notify_user_on_successful_usage_points(subscription.user)
+    end
+  end
+
+
 
 
   def self.make_payment_for_subscription(subscription)
