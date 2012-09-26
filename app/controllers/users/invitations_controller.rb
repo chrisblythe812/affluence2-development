@@ -141,8 +141,8 @@ class Users::InvitationsController < Devise::InvitationsController
   private
 
   def update_invitation_history_of_invited_to(status = 0)
-    invitation_history = InvitationHistory.find_by_user_id(self.resource.invited_by_id)
-    invitation_history.update_attributes(:status => status)
+    invitation_history = InvitationHistory.where(:email=>'aashish.kiran+101@gmail.com', :user_id=>self.resource.invited_by_id, :status=>1).last   
+    invitation_history.update_attributes(:status => status) unless invitation_history.nil?
   end
     
   def send_invitation(email, body)
