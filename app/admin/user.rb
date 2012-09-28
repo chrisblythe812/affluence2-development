@@ -5,6 +5,15 @@ ActiveAdmin.register User do
 
 
   filter :email
+  filter :profile_first_name, :as => "string"
+  filter :profile_last_name, :as => "string"
+  filter :profile_company, :as => "string"
+  filter :profile_title, :as => "string"
+  filter :profile_bio, :as => "string"
+  filter :profile_phone, :as => "string"
+  filter :profile_city, :as => "string"
+  filter :profile_state, :as => "string"
+  filter :profile_country, :as => "string"
 
 
   scope :active_members, :default => true
