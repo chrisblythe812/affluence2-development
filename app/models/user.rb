@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   attr_accessible :unread_messages_counter, :invitation_email_body
   attr_accessor :invitation_email_body
 
-  
+
   has_one :profile, :dependent => :destroy
   has_many :activities, :dependent => :destroy
   has_many :sent_messages, :foreign_key => "sender_id", :class_name => "Message"
@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
     self.connections.each { |x| ids<<x.friend.id }
     activities = []
     temp = false
- 
+
     pro_activities = []
     begin
       if !last_activity && pro_activities.blank?
@@ -135,6 +135,13 @@ class User < ActiveRecord::Base
   validates_presence_of :plan
 
   after_create :create_user_in_mailchimp
+  after_save :create_or_update_profile
+
+  def create_or_update_profile
+    if self.profile.nil?
+      self.build_profile(:first_name => "first name", :last_name => "last name", :city => "city", :country => "US").save!
+    end
+  end
 
   def create_user_in_mailchimp
     #should create user only when user is in active state
@@ -174,7 +181,7 @@ class User < ActiveRecord::Base
       end
 
     end
- 
+
 
     event :monthly do
       transition :free => :Monthly
@@ -388,7 +395,7 @@ class User < ActiveRecord::Base
   end
   def has_imported_contacts?(provider)
     contact = contacts.where(:provider => provider).limit(1).first
-    return contact.present?  
+    return contact.present?
   end
   def can_receive_invitation?
     return invited_by.present? && invitation_accepted_at.nil? && invitation_expired?
