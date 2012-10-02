@@ -49,7 +49,7 @@ Affluence2::Application.configure do
     :port           => "25",
     :authentication => :plain,
     :user_name      => "affluence_development",
-    :password       => "passffword",
+    :password       => "password",
     :domain         => "heroku.com"
   }
 
