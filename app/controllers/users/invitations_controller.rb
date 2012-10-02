@@ -81,7 +81,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
           contact = current_user.contacts.find_or_initialize_by_provider_and_user_id(params[:provider], current_user.id)
 
-          if contact.update_attributes(:emails_list => contacts.join(', '))
+          if contact.update_attributes(:emails_list => contacts.sort.join(', '))
             @contacts = Kaminari.paginate_array(contact.emails_list.split(', ')).page(params[:page]).per(20)
             session[:imported_from] << params[:provider]
           else
