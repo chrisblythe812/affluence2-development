@@ -21,13 +21,13 @@ ActiveAdmin.register SubscriptionFeeTracker do
       auto_link(subscription.user)
     end
     column("Email") do |subscription|
-      !subscription.user.blank? ?  subscription.user.email : "----"
+      !subscription.user.blank? ?  subscription.user.email : "nil"
     end
     column("Amount") do |subscription|
-        "$#{subscription.amount}"
+      "$#{subscription.amount}"
     end
     column("Membership plan") do |subscription|
-      subscription.user.plan
+      !subscription.user.blank? ?  subscription.user.plan : "nil"
     end
     column("Renewal Date") { |subscription| global_date_format(subscription.renewal_date) }
     column('Actions', :sortable => false) do |subscription|
