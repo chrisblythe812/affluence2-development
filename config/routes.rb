@@ -88,6 +88,8 @@ Affluence2::Application.routes.draw do
 
   resources :verfications
 
+  resources :photos
+
   resources :concierges do
     member do
       post :call
