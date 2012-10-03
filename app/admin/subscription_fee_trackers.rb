@@ -21,7 +21,7 @@ ActiveAdmin.register SubscriptionFeeTracker do
       auto_link(subscription.user)
     end
     column("Email") do |subscription|
-      !subscription.user.blnak? ?  subscription.user.email : "----"
+      !subscription.user.blank? ?  subscription.user.email : "----"
     end
     column("Amount") do |subscription|
         "$#{subscription.amount}"
