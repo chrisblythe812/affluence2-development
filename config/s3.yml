@@ -12,7 +12,7 @@ staging:
 
 production:
   <<: *default_settings
-  bucket: "affluence2-production"
+  bucket: "affluence2-development"
 
 test:
   <<: *default_settings
