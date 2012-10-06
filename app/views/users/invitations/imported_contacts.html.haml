@@ -7,25 +7,125 @@
     %ul.nav{:class => "nav-pills"}
       %li.span4
         %label.checkbox
-          = check_box_tag 'users[]', "Select all", false, {:class => 'select_all'}
+          = check_box_tag 'select_all', session[:state], false, {:class => 'select_all'}
           = "Select all"
-    = form_tag(import_contacts_path) do
+    = form_tag(import_contacts_path, :id => 'contacts') do
+      = params[:page]  
+      = hidden_field_tag "state_changed", 'false', {:id => 'state_changed'}
+      = hidden_field_tag "current_state", session[:state], {:class => 'current_state'}
+      = hidden_field_tag "unchecked_emails", '', {:id => 'unchecked-emails'}
+      = hidden_field_tag "current_page", params[:page].nil? ? "1" : params[:page], {:id => 'current-page'}
       - @contacts.in_groups_of(2, false) do |row|
         %ul.nav{:class => "nav-pills"}
           -row.each do |email|
             %li.span4
               %label.checkbox
-                = check_box_tag 'users[]', email, false, {:class => 'email'}
+                - temp_index = @contacts.index(email) + ((params[:page].nil? ? 0 : params[:page].to_i - 1) * 20)
+                - if session[:state] == "2"
+                  = !session[:unselected_emails][params[:page].nil? ? "1" : params[:page]].include?(temp_index.to_s)
+                  = check_box_tag 'users[]', temp_index, !session[:unselected_emails][params[:page].nil? ? "1" : params[:page]].include?(temp_index.to_s), {:class => 'email'}
+                - elsif session[:state] == "0"
+                  = temp_index
+                  = params[:page]
+                  = check_box_tag 'users[]', temp_index, session[:selected_emails][params[:page].nil? ? "1" : params[:page]].include?(temp_index.to_s), {:class => 'email'}
+                - else
+                  = check_box_tag 'users[]', temp_index, 'checked', {:class => 'email'}
                 = email
       .form-actions
-        = submit_tag "Send Invitation", :class => "btn btn-primary"
+        = submit_tag "Send Invitation", :class => "btn btn-primary send-invitation"
         .clear 
     = paginate @contacts, :theme => "bootstrap"
 :javascript
   $(function(){
-    $('.select_all').click(function(){
-      $('.email').attr('checked', !!$('.select_all').attr('checked'));
+    var state_changed = false;
+    var select_all = false;
+    var state = $('.select_all').val();
+  
+    var selected_emails = null, unselected_emails = null;
+
+    $('.select_all').change(function(){
+      state_changed = true;
+      alert(state_changed);
     });
 
+    if(state == "1"){
+      $('.select_all').attr('checked', 'checked');
+      $('.email').attr('checked', !!$('.select_all').attr('checked'));
+    }
 
+
+    $('.select_all').click(function(){
+      selected_emails = null, select_unchecked_emails = false, unselected_emails = null;
+
+      $('.email').attr('checked', !!$('.select_all').attr('checked'));
+        
+      if(!!$('.select_all').attr('checked')){
+        $('.select_all, .current_state').val("1");
+        selected_emails = $(".email").map(function(){
+          return this.value;
+        }).get().join(',');
+      }
+      else {
+        $('.select_all, .current_state').val('0');
+      }
+    });
+    $('.email').click(function(){
+      if(!!$('.select_all').attr('checked')) {
+        $('.select_all').attr('checked', false);
+        $('.select_all, .current_state').val('2');
+        select_unchecked_emails = true;
+        select_all = false;
+      }
+      
+    });
+       
+    $('.page a, .prev a, .next a').click(function(){
+      if($('.select_all').val() == "2"){
+        alert('222222');
+        unselected_emails = $(".email").map(function(){
+          if(!$(this).attr('checked')) return this.value;
+        }).get().join(',');
+        selected_emails = null;
+      }
+      else if($('.select_all').val() == "0") {
+        alert('000000');
+        selected_emails = $(".email").map(function(){
+          if(!!$(this).attr('checked')) return this.value;
+        }).get().join(',');
+      }
+      else if($('.select_all').val() == "1"){
+        alert('111111');
+        select_all = true;
+        selected_emails = null;
+        unselected_emails = null;
+      }
+  
+      
+      var params = { state:$('.select_all').val(),
+        state_changed:state_changed,
+        select_all:select_all,
+        prev_page:"#{params[:page].nil? ? "1" : params[:page]}",
+        selected_emails:selected_emails,
+        unselected_emails:unselected_emails
+      };
+      params = jQuery.param(params);
+      alert(params);
+
+      $(this).attr('href', $(this).attr('href') + "&" + params);
+    });
+
+    $('#contacts').submit(function(){
+      var temp = '';
+      if($('.select_all').val() == '2'){
+        $('.email:not(:checked)').each(function(){
+          if (temp == ''){
+            temp = $(this).val();
+          }
+          else{
+            temp = temp + "," + $(this).val();
+          }
+        });
+        $('#unchecked-emails').val(temp);
+      }
+    });
   });

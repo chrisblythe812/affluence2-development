@@ -8,7 +8,11 @@ class Users::InvitationsController < Devise::InvitationsController
   def new
     session[:consumer] = {}
     session[:imported_from] = [] if session[:imported_from].nil?
-
+    session[:select_all] = false
+    session[:selected_emails] = {"1" => []}
+    session[:unselected_emails] = {"1" => []}
+    session[:state] = "0"
+ 
     build_resource
     resource.build_profile
     current_user.invitations.where(:status => 1).each do |invite_history|
@@ -23,7 +27,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
     render :new
   end
-
+  
   def get_contacts
     if params[:provider]
 
@@ -50,13 +54,74 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def import_contacts
-    check_emails_and_send_invitation params[:users]
+
+    if params[:state_changed] == "true"
+      session[:select_all] = false
+      session[:selected_emails] = {"1" => []}
+      session[:unselected_emails] = {"1" => []}
+    end
+
+    user_indexes = []
+    session[:state] = params[:current_state]
+    users = current_user.contacts.find_by_provider(session[:provider]).emails_list.split(', ')
+
+    if session[:state] == "1"
+    elsif session[:state] == "0"
+      session[:selected_emails][params[:current_page]] = params[:users]  
+      session[:selected_emails].each_value do |value|
+        user_indexes = user_indexes + value
+      end
+
+      temp = []
+      user_indexes.each do |index|
+        temp << users[index.to_i]
+      end
+      users = temp 
+    elsif session[:state] == "2"
+
+      session[:unselected_emails][params[:current_page]] = params[:unchecked_emails].split(',')
+      session[:unselected_emails].each_value do |value|
+        user_indexes = user_indexes + value
+      end
+      user_indexes.uniq!
+
+      user_indexes.sort_by(&:to_i).reverse.each do |index|
+        users.delete_at(index.to_i)
+      end  
+    end
+    p "------emails will be sent to : #{users} -------------"
+    redirect_to new_user_invitation_path
+
+#    check_emails_and_send_invitation users
   end
 
   def contacts_provider_callback
 
     if current_user.has_imported_contacts?(params[:provider]) && session[:imported_from].include?(params[:provider])
       @contacts = Kaminari.paginate_array(current_user.contacts.find_by_provider(params[:provider]).emails_list.split(', ')).page(params[:page]).per(20)
+
+      session[:provider] = params[:provider]
+      session[:prev_page] = params[:prev_page] unless params[:prev_page].nil?
+
+      if params[:state_changed] == "true"
+        session[:select_all] = false
+        session[:selected_emails] = {"1" => []}
+        session[:unselected_emails] = {"1" => []}
+      end
+      session[:selected_emails][params[:page]] = [] unless session[:selected_emails].has_key?(params[:page])
+      session[:unselected_emails][params[:page]] = [] unless session[:unselected_emails].has_key?(params[:page])
+      session[:state] = params[:state] unless params[:state].nil?
+  
+      case params[:state]
+      when "0"
+        session[:selected_emails][params[:prev_page]] = params[:selected_emails].split(',')
+      when "1"
+        session[:select_all] = params[:select_all]
+        session[:selected_emails][params[:page]] = [] unless session[:selected_emails].has_key?(params[:page])
+      when "2"
+        session[:unselected_emails][params[:prev_page]] = params[:unselected_emails].split(',')
+        session[:unselected_emails][params[:page]] = [] unless session[:unselected_emails].has_key?(params[:page])
+      end
 
       respond_to do |format|
         format.html{render :imported_contacts}
