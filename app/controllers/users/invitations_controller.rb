@@ -89,10 +89,7 @@ class Users::InvitationsController < Devise::InvitationsController
         users.delete_at(index.to_i)
       end  
     end
-    p "------emails will be sent to : #{users} -------------"
-    redirect_to new_user_invitation_path
-
-#    check_emails_and_send_invitation users
+    check_emails_and_send_invitation users
   end
 
   def contacts_provider_callback
