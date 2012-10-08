@@ -45,7 +45,6 @@
 
     $('.select_all').change(function(){
       state_changed = true;
-      alert(state_changed);
     });
 
     if(state == "1"){
@@ -81,20 +80,17 @@
        
     $('.page a, .prev a, .next a').click(function(){
       if($('.select_all').val() == "2"){
-        alert('222222');
         unselected_emails = $(".email").map(function(){
           if(!$(this).attr('checked')) return this.value;
         }).get().join(',');
         selected_emails = null;
       }
       else if($('.select_all').val() == "0") {
-        alert('000000');
         selected_emails = $(".email").map(function(){
           if(!!$(this).attr('checked')) return this.value;
         }).get().join(',');
       }
       else if($('.select_all').val() == "1"){
-        alert('111111');
         select_all = true;
         selected_emails = null;
         unselected_emails = null;
@@ -109,7 +105,6 @@
         unselected_emails:unselected_emails
       };
       params = jQuery.param(params);
-      alert(params);
 
       $(this).attr('href', $(this).attr('href') + "&" + params);
     });
