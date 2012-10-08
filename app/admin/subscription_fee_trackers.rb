@@ -6,14 +6,16 @@ ActiveAdmin.register SubscriptionFeeTracker do
 
   config.sort_order = 'renewal_date_desc'
 
-
+  filter :user_email, :as => "string"
+  filter :user_profile_first_name, :as => "string"
+  filter :user_profile_last_name, :as => "string"
 
   scope :pending, :default => true
   scope :failed
 
 
 
-  config.clear_sidebar_sections!
+
 
 
   index do
