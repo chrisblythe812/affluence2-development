@@ -135,12 +135,13 @@ class Users::InvitationsController < Devise::InvitationsController
           end
           emails = []
 
-          User.select(:email).registered_users.each do |user|
-            emails << user.email
+          User.all.each do |user|
+            unless (user.present? && user.can_receive_invitation?)
+              emails << user.email
+            end
           end
 
           contacts = contacts - emails
-
           contact = current_user.contacts.find_or_initialize_by_provider_and_user_id(params[:provider], current_user.id)
 
           if contact.update_attributes(:emails_list => contacts.sort.join(', '))
