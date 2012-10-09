@@ -1,0 +1,2 @@
+module PhotoStreamsHelper
+end

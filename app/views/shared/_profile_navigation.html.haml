@@ -17,8 +17,8 @@
         %a{:href => "#{profile_path(current_user.permalink)}"}
           %i.icon-home>
           Profile
-      %li{:class => "#{(params[:controller] == 'photos') ? 'active':''}"}
-        %a{:href => "#{photo_path(current_user.permalink)}"}
+      %li{:class => "#{(params[:controller] == 'photo_streams') ? 'active':''}"}
+        %a{:href => "#{user_photo_streams_path(current_user.permalink)}"}
           %i.icon-picture>
           Photo Stream
       %li{:class => "#{(params[:controller] == 'members') ? 'active':''}"}

@@ -31,9 +31,7 @@ class ApplicationController < ActionController::Base
       flash[:error] = "Unauthorized Access!
         Please become a premium member.
         #{ActionController::Base.helpers.link_to "Billing Info", edit_profile_path(current_user.permalink, :value => 'billing info')}".html_safe
-      redirect_to user_conversations_path(current_user)
-      #      flash[:error] = "Unauthorized Access!  Please become a premium member."
-      #      redirect_to profile_path(current_user.permalink)
+      redirect_to(:back)
     end
   end
 

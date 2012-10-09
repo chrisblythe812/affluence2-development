@@ -3,7 +3,7 @@ class Profile < ActiveRecord::Base
   has_many :photos, :as => :photoable, :dependent => :destroy
   has_one :privacy_setting, :dependent => :destroy
   has_one :notification_setting, :dependent => :destroy
-  #  has_one :photo_stream, :dependent => :destroy
+  has_many :photo_streams, :dependent => :destroy
 
   attr_accessible :invitation_source, :photos_attributes, :first_name, :last_name, :city, :country, :state, :company, :bio,
     :middle_name, :phone, :title, :association_list, :interest_list, :expertise_list, :full_name

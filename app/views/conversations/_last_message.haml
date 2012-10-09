@@ -1,8 +1,12 @@
 - unless conversation.messages.blank?
   - message = conversation.messages.last
-  profile = (message.sender == current_user) ? message.recipient.profile : message.sender.profile
+  - if !conversation.messages.where('sender_id = ? and recipient_id != ?', current_user, current_user).last.blank?
+    - profile = conversation.messages.where('sender_id = ? and recipient_id != ?', current_user, current_user).last.recipient.profile
+  - else
+    - profile = conversation.messages.last.sender.profile
   %tr{:class => "#{'unread' unless conversation.read?(current_user)}" }
     %td.span1{:data => {:conversation_id => conversation.id}}
+      =# profile.user.id
       = link_to image_tag(display_image(profile.photos, :thumb)), user_conversation_path(current_user, conversation), :class => "thumbnail"
     %td
       -if conversation.messages.length > 1
@@ -22,4 +26,3 @@
                "data-confirm" => 'Are you sure?',
                "data-original-title" => "Delete",
                "data-placement" => "bottom"}×
-

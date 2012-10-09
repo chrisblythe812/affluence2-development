@@ -64,6 +64,10 @@ Affluence2::Application.routes.draw do
       get :unarchive
       get :confirm, :on => :collection
     end
+    resources :photo_streams do
+      post :create_photo
+      delete 'photo/:id' => :destroy_photo
+    end
   end
 
     

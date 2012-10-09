@@ -33,6 +33,8 @@ class Photo < ActiveRecord::Base
       end
     elsif self.photoable_type.nil?
       {:medium => ['260x260#', :png], :thumb => ['60x60#', :png]}
+    else
+      {:medium => ['260x260#', :png], :thumb => ['60x60#', :png]}
     end
   end
 
