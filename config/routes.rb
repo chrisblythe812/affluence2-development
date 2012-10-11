@@ -66,11 +66,12 @@ Affluence2::Application.routes.draw do
     end
     resources :photo_streams do
       post :create_photo
-      delete 'photo/:id' => :destroy_photo
+      delete 'photo/:id' => :destroy_photo, :as => 'photo'
     end
   end
 
-    
+  resources :photo_streams  
+
   # Sample resource route with options:
   resources :events do
     member do

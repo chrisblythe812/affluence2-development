@@ -82,7 +82,8 @@
             %a.thumbnail{:href => "#"}
               %img{:alt => "", :src => "http://placehold.it/260x180"}
         %p.pull-right
-          %a{:href => "./members.html"} see more photos
+          %a{:href => "#{user_photo_streams_path(current_user.permalink)}"}
+            see more photos
         %br/
         %br/
     / span9

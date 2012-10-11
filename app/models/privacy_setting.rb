@@ -16,7 +16,7 @@ class PrivacySetting < ActiveRecord::Base
       "Event" => "events",
       "Offer" => "offers",
       "Connection" => "new_contact",
-      "Photo" => "photos",
+      "PhotoStream" => "photo_stream",
       "Invitation" => "invitations",
       "VincompassShare" => "vincompass_share",
       "Discussion" => "discussions",
