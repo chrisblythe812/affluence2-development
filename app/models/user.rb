@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
 
       activities.each do |activity|
         break if (pro_activities.length == 7)
+        next if (activity.resource_type == 'PhotoStream') && (activity.resource.photos.count < 1)
         next unless (!activity.resource.nil?)
         privacy = activity.user.profile.privacy_setting
         if self == activity.user
@@ -93,6 +94,7 @@ class User < ActiveRecord::Base
       activity = activity ? self.activities.previous(activity).first : self.activities.last
       break unless activity
       next if activity.resource.nil?
+      next if (activity.resource_type == 'PhotoStream') && (activity.resource.photos.count < 1)
       privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'

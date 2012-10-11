@@ -124,7 +124,7 @@ class ConversationsController < ApplicationController
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message
       @conversation.save
-      if ((Time.now - Connection.where(:user_id => @message.sender_id, :recipient_id => @message.recipient_id).first.created_at) < 60)
+      if ((Time.now - Connection.where(:user_id => @message.sender_id, :friend_id => @message.recipient_id).first.created_at) < 60)
 
         reset_session_activity
       end

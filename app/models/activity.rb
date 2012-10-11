@@ -34,7 +34,8 @@ def self.all_by_privacy_setting(current_user, last_activity = false)
       activity = activity ? self.previous(activity).first : self.last
       break unless activity
       next if activity.resource.nil?
- 
+      next if (activity.resource_type == 'PhotoStream') && (activity.resource.photos.count < 1)
+
       privacy = activity.user.profile.privacy_setting
 
       if activity.resource_type == 'Profile'
