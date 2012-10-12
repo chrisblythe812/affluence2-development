@@ -8,6 +8,7 @@
       %li.span3{:style => 'min-height:220px'}
         = link_to user_photo_stream_path(current_user.permalink, albumn.id) do
           - photos = albumn.photos
+          %h3= albumn.title
           = image_tag photos.last.image.url(:medium) unless photos.blank?
           %br
           = photos.count
