@@ -6,11 +6,6 @@
       %h1
         %small= @photo_stream.profile.user.name+"'s" if !@photo_stream.profile.user.name.blank?
         = @photo_stream.title
-    .span2
-      %p.pull-right
-        %a.btn.btn-primary.btn-small{"data-toggle" => "modal", :href => "#new-photo"}
-          %i.icon-picture.icon-white
-          Post a Photo
   / row
 
   .row
