@@ -37,8 +37,7 @@
         });
         });
       .files
-        - photo = @photo_stream.photos.build
-        = form_for photo, :url => user_photo_stream_create_photo_path(current_user.id, @photo_stream), :html => {:class => "upload", :multipart => true} do |f|
+        = form_for Photo.new, :url => user_photo_stream_create_photo_path(current_user.id, @photo_stream), :html => {:class => "upload", :multipart => true} do |f|
           %input{:multiple => "", :name => "upload[image]", :type => "file"}
             %div Click here to upload Images
         %table.upload_files

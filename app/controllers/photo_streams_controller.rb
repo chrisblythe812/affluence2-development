@@ -16,7 +16,7 @@ before_filter :authenticate_paid_user!
      
   end
   def show
-    @photo_stream = current_user.profile.photo_streams.find(params[:id])
+    @photo_stream = PhotoStream.find(params[:id])
   end
 
   def create_photo

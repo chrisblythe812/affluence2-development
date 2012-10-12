@@ -46,7 +46,7 @@ class ConversationsController < ApplicationController
     if @conversations.include? @conversation
 
       status = @conversation.archived?(current_user)
-#      @other_conversations = Conversation.for_user(current_user).archived?(status)
+      #      @other_conversations = Conversation.for_user(current_user).archived?(status)
       @first_message = @conversation.messages.first
       @replies = @conversation.messages.order('updated_at asc')
       #    @replies.shift
@@ -68,15 +68,15 @@ class ConversationsController < ApplicationController
     params[:conversation].delete(:recipient_profile_id)
     if !recipient_user.blank? && recipient_user.profile.full_name == params[:conversation_recipient_profile_name]
 
-    @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
-    if @conversation.nil?
-      @conversation = Conversation.new(params[:conversation])
+      @conversation = Conversation.get_conversation_for(current_user.id, recipient_user.id).first
+      if @conversation.nil?
+        @conversation = Conversation.new(params[:conversation])
 
-    else
-      #      @conversation = message.conversation
-      @conversation.messages << Message.new(params[:conversation][:messages_attributes]["0"])
+      else
+        #      @conversation = message.conversation
+        @conversation.messages << Message.new(params[:conversation][:messages_attributes]["0"])
 
-    end
+      end
 
       @conversation.messages.last.sender = current_user
       @conversation.messages.last.recipient = recipient_user
