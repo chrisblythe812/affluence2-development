@@ -20,7 +20,6 @@ before_filter :authenticate_paid_user!
   end
 
   def create_photo
-    p params
     @photostream = current_user.profile.photo_streams.find(params[:photo_stream_id])
     @photo = @photostream.photos.build(:image => params[:upload][:image])
     if @photo.save!
@@ -28,8 +27,14 @@ before_filter :authenticate_paid_user!
     end
   end
   def destroy_photo
-    photo = Photo.find(params[:id]).destroy
+    photo = Photo.find(params[:id])  
+    if !photo.nil? && photo.photoable.profile.user == current_user
+      photo.destroy
+      flash[:success] = 'Successfully deleted'
+    else
+      flash[:error] = 'Cannot delete'
+    end
     redirect_to user_photo_stream_path(current_user.permalink, photo.photoable)
   end
 
-end
+end 
