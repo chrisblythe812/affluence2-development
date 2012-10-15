@@ -9,6 +9,7 @@ before_filter :authenticate_paid_user!
   def create
     @photo_stream =  current_user.profile.photo_streams.build(params[:photo_stream])
     if @photo_stream.save!
+      reset_session_activity
       redirect_to user_photo_stream_path(current_user.permalink, @photo_stream.id)
     else
       render :index
