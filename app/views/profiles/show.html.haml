@@ -64,14 +64,14 @@
         %h3 Photo Stream
         %hr.zero
           %ul.thumbnails
-            - @photo_streams.reverse.each do |albumn|
+            - @photo_streams.reverse.each do |album|
               %li.span3{:style => 'min-height:220px'}
-                = link_to user_photo_stream_path(current_user.permalink, albumn.id) do
-                  - photos = albumn.photos
+                = link_to user_photo_stream_path(current_user.permalink, album.id) do
+                  - photos = album.photos
                   %h3
-                    = albumn.title
+                    = album.title
                   - if photos.blank?
-                    = image_tag 'http://placehold.it/260x180'
+                    = image_tag 'http://placehold.it/260x260'
                   - else
                     = image_tag photos.last.image.url(:medium)
                   %br
