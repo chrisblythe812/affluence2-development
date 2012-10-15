@@ -7,6 +7,6 @@ class PhotoStream < ActiveRecord::Base
   before_save :check_title
 
   def check_title
-    self.title = 'Untitled Albumn' if self.title.strip!.size < 1
+    self.title = 'Untitled Albumn' if self.title.strip! == ''
   end
 end
