@@ -16,7 +16,13 @@ before_filter :authenticate_paid_user!
      
   end
   def show
-    @photo_stream = PhotoStream.find(params[:id])
+    photo_stream = PhotoStream.find(params[:id])
+    if (current_user == photo_stream.profile.user) || current_user.can_view?(photo_stream.profile, 'PhotoStream')
+      @photo_stream =  photo_stream
+    else
+      flash[:error] = 'Cannot access'
+      redirect_to user_photo_streams_path(current_user.permalink)
+    end 
   end
 
   def create_photo

@@ -60,32 +60,28 @@
   / row
   .row
     .span9
-      %h3 Photo Stream
-      %hr.zero
-        %ul.thumbnails
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-          %li.span3
-            %a.thumbnail{:href => "#"}
-              %img{:alt => "", :src => "http://placehold.it/260x180"}
-        %p.pull-right
-          %a{:href => "#{user_photo_streams_path(current_user.permalink)}"}
-            see more photos
-        %br/
-        %br/
+      - if !@photo_streams.nil?
+        %h3 Photo Stream
+        %hr.zero
+          %ul.thumbnails
+            - @photo_streams.reverse.each do |albumn|
+              %li.span3{:style => 'min-height:220px'}
+                = link_to user_photo_stream_path(current_user.permalink, albumn.id) do
+                  - photos = albumn.photos
+                  %h3
+                    = albumn.title
+                  - if photos.blank?
+                    = image_tag 'http://placehold.it/260x180'
+                  - else
+                    = image_tag photos.last.image.url(:medium)
+                  %br
+                  = photos.count
+                  Photos
+          %p.pull-right
+            %a{:href => "#{user_photo_streams_path(current_user.permalink)}"}
+              see more photos
+          %br/
+          %br/
     / span9
   / row
 / span9

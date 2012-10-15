@@ -402,4 +402,13 @@ class User < ActiveRecord::Base
   def can_receive_invitation?
     return invited_by.present? && invitation_accepted_at.nil? && invitation_expired?
   end
+
+  def can_view?(profile, type = nil)
+    return false if PrivacySetting::OPTS[type].nil?
+    opts = profile.privacy_setting.send(PrivacySetting::OPTS[type])
+  
+    return (!opts.nil? && ((opts == PrivacySetting::EVERYONE) || ((opts == PrivacySetting::CONTACTS_ONLY) && (Connection.are_connected?(self, profile.user)))))
+  end
+
+
 end

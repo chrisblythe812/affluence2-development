@@ -26,6 +26,6 @@ class Connection < ActiveRecord::Base
     if connected.nil?
       connected = where(:user_id => friend, :friend_id => user)
     end
-    return connected.nil?
+    return !connected.nil?
   end
 end

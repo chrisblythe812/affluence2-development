@@ -1,6 +1,6 @@
 .span9
   = form_for PhotoStream.new, :url => user_photo_streams_path(current_user.permalink) do |f|
-    = f.text_field 'title'
+    = text_field 'photostream', 'title', :value => '', :placeholder => 'Untitled Albumn'
     = f.submit "Create Albumn", :class => 'btn-primary btn'
 .span9
   %ul.thumbnails
@@ -10,7 +10,10 @@
           - photos = albumn.photos
           %h3
             = albumn.title
-          = image_tag photos.last.image.url(:medium) unless photos.blank?
+          - if photos.blank?
+            = image_tag 'http://placehold.it/260x180' 
+          - else
+            = image_tag photos.last.image.url(:medium)
           %br
           = photos.count
           Photos
