@@ -12,6 +12,9 @@ ActiveAdmin.register Event do
 
   filter :title
 
+  menu :if => proc{ current_user.superadmin? }
+
+
   before_filter :only => :index do
     @per_page = 10
   end

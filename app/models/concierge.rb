@@ -9,6 +9,14 @@ class Concierge < ActiveRecord::Base
     0
   end
 
+  def self.get_latest_config
+  if Concierge.last.blank?
+    Concierge.create(:title=>' test',:description=>'test',:number=>'9932332123')
+  else
+    Concierge.last
+  end
+  end
+
   def make_call(user,mobile)
     account_sid = 'ACda525abca69de6bb2777e074da0ba91e'
     auth_token = '7a99e95167fce00419dcd90429ce14aa'

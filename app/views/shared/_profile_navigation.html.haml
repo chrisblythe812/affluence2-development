@@ -46,7 +46,7 @@
           Invites
   / side bar nav
   %div
-    = form_for(Concierge.new, :url => call_concierge_path(Concierge.last), :html => {:class => 'well'}) do |f|
+    = form_for(Concierge.new, :url => call_concierge_path(Concierge.get_latest_config), :html => {:class => 'well'}) do |f|
       %h3 Call Concierge
       %hr.zero
         %input.span2{:value => current_user.profile.phone, :type => "text", :name => 'phone_number'}

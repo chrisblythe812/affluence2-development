@@ -13,6 +13,9 @@ ActiveAdmin.register Offer do
   scope :services
 
   config.clear_sidebar_sections!
+  
+  menu :if => proc{ current_user.superadmin? }
+
 
   form :html => {:enctype => "multipart/form-data"} do |f|
     f.inputs "Create New Offer" do

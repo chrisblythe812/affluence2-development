@@ -14,7 +14,7 @@ ActiveAdmin.register SubscriptionFeeTracker do
   scope :failed
 
 
-
+  menu :if => proc{ current_user.superadmin? }
 
 
 
