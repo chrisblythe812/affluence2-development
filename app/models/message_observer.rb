@@ -1,6 +1,6 @@
 class MessageObserver < ActiveRecord::Observer
   def after_create(message)
-   if message.recipient.role == 'superadmin'
+   if message.recipient.role == 'superadmin' || message.recipient.role == 'operator'
      create_interaction_thread(message)
    end
   end
