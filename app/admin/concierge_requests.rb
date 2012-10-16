@@ -70,7 +70,24 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
 
 
+  action_item :only => [:show] do
+    link_to('Close Request', close_admin_concierge_request_path(concierge_request.id))
+    link_to('Reject Request', reject_admin_concierge_request_path(concierge_request.id))
+  end
 
+
+  member_action :close, :method => :get do
+    concierge_request = ConciergeRequest.find(params[:id])
+    concierge_request.reject!
+    redirect_to admin_concierge_requests_path
+  end
+
+
+  member_action :reject, :method => :get do
+    concierge_request = ConciergeRequest.find(params[:id])
+    concierge_request.complete!
+    redirect_to admin_concierge_requests_path
+  end
 
 
 
