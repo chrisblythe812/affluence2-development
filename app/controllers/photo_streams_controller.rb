@@ -1,6 +1,16 @@
 class PhotoStreamsController < ApplicationController
 before_filter :authenticate_user!
-before_filter :authenticate_paid_user!
+before_filter :authorize_photo_stream_resource
+
+  def authorize_photo_stream_resource
+    begin
+       authorize! :all, :photo_stream
+    rescue CanCan::AccessDenied
+      flash[:error] = "Photos is restricted to premium members. Become a premium member
+          #{ActionController::Base.helpers.link_to "Register", edit_profile_path(current_user.permalink, :value => 'billing info')}".html_safe
+        redirect_to(:back)
+    end
+  end
 
   def index
     @photo_streams =  current_user.profile.photo_streams

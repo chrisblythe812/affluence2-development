@@ -1,14 +1,19 @@
 class ConciergesController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :authorize_concierge_resource
 
+  def authorize_concierge_resource
+    begin
+       authorize! :all, :concierge
+    rescue CanCan::AccessDenied
+      flash[:error] = "Concierge is restricted to premium members. Become a premium member.
+          #{ActionController::Base.helpers.link_to "Register", edit_profile_path(current_user.permalink, :value => 'billing info')}".html_safe
+        redirect_to(:back)
+    end
+  end
 
   def call
     @concierge = Concierge.find(params[:id])
-    if current_user.plan == 'free'
-      flash[:error] = "You need to Become a Premium Member to utilize the Concierge service"
-      redirect_to profile_path(current_user.permalink) and return
-    end
-
     if params[:phone_number].blank?
       flash[:error] = "PLease provide the correct phone number"
       redirect_to profile_path(current_user.permalink) and return

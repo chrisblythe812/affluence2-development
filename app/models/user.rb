@@ -410,5 +410,27 @@ class User < ActiveRecord::Base
     return (!opts.nil? && ((opts == PrivacySetting::EVERYONE) || ((opts == PrivacySetting::CONTACTS_ONLY) && (Connection.are_connected?(self, profile.user)))))
   end
 
+  #User levels
+  def admin?
+       role=='superadmin'
+  end
+  def operator?
+       role=='operator'
+  end
+  def free?
+     role=='member' and plan=='free' and verified==false
+  end
+
+  def free_vetted?
+      role=='member' and plan=='free' and verified==true
+  end
+
+  def paid?
+      role=='member' && (plan=='Monthly' || plan=='Yearly') && verified==false
+  end
+
+  def paid_vetted?
+       role=='member' && (plan=='Monthly' || plan=='Yearly') && verified==true
+  end
 
 end

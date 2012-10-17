@@ -1,3 +1,4 @@
+
 # This will guess the User class
 FactoryGirl.define do
   #<User id: nil, email: "", encrypted_password: "", reset_password_token: nil,
@@ -9,20 +10,59 @@ FactoryGirl.define do
   sequence(:email) {|n| "person-#{n}@example.com" }
 
   factory :user do
-    email
+    email {"user_#{rand(100000).to_s}@example.com" }
     password 'password'
     password_confirmation 'password'
-    role 'member'
-    plan 'free'
     permalink ''
-  end
 
-  # The same, but using a string instead of class constant
-  factory :admin, :class => 'user' do
-    email 'default@example.com'
-    password 'password'
-    password_confirmation 'password'
-    role 'superadmin'
-    plan 'free'
+    trait :member_free do
+      role 'member'
+      plan 'free'
+      verified false
+    end
+
+    trait :member_free_vetted do
+        role 'member'
+        plan 'free'
+        verified true
+    end
+
+    trait :member_paid_monthly do
+        role 'member'
+        plan 'Monthly'
+        verified false
+    end
+
+    trait :member_paid_yearly do
+        role 'member'
+        plan 'Yearly'
+        verified false
+    end
+
+    trait :member_paid_monthly_vetted do
+        role 'member'
+        plan 'Monthly'
+        verified true
+    end
+
+    trait :member_paid_yearly_vetted do
+        role 'member'
+        plan 'Yearly'
+        verified true
+    end
+
+    trait :operator do
+        role 'operator'
+        plan 'free'
+        verified false
+    end
+
+    trait :admin do
+        role 'superadmin'
+        plan 'free'
+        verified false
+    end
+
   end
 end
+

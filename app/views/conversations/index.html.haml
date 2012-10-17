@@ -17,25 +17,6 @@
   -else
     %p.no-messages No Messages
 
-- if current_user.plan == 'free'
-  #new-message.modal.hide.fade.in{:style => "display: none;"}
-  :javascript
-     $('.conversation-register-button').click(function(){
-       var user_id = this.id.split('_')[1]
-       //alert(event_id) ;
-       $.ajax({
-                     url: "/promotions/"+user_id+"/become_premium_member",
-                     data:'promotion=conversation',
-                     //async: false,
-                     success:function(data){
-                       $('#new-message').html(data);
-                       //alert('Load was performed.');
-                     },
-                     dataType:'html'
-                     });
-       //$('#register-div').modal('show');
-     });
-- else
   #new-message.modal.hide.fade.in{:style => "display: none;"}
     .modal-header
       %a.close{"data-dismiss" => "modal", :href => "#"} ×

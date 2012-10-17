@@ -1,9 +1,19 @@
 class ConversationsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :authenticate_paid_user!, :except => [:index, :show, :confirm]
+  before_filter :authorize_conversation_resource, :except => [:index, :show, :confirm]
   before_filter :set_page_header
   autocomplete :profile, :full_name, :extra_data => [:id]
 
+
+  def authorize_conversation_resource
+    begin
+       authorize! :all, :conversation
+    rescue CanCan::AccessDenied
+      flash[:error] = "Messaging is restricted to verified or premium members. Become a premium member
+          #{ActionController::Base.helpers.link_to "Register", edit_profile_path(current_user.permalink, :value => 'billing info')}".html_safe
+        redirect_to(:back)
+    end
+  end
 
   def get_autocomplete_items(parameters)
     items = super(parameters)
