@@ -85,7 +85,7 @@
     / span9
   / row
 / span9
-- if current_user.plan == 'free'
+- if Ability.new(current_user).cannot?(:all,:conversation)
   #new-message.modal.hide.fade.in{:style => "display: none;"}
   :javascript
      $('.message-register-button').click(function(){
