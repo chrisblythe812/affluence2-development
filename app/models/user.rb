@@ -42,8 +42,8 @@ class User < ActiveRecord::Base
 
   def connections_activities(last_activity = false)
     ids=[]
-    ids<<self.id
-    self.connections.each { |x| ids<<x.friend.id }
+    ids << self.id
+    self.connections.each { |x| ids << x.friend.id }
     activities = []
     temp = false
 
@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
 
   def activities_by_privacy_settings(current_user, last_activity = false)
     ids = []
-    self.connections.each { |x| ids<<x.friend.id }
+    self.connections.each { |x| ids << x.friend.id }
 
     activity = nil
     if last_activity
@@ -152,6 +152,10 @@ class User < ActiveRecord::Base
 
   def superadmin?
     self.role == 'superadmin'
+  end
+
+  def has_admin_access?
+    self.role == 'superadmin' || self.role == 'operator'
   end
 
 
@@ -432,5 +436,15 @@ class User < ActiveRecord::Base
   def paid_vetted?
        role=='member' && (plan=='Monthly' || plan=='Yearly') && verified==true
   end
+
+
+  def self.concierge_users
+   User.find_by_sql("select * from users where id in(
+SELECT user_id FROM promotions_users left join promotions on promotions.id = promotions_users.promotion_id
+ WHERE (promotions.promotionable_type like 'Concierge')
+)")
+  end
+
+
 
 end

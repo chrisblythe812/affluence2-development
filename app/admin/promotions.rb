@@ -2,6 +2,8 @@ ActiveAdmin.register Promotion do
 
   #menu :if => proc{ Rails.env.development? }
   menu false
+  menu :if => proc{ current_user.superadmin? }
+
 
 
   form :html => {:enctype => "multipart/form-data"} do |f|

@@ -14,6 +14,8 @@ ActiveAdmin.register Verfication do
 
   config.clear_sidebar_sections!
 
+  menu :if => proc{ current_user.superadmin? }
+
 
   index do
     column("Name") do |verification|

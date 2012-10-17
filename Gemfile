@@ -37,6 +37,7 @@ gem 'freiden-contacts',  :require => "contacts"
 gem "awesome_print"
 gem 'rack-ssl'
 gem "cancan"
+gem "workflow"
 
 
   
