@@ -44,6 +44,7 @@ class ConciergeRequest < ActiveRecord::Base
       event :on_reply, :transitions_to => :awaiting_customer
       event :complete, :transitions_to => :completed
       event :reject, :transitions_to => :rejected
+      event :on_message, :transitions_to => :awaiting_operator
     end
     on_exit do
       #TODO mail the user
@@ -52,6 +53,7 @@ class ConciergeRequest < ActiveRecord::Base
 
     state :awaiting_customer do
       event :on_message, :transitions_to => :awaiting_operator
+      event :on_reply, :transitions_to => :awaiting_customer
     end
     on_exit do
       #TODO mail to the operator
@@ -63,7 +65,7 @@ class ConciergeRequest < ActiveRecord::Base
 
     on_transition do |from, to, triggering_event, *event_args|
       #TODO log this transition
-      puts "#{from} -> #{to}"
+      puts "Custom #{from} -> #{to}"
     end
 
   end
