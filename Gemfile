@@ -32,13 +32,12 @@ gem 'nokogiri'
 gem 'exception_notification', :require => 'exception_notifier'
 gem "rails_best_practices"
 gem "twilio-ruby"
-
 gem 'freiden-contacts',  :require => "contacts"
 gem "awesome_print"
 gem 'rack-ssl'
-gem "cancan"
-gem "workflow"
-
+gem 'newrelic_rpm'
+gem 'cancan'
+gem 'workflow'
 
   
 
@@ -48,8 +47,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
 
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-   gem 'therubyracer'
+
 
   gem 'uglifier', '>= 1.0.3'
 end
@@ -71,6 +69,8 @@ gem 'jquery-rails'
 group :test, :development do
   gem 'rspec-rails'
   gem "factory_girl_rails", ">= 1.7.0"
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'therubyracer'
   #gem 'ruby-debug19', :require => 'ruby-debug'
 end
  
