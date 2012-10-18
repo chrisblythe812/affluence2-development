@@ -132,11 +132,13 @@ class ConversationsController < ApplicationController
     #
     ##    authorize!(:create, Message)
 
+    already_connected = Connection.are_connected?(recipient.id, current_user.id)
+
     if @message = Message.create(new_message_attrs)
       @conversation.messages << @message
       @conversation.save
-      if ((Time.now - Connection.where(:user_id => @message.sender_id, :friend_id => @message.recipient_id).first.created_at) < 60)
-
+      newly_connected = ((!already_connected) ? Connection.are_connected?(@message.sender_id, @message.recipient_id)  : false )
+      if newly_connected
         reset_session_activity
       end
       redirect_to user_conversations_path(current_user), :flash => {:success => "Your message has been sent."}

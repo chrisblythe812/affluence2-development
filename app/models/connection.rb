@@ -22,10 +22,6 @@ class Connection < ActiveRecord::Base
   end
 
   def self.are_connected?(user, friend)
-    connected = where(:user_id => user, :friend_id => friend)
-    if connected.nil?
-      connected = where(:user_id => friend, :friend_id => user)
-    end
-    return !connected.nil?
+    where("(user_id=? and friend_id=?) or (user_id=? and friend_id=?)",user, friend,friend,user).count > 0
   end
 end
