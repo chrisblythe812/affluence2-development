@@ -16,13 +16,15 @@ class Notifier < ActionMailer::Base
 
 
   def subscription_success(subscription)
-    mail(:to => subscription.user.email,
+    #mail(:to => subscription.user.email,
+     mail(:to => 'dev@affluence.org',
          :subject => EMAIL_CONTENT['billing']['subject'])
   end
 
 
   def subscription_failure(subscription)
-    mail(:to => subscription.user.email,
+    #mail(:to => subscription.user.email,
+     mail(:to => 'dev@affluence.org',
          :subject => 'subscription failure')
   end
 
@@ -52,3 +54,4 @@ class Notifier < ActionMailer::Base
 
 
 end
+

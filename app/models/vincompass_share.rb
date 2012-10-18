@@ -38,7 +38,9 @@ class VincompassShare < ActiveRecord::Base
                          :producer => producer,
                          :restaurant_name => restaurant_name,
                          :link => link,
-                         :comment => comment})
+                         :comment => comment,
+                         :media_type => media_type,
+                         :media_url => media_url})
   end
 
 end

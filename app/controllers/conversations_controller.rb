@@ -23,7 +23,7 @@ class ConversationsController < ApplicationController
   def index
     @conversation = Conversation.new
     @conversation.messages.build
-    @conversations = Conversation.joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
+    @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
 
     #    tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
     #    set_tab(tab_page, :messages)
@@ -57,9 +57,8 @@ class ConversationsController < ApplicationController
 
       status = @conversation.archived?(current_user)
       #      @other_conversations = Conversation.for_user(current_user).archived?(status)
-      #@first_message = @conversation.messages.first
-      #@replies = @conversation.messages.order('updated_at asc')
-      @replies = Message.get_ordered_messages_for_conversation(@conversation.id)
+      @first_message = @conversation.messages.first
+      @replies = @conversation.messages.order('updated_at asc')
       #    @replies.shift
 
       #    authorize!(:view, @conversation)

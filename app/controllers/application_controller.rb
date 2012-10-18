@@ -2,15 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_unread_messages_count, :if => :current_user?
   before_filter :persist_activity_in_session
-  include SslRequirement
   before_filter :set_cache_buster
 
-
-  def admin_ssl_required
-    if !request.ssl?
-    redirect_to url_for params.merge({:protocol => 'https://'}) unless request.host == 'localhost'
-    end
-  end
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"

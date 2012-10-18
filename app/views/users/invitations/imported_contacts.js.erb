@@ -1,8 +1,0 @@
-var current_page_div = $('#page-<%=escape_javascript(@page.to_s)%>');
-$("#imported-contacts").children(".visible").removeClass("visible")
-if (current_page_div.length >0) {
-  current_page_div.addClass("visible").effect("highlight")
-}else{
-  $("#imported-contacts").prepend('<%=escape_javascript render("contacts")%>').effect("highlight")
-};
-$('#paginator').html('<%= escape_javascript(paginate(@contacts, :remote => true).to_s) %>');

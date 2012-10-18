@@ -34,39 +34,7 @@ class Conversation < ActiveRecord::Base
   # the user <user> is having a conversation with.
 
 
-  #    unless Connection.are_connected?(self.sender,  self.recipient)
-  #      #       ConnectionRequest.find_or_create_by_requestor_id_and_requestee_id(current_user.id, recipient_user.id)
-  #      if ConnectionRequest.where(:requestor_id => self.sender, :requestee_id => self.recipient).first
-  #        if ConnectionRequest.where(:requestor_id => self.recipient, :requestee_id => self.sender).first
-  #          Connection.make_connection(self.sender,  self.recipient)
-  #        end
-  #      else
-  #        ConnectionRequest.create!(:requestor_id => self.recipient, :requestee_id => self.sender)
-  #      end
-  #
-  ##
-  ##      logger.info 'not yet connected  -----------------------------------------------------   '
-  ##             if   ConnectionRequest.present?(self.sender, self.recipient)
-  ##      messages = self.messages
-  ##
-  ##      if messages.size > 1
-  ##        messages = messages.last(2)
-  ##        logger.info messages.inspect
-  ##        unless messages[0].sender_id == messages[1].sender_id
-  ##          Connection.make_connection(self.sender,  self.recipient)
-  ##          logger.info ' connected  -----------------------------------------------------   '
-  ##        end
-  ##      end
-  #
-  #    end
-  #    #    logger.info ' make_connection_req55555555555555555555555555555555555555555555555555555 '
-  #    #    logger.info new_saved_message.inspect
-  #    #    connected =  Connection.are_connected?
-  #    #    logger.info   connected
-  #    #
-  #    #    con_req = ConnectionRequest.where(:requestor_id => new_saved_message.sender_id, :requestee_id => new_saved_message.recipient_id)
-  #    #
-
+  
 
   def recipient_for(user)
     results = messages.where(:sender_id => user.id)

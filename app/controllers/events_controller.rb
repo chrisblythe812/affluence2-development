@@ -103,6 +103,7 @@ class EventsController < ApplicationController
   end
 
   def get_latest(max=3)
-    @promotion_events = Event.up_comming.limit(max).order("sale_ends_at DESC")
+    @promotion_events = Event.up_comming.limit(max).order("sale_ends_at DESC").includes(:promotion => [:photos])
   end
 end
+

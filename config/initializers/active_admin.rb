@@ -1,5 +1,3 @@
-require 'active_admin_custom_filter'
-
 ActiveAdmin.setup do |config|
 
   # == Site Title
@@ -7,7 +5,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  #config.site_title = "Affluence2"
+  config.site_title = "Affluence2"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -42,10 +40,9 @@ ActiveAdmin.setup do |config|
   # a namespace block. For example, to change the site title
   # within a namespace:
   #
-     config.namespace :admin do |admin|
-       admin.site_title = "Affluence Admin Section"
-       #admin.site_title_image = "/assets/admin_affluence.png"
-     end
+  #   config.namespace :admin do |admin|
+  #     admin.site_title = "Custom Admin Title"
+  #   end
   #
   # This will ONLY change the title for the admin section. Other
   # namespaces will continue to use the main "site_title" configuration.
@@ -112,8 +109,9 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources from here.
   #
-  #config.before_filter :admin_ssl_required
+  # config.before_filter :do_something_awesome
 
+  #config.before_filter :admin_ssl_required
 
   # == Register Stylesheets & Javascripts
   #

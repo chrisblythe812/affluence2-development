@@ -1,5 +1,4 @@
 class ApiController < ApplicationController
-  ssl_required
   skip_before_filter :authenticate_user!
   layout "mobile"
   #todo need to add related styles
