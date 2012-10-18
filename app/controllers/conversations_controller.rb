@@ -57,8 +57,9 @@ class ConversationsController < ApplicationController
 
       status = @conversation.archived?(current_user)
       #      @other_conversations = Conversation.for_user(current_user).archived?(status)
-      @first_message = @conversation.messages.first
-      @replies = @conversation.messages.order('updated_at asc')
+      #@first_message = @conversation.messages.first
+      #@replies = @conversation.messages.order('updated_at asc')
+      @replies = Message.get_ordered_messages_for_conversation(@conversation.id)
       #    @replies.shift
 
       #    authorize!(:view, @conversation)
@@ -66,8 +67,8 @@ class ConversationsController < ApplicationController
       unless @conversation.read?(current_user)
         session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)
       end
-    elsif current_user.plan == 'free'
-      flash[:error] = "Cannot send message, Please become a premium member."
+    elsif Ability.new(current_user).can?(:all, :conversation)
+      flash[:error] = "Messaging is restricted to verified or premium members. Become a premium member."
     else
       redirect_to user_conversations_path(current_user), :flash => {:error => "Unauthorized Access!"}
     end

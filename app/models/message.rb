@@ -10,7 +10,26 @@ class Message < ActiveRecord::Base
 
   after_save :make_connection_req
 
+  def self.get_ordered_messages_for_conversation(conversation_id)
+    find_by_sql( [
+        "with distinct_subjects as (
+            select max(id) as subject_rank,subject as distinct_subject from messages where conversation_id=? group by subject order by subject_rank desc
+        )
+        select distinct_subjects.subject_rank, messages.*, rank() over (partition by subject order by created_at desc) as internal_rank, body
+        from messages left outer join distinct_subjects on messages.subject=distinct_subjects.distinct_subject
+        where conversation_id=? order by subject_rank desc, internal_rank asc",conversation_id,conversation_id])
+  end
 
+  def self.search_subject_body (query)
+        find_by_sql(
+        "      with distinct_subjects as (
+            select max(id) as subject_rank,subject as distinct_subject from messages where (to_tsvector('english', COALESCE(subject,'') || ' ' || COALESCE(body,''))  @@ plainto_tsquery('english', '#{query}')) group by subject order by subject_rank desc
+        )
+        select distinct_subjects.subject_rank, messages.*, rank() over (partition by subject order by created_at desc) as internal_rank, body
+        from messages left outer join distinct_subjects on messages.subject=distinct_subjects.distinct_subject
+        where to_tsvector('english', COALESCE(subject,'') || ' ' || COALESCE(body,''))  @@ plainto_tsquery('english', '#{query}') order by subject_rank desc, internal_rank asc
+       ")
+  end
   def make_connection_req
     _conn = Connection.where(:user_id => self.sender_id, :friend_id => self.recipient_id)
     if _conn.blank?
