@@ -56,12 +56,8 @@ class ConversationsController < ApplicationController
     if @conversations.include? @conversation
 
       status = @conversation.archived?(current_user)
-#      @other_conversations = Conversation.for_user(current_user).archived?(status)
-#      @first_message = @conversation.messages.first
       @replies = Message.get_ordered_messages_for_conversation(@conversation.id)
-#      @replies.shift
 
-      #    authorize!(:view, @conversation)
       @conversation.messages.build
       unless @conversation.read?(current_user)
         session[:unread_messages_count] -= 1 if @conversation.mark_as_read!(current_user)

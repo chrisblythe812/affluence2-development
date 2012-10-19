@@ -49,6 +49,10 @@
               .controls
                 %ul#msg_to{:name => "recipient_profile_id"}
             .control-group
+              %label.control-label{:for => "fileInput"} Subject
+              .controls
+                = x.text_field :subject, :placeholder => "Subject ....", :class => "input ", :rows => "5", :style => "width:370px;"
+            .control-group
               %label.control-label{:for => "fileInput"} Body
               .controls
                 = x.text_area :body, :placeholder => "Write message ....", :class => "input ", :rows => "5", :style => "width:370px;"
