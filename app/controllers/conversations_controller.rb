@@ -56,10 +56,10 @@ class ConversationsController < ApplicationController
     if @conversations.include? @conversation
 
       status = @conversation.archived?(current_user)
-      #      @other_conversations = Conversation.for_user(current_user).archived?(status)
-      @first_message = @conversation.messages.first
-      @replies = @conversation.messages.order('updated_at asc')
-      #    @replies.shift
+#      @other_conversations = Conversation.for_user(current_user).archived?(status)
+#      @first_message = @conversation.messages.first
+      @replies = Message.get_ordered_messages_for_conversation(@conversation.id)
+#      @replies.shift
 
       #    authorize!(:view, @conversation)
       @conversation.messages.build
@@ -118,7 +118,7 @@ class ConversationsController < ApplicationController
     previous_message = @conversation.messages.last
     new_message_attrs = {}
     new_message_attrs[:body] = params[:message][:body]
-    new_message_attrs[:subject] = previous_message.subject
+    new_message_attrs[:subject] = params[:message][:subject]
     new_message_attrs[:sender_id] = current_user.id
     new_message_attrs[:recipient_id] = recipient.id
     new_message_attrs[:conversation_id] = @conversation.id

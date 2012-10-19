@@ -9,6 +9,11 @@ class Message < ActiveRecord::Base
   validates_presence_of :body, :sender_id, :recipient_id
 
   after_save :make_connection_req
+  before_save :default_subject
+
+  def default_subject
+    self.subject = 'Subject' if (self.subject.nil? || self.subject.strip.empty?)
+  end
 
   def self.get_ordered_messages_for_conversation(conversation_id)
     find_by_sql( [
