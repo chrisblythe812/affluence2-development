@@ -33,7 +33,35 @@ class Conversation < ActiveRecord::Base
 
   # the user <user> is having a conversation with.
 
+   #Usage call with the current-user and the text as the query to be searched
+   def self.matching_conversation(user_id,query)
+     find_by_sql(["
+     with selected_user_ids as
+        (
+          select distinct user_id
+          from profiles
+          where (user_id is not null)
+                and ( to_tsvector('english', COALESCE(first_name,'') || ' ' || COALESCE(last_name,'')) @@ plainto_tsquery('english', ?))
+        )
+        select id from (
+          select conversation_id as id  ,rank() over (partition by conversation_id order by created_at desc) as internal_rank
+          from messages
+          where  ((sender_id=? and recipient_id in (select * from selected_user_ids) ) or  (recipient_id=? and sender_id in (select * from selected_user_ids) ))
+        ) matching_users
+        where internal_rank=1
 
+        union
+
+        select id from (
+          select distinct messages.conversation_id as id  ,rank() over (partition by conversation_id order by created_at desc) as internal_rank
+          from messages
+          where to_tsvector('english', COALESCE(subject,'') || ' ' || COALESCE(body,''))  @@ plainto_tsquery('english', ?)
+                and  (sender_id=? or recipient_id=?)
+        ) matching_subs_body
+        where internal_rank = 1
+        limit 100
+     ",query,user_id,user_id,query,user_id,user_id])
+   end
   
 
   def recipient_for(user)
