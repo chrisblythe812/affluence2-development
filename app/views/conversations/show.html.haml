@@ -7,26 +7,32 @@
   -unless @replies.blank?
     %table.table.table-striped
       %tbody
-        - @replies.each do |reply|
-          - if reply.sender
-            %tr
-              %td.span1
-                = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(reply.sender.permalink), :class => "avatar large"
-              %td
-                %h5
-                  =link_to reply.sender.profile.name, profile_path(reply.sender.permalink)
-                %br/
-                %p
-                  = message_with_links_and_paragraphs(reply.body).html_safe
-              %td= reply.subject
-              %td= time_ago_in_words(reply.updated_at) + " ago"
-        %tr
-          %td.span1
-            = link_to image_tag(display_image(current_user.profile.photos, :thumb)), profile_path(current_user.permalink), :class => "avatar small"
-          %td
-            = semantic_form_for @conversation, :url => user_conversation_path do |f|
-              = semantic_fields_for :message do |m|
-                = m.inputs do
-                  = m.input :body, :as => :text, :label => false, :input_html => {:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
-              = f.buttons do
-                = f.commit_button "Send", :button_html => {:class => "btn btn-primary", :id => nil}
+        - hash_of_replies = to_hash_with_subject_as_keys(@replies)
+        - hash_of_replies.each_pair do |subject, messages|
+          - messages.each do |reply|
+            - if reply.sender
+              %tr
+                %td.span1
+                  = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(reply.sender.permalink), :class => "avatar large"
+                %td
+                  %h5
+                    =link_to reply.sender.profile.name, profile_path(reply.sender.permalink)
+                  %br/
+                  %p
+                    = message_with_links_and_paragraphs(reply.body).html_safe
+                %td= reply.subject
+                %td= time_ago_in_words(reply.updated_at) + " ago"
+          %tr
+            %td.span1
+              = link_to image_tag(display_image(current_user.profile.photos, :thumb)), profile_path(current_user.permalink), :class => "avatar small"
+            %td
+              = semantic_form_for @conversation, :url => user_conversation_path do |f|
+                = semantic_fields_for :message do |m|
+                  = m.inputs do
+                    = m.input :subject, :as => :hidden, :label => false, :input_html => { :value => subject,:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
+                    = m.input :body, :as => :text, :label => false, :input_html => {:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
+                = f.buttons do
+                  = f.commit_button "Send", :button_html => {:class => "btn btn-primary", :id => nil}
+          %tr.span7
+            %td
+              %hr
