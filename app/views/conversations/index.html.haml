@@ -7,6 +7,9 @@
         %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message", :id => "conversation_#{current_user.id}", :class => "conversation-register-button"}
           %i.icon-pencil.icon-white
           New Message
+  = form_tag user_conversations_path, {:method => :get, :id => "search"  } do
+    = text_field_tag :search, params[:search], :placeholder => "Search ... ", :class => "input-xlarge span7", :size => "20x1"
+    = submit_tag "search", :class => "btn"
 
 
   -unless @conversations.blank?

@@ -7,11 +7,11 @@ class ConversationsController < ApplicationController
 
   def authorize_conversation_resource
     begin
-       authorize! :all, :conversation
+      authorize! :all, :conversation
     rescue CanCan::AccessDenied
       flash[:error] = "Messaging is restricted to verified or premium members. Become a premium member
           #{ActionController::Base.helpers.link_to "Register", edit_profile_path(current_user.permalink, :value => 'billing info')}".html_safe
-        redirect_to(:back)
+      redirect_to(:back)
     end
   end
 
@@ -23,21 +23,12 @@ class ConversationsController < ApplicationController
   def index
     @conversation = Conversation.new
     @conversation.messages.build
-    @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
-
-    #    tab_page = params[:tab_page] ? params[:tab_page].to_sym : :inbox
-    #    set_tab(tab_page, :messages)
-    #    if params[:blitz]
-    #      @user = User.where(:email => "blake.macleod@gmail.com").first
-    #      sign_in(@user)
-    #    else
-    #      raise CanCan::AccessDenied if params[:user_id].to_i != current_user.id
-    #    end
-    #    if tab_page == :inbox
-    #          @conversations = Conversation.for_user(current_user).archived?(false).page params[:page]
-    #    elsif tab_page == :archive
-    #      @conversations = Conversation.for_user(current_user).archived?(true).page params[:page]
-    #    end
+    if !params[:search].blank?
+      conversations = Conversation.matching_conversation(current_user.id, params[:search])
+      @conversations = Kaminari.paginate_array(conversations).page(params[:page]).per(10)
+    else
+      @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
+    end
   end
 
   def new
