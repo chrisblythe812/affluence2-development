@@ -24,6 +24,11 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
     autocomplete :user, :id
   end
 
+  #member_action :show, :method => :get do
+    #@concierge_request = ConciergeRequest.find(params[:id])
+    #@message = Message.new
+  #end
+
   member_action :create, :method => :post do
     ConciergeRequest.transaction do
       @concierge_request = ConciergeRequest.new(params[:concierge_request])
@@ -61,6 +66,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       end
 
       #f.input :operator_id, :value => 1, :hidden => true
+     f.input :title
       f.input :request_note , :label => "Request"
       f.input :completion_date, :label => "Date the Request has to be complete by"
       f.input :todo, :label => "Description"
@@ -79,21 +85,44 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
       end
     end
-
-    panel "Conversation with User" do
+      panel "Conversation with User" do
       table_for concierge_request.interactions do |interaction|
         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
+      end
 
+    div :class => "panel" do
+      panel "Reply to User" do
+      render :partial =>  'reply_form'
+        end
     end
+   end
 
-  end
 
   action_item :only => [:show] do
     if concierge_request.workflow_state != "completed" && concierge_request.workflow_state != "rejected"
       link_to('Close Request', close_admin_concierge_request_path(concierge_request.id)) + " " + \
       link_to('Reject Request', reject_admin_concierge_request_path(concierge_request.id))
     end
+  end
+
+  member_action :reply_message, :method => :post do
+    concierge_request = ConciergeRequest.find(params[:id])
+    #render :text =>  params.inspect
+    conversation = Conversation.get_conversation_for(concierge_request.operator_id, concierge_request.user_id).first
+    if conversation.nil?
+      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => params[:message][:body], :subject => 'title'}})
+    else
+      conversation.messages << Message.new(:subject => "Concierge Request", :body => params[:message][:body])
+    end
+    conversation.messages.last.sender = User.find(concierge_request.operator_id)
+    conversation.messages.last.recipient = User.find(concierge_request.user_id)
+    if conversation.save
+      Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+      #self.submit!(self.user_id)
+      concierge_request.on_reply!
+    end
+    redirect_to admin_concierge_request_path(concierge_request.id)
   end
 
   member_action :close, :method => :get do

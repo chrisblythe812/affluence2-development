@@ -389,7 +389,11 @@ class User < ActiveRecord::Base
   end
 
   def concierge_calls
-    promotions_users.where("promotions.promotionable_type like 'Concierge' ").joins('left join promotions on promotions.id = promotions_users.promotion_id')
+    promotions_users.where("promotions.promotionable_type like 'Concierge' ").joins('left join promotions on promotions.id = promotions_users.promotion_id').order("created_at desc")
+  end
+
+  def concierge_last_call
+    concierge_calls.first
   end
 
   #invite methods

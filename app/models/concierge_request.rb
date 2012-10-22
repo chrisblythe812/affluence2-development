@@ -17,7 +17,7 @@ class ConciergeRequest < ActiveRecord::Base
   def create_interaction
     conversation = Conversation.get_conversation_for(self.operator_id, self.user_id).first
     if conversation.nil?
-      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => self.request_note}})
+      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => self.request_note, :subject => self.title}})
     else
       conversation.messages << Message.new(:subject => "Concierge Request", :body => self.request_note)
     end
