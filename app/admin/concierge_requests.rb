@@ -3,14 +3,20 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
   menu :label => "Concierge Requests"
 
   actions :all
+  scope :all
+  scope :my do |concierge_requests|
+    concierge_requests.my_requests(current_user.id)
+  end
+  scope :completed do |concierge_requests|
+    concierge_requests.completed(current_user.id)
+  end
+  scope :rejected  do |concierge_requests|
+    concierge_requests.rejected(current_user.id)
+  end
 
   #config.sort_order = 'user_id_desc'
 
-
-
   #scope :concierge, :default => true
-
-
 
   config.clear_sidebar_sections!
 
@@ -31,12 +37,29 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
     end
   end
 
+  collection_action :index
+
+  collection_action :new do
+    @user = User.find(params[:user_id]) if params[:user_id]
+    @concierge_request = ConciergeRequest.new
+    @concierge_request.user_id = @user.id if @user
+  end
+
+  member_action :edit do
+    @concierge_request = ConciergeRequest.find(params[:id])
+  end
 
   form  :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "New Concierge Request form" do
-      #f.input :user_id #:as => :autocomplete, :url => autocomplete_user_id_admin_concierge_requests_path
-      #f.input :user_id, :as => :select, :include_blank => false
-      f.input :user_id, :as => :select,:collection => User.concierge_users
+    #f.input :user_id #:as => :autocomplete, :url => autocomplete_user_id_admin_concierge_requests_path
+    #f.input :user_id, :as => :select, :include_blank => false
+      if f.object.user_id
+        f.input :user_id, :as => :select,:collection => User.concierge_users, :selected => f.object.user_id, :input_html => {:disabled => true}
+        f.input :user_id, :as => :hidden
+      else
+        f.input :user_id, :as => :select,:collection => User.concierge_users
+      end
+
       #f.input :operator_id, :value => 1, :hidden => true
       f.input :request_note , :label => "Request"
       f.input :completion_date, :label => "Date the Request has to be complete by"
@@ -53,92 +76,68 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
         row("Request Note") {|concierge_request| concierge_request.request_note}
         row("Description") {|concierge_request| concierge_request.todo}
         row("Date the Request is made") {|concierge_request| global_date_format(concierge_request.created_at)}
-        #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
+      #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
       end
     end
 
     panel "Conversation with User" do
       table_for concierge_request.interactions do |interaction|
-         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
+        column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
-
 
     end
 
-
-   end
-
-
+  end
 
   action_item :only => [:show] do
-    link_to('Close Request', close_admin_concierge_request_path(concierge_request.id))
-    link_to('Reject Request', reject_admin_concierge_request_path(concierge_request.id))
+    if concierge_request.workflow_state != "completed" && concierge_request.workflow_state != "rejected"
+      link_to('Close Request', close_admin_concierge_request_path(concierge_request.id)) + " " + \
+      link_to('Reject Request', reject_admin_concierge_request_path(concierge_request.id))
+    end
   end
-
 
   member_action :close, :method => :get do
-    concierge_request = ConciergeRequest.find(params[:id])
-    concierge_request.reject!
-    redirect_to admin_concierge_requests_path
-  end
-
-
-  member_action :reject, :method => :get do
     concierge_request = ConciergeRequest.find(params[:id])
     concierge_request.complete!
     redirect_to admin_concierge_requests_path
   end
 
+  member_action :reject, :method => :get do
+    concierge_request = ConciergeRequest.find(params[:id])
+    concierge_request.reject!
+    redirect_to admin_concierge_requests_path
+  end
 
+#action_item :only => [:show] do
+#link_to('Send Message', message_admin_concierge_request_path(concierge_request.id))
+#end
 
+#member_action :message, :method => :get do
+# @concierge_request = ConciergeRequest.find(params[:id])
 
+#end
+#index :download_links => false  do
+#column(:Member, :sortable => false){|promotions_user| promotions_user.user.name}
+#column(:Profile, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
+#column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
+#column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
+#column('Actions', :sortable => false) do |promotions_user|
+# link_to 'View call history', view_call_info_admin_concierge_path(promotions_user.user)
+#end
+#end
 
+#member_action :autocomplete_user_id,:method => :get do
+#@user = User.find(params[:id])
+#@calls = @user.concierge_calls
+#end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  #action_item :only => [:show] do
-    #link_to('Send Message', message_admin_concierge_request_path(concierge_request.id))
-  #end
-
-  #member_action :message, :method => :get do
-   # @concierge_request = ConciergeRequest.find(params[:id])
-
-  #end
-  #index :download_links => false  do
-    #column(:Member, :sortable => false){|promotions_user| promotions_user.user.name}
-    #column(:Profile, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
-    #column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
-    #column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
-    #column('Actions', :sortable => false) do |promotions_user|
-     # link_to 'View call history', view_call_info_admin_concierge_path(promotions_user.user)
-    #end
-  #end
-
-  #member_action :autocomplete_user_id,:method => :get do
-  #@user = User.find(params[:id])
-  #@calls = @user.concierge_calls
-  #end
-
-  #show do |user|
-    #section "Calls made by the member" do
-     #table_for @promotions_user do |concierge_call|
-        #column("Name") { |promotions_user| promotions_user.user.profile.first_name }
-        #column("profile") { |promotions_user| display_image(promotions_user.user.profile.photos, :thumb) }
-      #end
-    #end
-  #end
-
-
+#show do |user|
+#section "Calls made by the member" do
+#table_for @promotions_user do |concierge_call|
+#column("Name") { |promotions_user| promotions_user.user.profile.first_name }
+#column("profile") { |promotions_user| display_image(promotions_user.user.profile.photos, :thumb) }
+#end
+#end
+#end
 
 end

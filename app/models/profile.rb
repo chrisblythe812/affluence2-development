@@ -74,6 +74,7 @@ class Profile < ActiveRecord::Base
       INNER JOIN users ON users.id = profiles.user_id
       where (user_id is not null)
       and (users.status = 'active')
+      and (users.role = 'member')
       and (
             (to_tsvector('english', COALESCE(first_name,'') || ' ' ||
                                     COALESCE(last_name,'') || ' ' ||
@@ -93,7 +94,7 @@ class Profile < ActiveRecord::Base
     query_text << "select profiles.* from profiles
            INNER JOIN users ON users.id = profiles.user_id 
            where (user_id is not null)
-           and (users.status = 'active') 
+           and (users.status = 'active')
            and profiles.id in ( select distinct taggable_id
                        from taggings
                        where taggable_type='Profile'

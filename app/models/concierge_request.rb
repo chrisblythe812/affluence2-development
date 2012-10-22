@@ -6,10 +6,12 @@ class ConciergeRequest < ActiveRecord::Base
 
   has_many :interactions
 
-
   after_create :create_interaction
 
-
+  scope :my_requests, lambda{|user_id| where(["user_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
+  scope :completed, lambda{|user_id| where(["user_id = ? and workflow_state = ?",user_id, "completed"])}
+  scope :rejected, lambda{|user_id| where(["user_id = ? and workflow_state = ?", user_id, "rejected"])}
+  
   #create interaction with type message.
   #create new conversation if not exists and send the request as message to user.
   def create_interaction
@@ -36,7 +38,7 @@ class ConciergeRequest < ActiveRecord::Base
     state :new do
       event :submit, :transitions_to => :awaiting_operator do |user_id|
         # Allow only one active concierge-request per user
-        halt! "The #{user_id} already has a concierge-request" unless ConciergeRequest.matching_requests(user_id) == nil
+        # halt! "The #{user_id} already has a concierge-request" unless ConciergeRequest.matching_requests(user_id) == nil
       end
     end
 
@@ -54,6 +56,8 @@ class ConciergeRequest < ActiveRecord::Base
     state :awaiting_customer do
       event :on_message, :transitions_to => :awaiting_operator
       event :on_reply, :transitions_to => :awaiting_customer
+      event :complete, :transitions_to => :completed
+      event :reject, :transitions_to => :rejected
     end
     on_exit do
       #TODO mail to the operator

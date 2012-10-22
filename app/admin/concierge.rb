@@ -21,7 +21,8 @@ ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
     column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
     #column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
     column('Actions', :sortable => false) do |promotions_user|
-      link_to 'View call history', view_call_info_admin_concierge_path(promotions_user.user)
+      link_to('View call history', view_call_info_admin_concierge_path(promotions_user.user)) + " " + \
+      link_to('Create', new_admin_concierge_request_path(:user_id => promotions_user.user.id))
     end
   end
 
