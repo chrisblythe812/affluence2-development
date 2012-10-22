@@ -425,6 +425,9 @@ class User < ActiveRecord::Base
   def operator?
        role=='operator'
   end
+  def member?
+       role=='member'
+  end
   def free?
      role=='member' and plan=='free' and verified==false
   end

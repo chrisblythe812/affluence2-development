@@ -20,6 +20,22 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
   config.clear_sidebar_sections!
 
+  index :download_links => false  do
+    column(:Member, :sortable => false){|concierge_request| concierge_request.user.name}
+    column(:Profile, :sortable => false){|concierge_request| image_tag display_image(concierge_request.user.profile.photos, :thumb)}
+    column(:request_note){|concierge_request| concierge_request.request_note}
+    column(:todo){|concierge_request| concierge_request.todo}
+    column(:created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
+    column(:updated_at){|concierge_request|  global_date_format(concierge_request.updated_at)}
+    column(:completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
+    column(:workflow_state){|concierge_request|  concierge_request.workflow_state}
+    column('Actions', :sortable => false) do |concierge_request|
+      link_to('View', admin_concierge_request_path(concierge_request)) + " " + \
+      link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
+      link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
+   end
+  end
+  
   controller do
     autocomplete :user, :id
   end

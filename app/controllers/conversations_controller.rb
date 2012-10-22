@@ -17,7 +17,7 @@ class ConversationsController < ApplicationController
 
   def get_autocomplete_items(parameters)
     items = super(parameters)
-    items = Profile.joins(:user).where("LOWER(profiles.full_name) ilike ? and status = ? and user_id != ?", "#{params[:term]}%", "active", current_user.id).order("profiles.full_name").limit(10).select(["profiles.id", "profiles.full_name"])
+    items = Profile.joins(:user).where("LOWER(profiles.full_name) ilike ? and status = ?  and role = ?  and user_id != ?", "#{params[:term]}%", "active", "member", current_user.id).order("profiles.full_name").limit(10).select(["profiles.id", "profiles.full_name"])
   end
 
   def index
