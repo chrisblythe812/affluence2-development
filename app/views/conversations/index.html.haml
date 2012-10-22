@@ -4,13 +4,16 @@
       %h2 Messages
     .span4
       %p.pull-right
-        = link_to 'inbox', user_conversations_path("saved" => false)
-        = link_to 'saved', user_conversations_path("saved" => true)
+      .span4
+        .btn-group.pull-right{"data-toggle" => "buttons-radio"}
+          = link_to 'inbox', user_conversations_path("saved" => false), {:class => "conversations_type btn btn-small btn-primary #{!@archived ? 'active' : ''}"}
+          = link_to 'saved', user_conversations_path("saved" => true), {:class => "conversations_type btn btn-small btn-primary #{@archived ? 'active' : ''}"}
         %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message", :id => "conversation_#{current_user.id}", :class => "conversation-register-button"}
           %i.icon-pencil.icon-white
           New Message
   = form_tag user_conversations_path, {:method => :get, :id => "search"  } do
-    = text_field_tag :search, params[:search], :placeholder => "Search ... ", :class => "input-xlarge span7", :size => "20x1"
+    = text_field_tag :search, params[:search], :placeholder => "Search ... ", :id => 'term', :class => "input-xlarge span7", :size => "20x1"
+    = hidden_field_tag :saved, params[:saved], :value => "#{@archived ? 'true' : 'false'}", :placeholder => "Search ... ", :class => "input-xlarge span7", :size => "20x1"
     = submit_tag "search", :class => "btn"
 
 

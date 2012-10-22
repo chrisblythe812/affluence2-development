@@ -34,7 +34,7 @@ class Conversation < ActiveRecord::Base
   # the user <user> is having a conversation with.
 
    #Usage call with the current-user and the text as the query to be searched
-   def self.matching_conversation(user_id,query)
+   def self.matching_conversation(user_id,query, archived = false)
      find_by_sql(["
      with selected_user_ids as
         (
@@ -59,8 +59,18 @@ class Conversation < ActiveRecord::Base
                 and  (sender_id=? or recipient_id=?)
         ) matching_subs_body
         where internal_rank = 1
+
+        INTERSECT
+  
+        select id from (
+        select distinct conversation_metadata.conversation_id as id ,rank() over (partition by conversation_id order by created_at desc) as internal_rank
+        from conversation_metadata
+        where archived=? and user_id=?
+        ) matching_subs_body
+        where internal_rank = 1
+
         limit 100
-     ",query,user_id,user_id,query,user_id,user_id])
+     ",query,user_id,user_id,query,user_id,user_id, archived, user_id])
    end
   
 
