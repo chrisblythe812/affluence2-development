@@ -8,18 +8,18 @@ class ConciergeRequest < ActiveRecord::Base
 
   after_create :create_interaction
 
-  scope :my_requests, lambda{|user_id| where(["user_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
-  scope :completed, lambda{|user_id| where(["user_id = ? and workflow_state = ?",user_id, "completed"])}
-  scope :rejected, lambda{|user_id| where(["user_id = ? and workflow_state = ?", user_id, "rejected"])}
+  scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
+  scope :completed, lambda{|user_id| where(["operator_id = ? and workflow_state = ?",user_id, "completed"])}
+  scope :rejected, lambda{|user_id| where(["operator_id = ? and workflow_state = ?", user_id, "rejected"])}
   
   #create interaction with type message.
   #create new conversation if not exists and send the request as message to user.
   def create_interaction
     conversation = Conversation.get_conversation_for(self.operator_id, self.user_id).first
     if conversation.nil?
-      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => self.request_note}})
+      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => self.request_note, :subject => self.title}})
     else
-      conversation.messages << Message.new(:subject => "Concierge Request", :body => self.request_note)
+      conversation.messages << Message.new(:subject => self.title, :body => self.request_note)
     end
     conversation.messages.last.sender = User.find(self.operator_id)
     conversation.messages.last.recipient = User.find(self.user_id)

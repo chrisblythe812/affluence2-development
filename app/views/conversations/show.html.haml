@@ -13,10 +13,16 @@
             - if reply.sender
               %tr
                 %td.span1
-                  = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(reply.sender.permalink), :class => "avatar large"
+                  -if reply.sender.profile.user.member?
+                    = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(reply.sender.permalink), :class => "avatar large"
+                  -else
+                    = image_tag(display_image(reply.sender.profile.photos, :thumb))
                 %td
                   %h5
-                    =link_to reply.sender.profile.name, profile_path(reply.sender.permalink)
+                    -if reply.sender.profile.user.member?
+                      =link_to reply.sender.profile.name, profile_path(reply.sender.permalink)
+                    -else
+                      = reply.sender.profile.name
                   %br/
                   %p
                     = message_with_links_and_paragraphs(reply.body).html_safe

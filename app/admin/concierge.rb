@@ -19,10 +19,10 @@ ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
     column(:Member, :sortable => false){|promotions_user| promotions_user.user.name}
     column(:Profile, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
     column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
-    #column(:created_at, :sortable => false) { |concierge| global_date_format(concierge.created_at) }
+    column('Last Call', :sortable => false) { |concierge| global_date_format(concierge.user.concierge_last_call.created_at) }
     column('Actions', :sortable => false) do |promotions_user|
-      link_to('View call history', view_call_info_admin_concierge_path(promotions_user.user)) + " " + \
-      link_to('Create', new_admin_concierge_request_path(:user_id => promotions_user.user.id))
+      link_to('View call history', view_call_info_admin_concierge_path(promotions_user.user)) + " | " + \
+      link_to('Create new request', new_admin_concierge_request_path(:user_id => promotions_user.user.id))
     end
   end
 

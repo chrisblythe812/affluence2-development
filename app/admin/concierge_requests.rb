@@ -20,9 +20,30 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
   config.clear_sidebar_sections!
 
+  index :download_links => false  do
+    column(:Member, :sortable => false){|concierge_request| concierge_request.user.name}
+    column(:Profile, :sortable => false){|concierge_request| image_tag display_image(concierge_request.user.profile.photos, :thumb)}
+    column(:request_note){|concierge_request| concierge_request.request_note}
+    column(:todo){|concierge_request| concierge_request.todo}
+    column(:created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
+    column(:updated_at){|concierge_request|  global_date_format(concierge_request.updated_at)}
+    column(:completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
+    column(:workflow_state){|concierge_request|  concierge_request.workflow_state}
+    column('Actions', :sortable => false) do |concierge_request|
+      link_to('View', admin_concierge_request_path(concierge_request)) + " " + \
+      link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
+      link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
+   end
+  end
+  
   controller do
     autocomplete :user, :id
   end
+
+  #member_action :show, :method => :get do
+    #@concierge_request = ConciergeRequest.find(params[:id])
+    #@message = Message.new
+  #end
 
   member_action :create, :method => :post do
     ConciergeRequest.transaction do
@@ -61,6 +82,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       end
 
       #f.input :operator_id, :value => 1, :hidden => true
+     f.input :title
       f.input :request_note , :label => "Request"
       f.input :completion_date, :label => "Date the Request has to be complete by"
       f.input :todo, :label => "Description"
@@ -79,21 +101,45 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
       end
     end
-
-    panel "Conversation with User" do
+      panel "Conversation with User" do
       table_for concierge_request.interactions do |interaction|
         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
+      end
 
+    div :class => "panel" do
+      panel "Reply to User" do
+      render :partial =>  'reply_form'
+        end
     end
+   end
 
-  end
 
   action_item :only => [:show] do
     if concierge_request.workflow_state != "completed" && concierge_request.workflow_state != "rejected"
       link_to('Close Request', close_admin_concierge_request_path(concierge_request.id)) + " " + \
       link_to('Reject Request', reject_admin_concierge_request_path(concierge_request.id))
     end
+  end
+
+  member_action :reply_message, :method => :post do
+    concierge_request = ConciergeRequest.find(params[:id])
+    #render :text =>  params.inspect
+    conversation = Conversation.get_conversation_for(concierge_request.operator_id, concierge_request.user_id).first
+    if conversation.nil?
+      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => params[:message][:body], :subject => 'title'}})
+    else
+      last_interaction_message = concierge_request.interactions.last.interactable
+      conversation.messages << Message.new(:subject => "Concierge Request", :body => params[:message][:body], :subject => last_interaction_message.subject)
+    end
+    conversation.messages.last.sender = User.find(concierge_request.operator_id)
+    conversation.messages.last.recipient = User.find(concierge_request.user_id)
+    if conversation.save
+      Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+      #self.submit!(self.user_id)
+      concierge_request.on_reply!
+    end
+    redirect_to admin_concierge_request_path(concierge_request.id)
   end
 
   member_action :close, :method => :get do
