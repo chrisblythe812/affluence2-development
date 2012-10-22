@@ -21,8 +21,9 @@
           =truncate(message.body.gsub(/<\/?[^>]*>/, ""), :length => 90)
     %td= time_ago_in_words(message.updated_at) + " ago"
     %td
-      %a.close{:href => "#{user_conversation_archive_path(current_user, conversation)}",
-               :rel => "tooltip",
-               "data-confirm" => 'Are you sure?',
-               "data-original-title" => "Save",
-               "data-placement" => "bottom"}×
+      - unless archived
+        %a.close{:href => "#{user_conversation_archive_path(current_user, conversation)}",
+                 :rel => "tooltip",
+                 "data-confirm" => 'Are you sure?',
+                 "data-original-title" => "Save",
+                 "data-placement" => "bottom"}Save

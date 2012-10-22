@@ -77,6 +77,10 @@ class ApplicationController < ActionController::Base
     check_activity_load_time_for("my_connections")
   end
 
+  def to_bool(x)
+    return (x == "true")
+  end
+
   protected
 
   def check_activity_load_time_for(type)

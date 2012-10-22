@@ -4,6 +4,8 @@
       %h2 Messages
     .span4
       %p.pull-right
+        = link_to 'inbox', user_conversations_path("saved" => false)
+        = link_to 'saved', user_conversations_path("saved" => true)
         %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message", :id => "conversation_#{current_user.id}", :class => "conversation-register-button"}
           %i.icon-pencil.icon-white
           New Message
@@ -15,7 +17,8 @@
   -unless @conversations.blank?
     %table.table.table-striped
       %tbody
-        =render :partial => "conversations/last_message", :collection => @conversations, :as => :conversation
+        - @conversations.each do |conversation|
+          =render :partial => "conversations/last_message", :locals => {:conversation => conversation, :archived => @archived} 
     = paginate(@conversations, :theme => "bootstrap")
   -else
     %p.no-messages No Messages

@@ -9,7 +9,7 @@
       %tbody
         - hash_of_replies = to_hash_with_subject_as_keys(@replies)
         - hash_of_replies.each_pair do |subject, messages|
-          - messages.each do |reply|
+          - messages.reverse.each do |reply|
             - if reply.sender
               %tr
                 %td.span1

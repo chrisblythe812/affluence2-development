@@ -27,7 +27,8 @@ class ConversationsController < ApplicationController
       conversations = Conversation.matching_conversation(current_user.id, params[:search])
       @conversations = Kaminari.paginate_array(conversations).page(params[:page]).per(10)
     else
-      @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(false).order("updated_at DESC").page params[:page]
+      @archived = to_bool(params[:saved])
+      @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(@archived).order("updated_at DESC").page params[:page]
     end
   end
 
