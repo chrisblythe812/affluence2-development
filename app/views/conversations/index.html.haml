@@ -6,8 +6,8 @@
       %p.pull-right
       .span4
         .btn-group.pull-right{"data-toggle" => "buttons-radio"}
-          = link_to 'inbox', user_conversations_path("saved" => false), {:class => "conversations_type btn btn-small btn-primary #{!@archived ? 'active' : ''}"}
-          = link_to 'archived', user_conversations_path("saved" => true), {:class => "conversations_type btn btn-small btn-primary #{@archived ? 'active' : ''}"}
+          = link_to 'inbox', user_conversations_path("saved" => false), {:class => "conversations_type btn btn-small btn-primary #{!@archived && !@searched ? 'active' : ''}"}
+          = link_to 'archived', user_conversations_path("saved" => true), {:class => "conversations_type btn btn-small btn-primary #{@archived && !@searched ? 'active' : ''}"}
         %a.btn.btn-primary{"data-toggle" => "modal", :href => "#new-message", :id => "conversation_#{current_user.id}", :class => "conversation-register-button"}
           %i.icon-pencil.icon-white
           New Message
