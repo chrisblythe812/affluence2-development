@@ -13,7 +13,6 @@
           New Message
   = form_tag user_conversations_path, {:method => :get, :id => "search"  } do
     = text_field_tag :search, params[:search], :placeholder => "Search ... ", :id => 'term', :class => "input-xlarge span7", :size => "20x1"
-    = hidden_field_tag :saved, params[:saved], :value => "#{@archived ? 'true' : 'false'}", :placeholder => "Search ... ", :class => "input-xlarge span7", :size => "20x1"
     = submit_tag "search", :class => "btn"
 
 
@@ -21,7 +20,7 @@
     %table.table.table-striped
       %tbody
         - @conversations.each do |conversation|
-          =render :partial => "conversations/last_message", :locals => {:conversation => conversation, :archived => @archived} 
+          =render :partial => "conversations/last_message", :locals => {:conversation => conversation, :archived => @archived, :searched => @searched}
     = paginate(@conversations, :theme => "bootstrap")
   -else
     %p.no-messages No Messages

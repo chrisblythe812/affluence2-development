@@ -24,8 +24,10 @@ class ConversationsController < ApplicationController
     @archived = to_bool(params[:saved])
     @conversation = Conversation.new
     @conversation.messages.build
+    @searched = !params[:search].blank?
+
     if !params[:search].blank?
-      conversations = Conversation.matching_conversation(current_user.id, params[:search], @archived)
+      conversations = Conversation.matching_conversation(current_user.id, params[:search])
       @conversations = Kaminari.paginate_array(conversations).page(params[:page]).per(10)
     else
       @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(@archived).order("updated_at DESC").page params[:page]
