@@ -19,6 +19,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def is_admin?
+    unless current_user.superadmin?
+      flash[:alert] = "Unauthorized Access!"
+      redirect_to admin_concierges_path
+    end
+  end
+
   def authenticate_paid_user!
     if current_user.plan == 'free'
       flash[:error] = "Unauthorized Access!

@@ -1,5 +1,11 @@
 ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
+
+  controller do
+    skip_before_filter :is_admin?
+  end
+
+
   menu :label => "Concierge Requests"
 
   actions :all
