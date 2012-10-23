@@ -143,7 +143,7 @@ class ConversationsController < ApplicationController
     @conversation.archive!(current_user)
 
     respond_to do |format|
-      format.html { redirect_to user_conversations_path(current_user), :flash => {:success => "Conversation has been saved."} }
+      format.html { redirect_to user_conversations_path(current_user), :flash => {:success => "Conversation has been archived."} }
       format.js { render :layout => false }
     end
   end
