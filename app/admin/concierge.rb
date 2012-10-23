@@ -1,5 +1,10 @@
 ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
 
+  controller do
+    skip_before_filter :is_admin?
+  end
+
+
   menu :label => "Concierge"
 
   actions :all, :except => [:new,:show,:edit]

@@ -111,7 +111,7 @@ ActiveAdmin.setup do |config|
   #
   # config.before_filter :do_something_awesome
 
-  #config.before_filter :admin_ssl_required
+  config.before_filter :is_admin?
 
   # == Register Stylesheets & Javascripts
   #
