@@ -46,6 +46,7 @@
                           = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(current_user), :class => "thumbnail"
                         %td
                           = reply.body
+                        %td= time_ago_in_words(message.updated_at) + " ago"
                     %tr
                       %td
                       %td
