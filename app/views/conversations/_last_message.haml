@@ -1,3 +1,5 @@
+- messages = Message.get_ordered_messages_for_conversation(conversation.id)
+
 - unless conversation.messages.blank?
   - message = conversation.messages.last
   - if !conversation.messages.where('sender_id = ? and recipient_id != ?', current_user, current_user).last.blank?
@@ -16,9 +18,6 @@
         %span{:class => "#{'unread_msg' unless conversation.read?(current_user)} last-reply tk-ff-tisa-web-pro" }
           = link_to message.sender.profile.full_name, user_conversation_path(current_user, conversation), :class => "desc"
       %br/
-      %p
-        %a.summary{:href => user_conversation_path(current_user, conversation) }
-          =truncate(message.body.gsub(/<\/?[^>]*>/, ""), :length => 90)
     %td= time_ago_in_words(message.updated_at) + " ago"
     %td
       - if !searched && !archived
@@ -27,3 +26,39 @@
                  "data-confirm" => 'Are you sure?',
                  "data-original-title" => "Archive",
                  "data-placement" => "bottom"}archive
+  %tr
+    %td{:colspan => 4}
+      %p
+        - hash_of_replies = to_hash_with_subject_as_keys(messages)
+        - temp = 0
+        .accordion{:id => "accordion#{conversation_index}"}
+          - hash_of_replies.each_pair do |subject, messages|
+            .accordion-group
+              .accordion-heading
+                %a.accordion-toggle{"data-parent" => "#accordion#{conversation_index}", "data-toggle" => "collapse", :href => "#collapse#{conversation_index}#{temp}"}
+                  = subject
+              .accordion-body.collapse{:id => "collapse#{conversation_index}#{temp}", :class => "#{(temp > 0)? '' : 'in'}"}
+                .accordion-inner
+                  %table
+                    - messages.reverse.each do |reply|
+                      %tr
+                        %td
+                          = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(current_user), :class => "thumbnail"
+                        %td
+                          = reply.body
+                    %tr
+                      %td
+                      %td
+                        - conversation.messages.build
+                        = semantic_form_for conversation, :url => user_conversation_path(current_user, conversation) do |f|
+                          = semantic_fields_for :message do |m|
+                            = m.inputs do
+                              = m.input :subject, :as => :hidden, :label => false, :input_html => { :value => subject,:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
+                              = m.input :body, :as => :text, :label => false, :input_html => {:placeholder => "Your comment...", :rows => "5", :style => "width:370px;"}
+                          = f.buttons do
+                            = f.commit_button "Reply", :button_html => {:class => "btn btn-primary", :id => nil}
+
+
+            - temp = temp + 1
+
+

@@ -19,8 +19,8 @@
   -unless @conversations.blank?
     %table.table.table-striped
       %tbody
-        - @conversations.each do |conversation|
-          =render :partial => "conversations/last_message", :locals => {:conversation => conversation, :archived => @archived, :searched => @searched}
+        - @conversations.each_with_index do |conversation, index|
+          =render :partial => "conversations/last_message", :locals => {:conversation => conversation, :archived => @archived, :searched => @searched, :conversation_index => index}
     = paginate(@conversations, :theme => "bootstrap")
   -else
     %p.no-messages No Messages
