@@ -6,10 +6,9 @@ class PromotionsUser < ActiveRecord::Base
   attr_accessible :user_id, :promotion_id
 
 
-
   scope :concierge, :conditions => "promotions.promotionable_type like 'Concierge' ",
         :joins => 'left join promotions on promotions.id = promotions_users.promotion_id',
-        :select => "distinct(user_id)"
+        :select => "user_id, max(promotions_users.created_at) AS created_at", :order => "max(promotions_users.created_at) desc" , :group => "user_id"
 
 
 end

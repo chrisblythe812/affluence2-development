@@ -6,7 +6,7 @@ class ConciergeRequest < ActiveRecord::Base
 
   has_many :interactions
 
-  after_create :create_interaction
+  after_create :create_unique_code, :create_interaction
 
   scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
   scope :completed, lambda{|user_id| where(["operator_id = ? and workflow_state = ?",user_id, "completed"])}
@@ -30,8 +30,11 @@ class ConciergeRequest < ActiveRecord::Base
     end
   end
 
-
-
+  def create_unique_code
+    unique_code = "CR#{self.id}"
+    subject = unique_code + "-" + self.title
+    self.update_attributes(:code => unique_code , :title => subject)
+  end
 
   include Workflow
   workflow do

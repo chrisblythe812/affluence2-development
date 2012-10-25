@@ -10,7 +10,7 @@ gem 'haml-rails'
 gem 'pg', :group => [:development, :production]
 gem 'devise'
 gem 'devise_invitable', :git => 'git://github.com/aashish/devise_invitable.git'
-gem 'activeadmin', '=0.4.0' 
+gem 'activeadmin', '=0.4.3' 
 gem 'aasm'
 gem "paperclip", "~> 2.3"
 gem 'aws-s3'
