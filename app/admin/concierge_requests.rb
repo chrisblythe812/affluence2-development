@@ -29,10 +29,9 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
   index :download_links => false  do
     column(:Member, :sortable => false){|concierge_request| concierge_request.user.name}
     column(:Profile, :sortable => false){|concierge_request| image_tag display_image(concierge_request.user.profile.photos, :thumb)}
+    column(:title){|concierge_request| concierge_request.title}
     column(:request_note){|concierge_request| concierge_request.request_note}
-    column(:todo){|concierge_request| concierge_request.todo}
     column(:created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
-    column(:updated_at){|concierge_request|  global_date_format(concierge_request.updated_at)}
     column(:completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
     column(:workflow_state){|concierge_request|  concierge_request.workflow_state}
     column('Actions', :sortable => false) do |concierge_request|
@@ -88,7 +87,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       end
 
       #f.input :operator_id, :value => 1, :hidden => true
-     f.input :title
+      f.input :title, :input_html => {:readonly => f.object.new_record? ? false : true}
       f.input :request_note , :label => "Request"
       f.input :completion_date, :label => "Date the Request has to be complete by"
       f.input :todo, :label => "Description"
@@ -101,6 +100,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       attributes_table_for concierge_request do
         row("User") {|concierge_request| concierge_request.user.name}
         row("Email") {|concierge_request| concierge_request.user.email}
+        row("Title") {|concierge_request| concierge_request.title}
         row("Request Note") {|concierge_request| concierge_request.request_note}
         row("Description") {|concierge_request| concierge_request.todo}
         row("Date the Request is made") {|concierge_request| global_date_format(concierge_request.created_at)}
