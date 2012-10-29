@@ -43,9 +43,10 @@
                     - messages.reverse.each do |reply|
                       %tr
                         %td
-                          = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), profile_path(current_user), :class => "thumbnail"
+                          = link_to image_tag(display_image(reply.sender.profile.photos, :thumb)), user_conversation_path(current_user, conversation), :class => "thumbnail"
                         %td
-                          = reply.body
+                          = reply.body 
+                        %td= time_ago_in_words(message.updated_at) + " ago"
                     %tr
                       %td
                       %td
