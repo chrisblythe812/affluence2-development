@@ -14,7 +14,7 @@ ActiveAdmin.register PromotionsUser, :as => 'Concierge' do
   config.clear_sidebar_sections!
 
   index :download_links => false do
-    column(:Member, :sortable => :member){|promotions_user| promotions_user.user.name}
+    column(:Member, :sortable => "profiles.first_name"){|promotions_user| promotions_user.user.name}
     column(:Profile, :sortable => false){|promotions_user| image_tag display_image(promotions_user.user.profile.photos, :thumb)}
     column('Total calls', :sortable => false) { |promotion_user| promotion_user.user.concierge_calls_count }
     column('Last Call', :sortable => false) { |promotions_user| global_date_format(promotions_user.created_at) }
