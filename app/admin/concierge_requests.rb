@@ -69,13 +69,16 @@ ActiveAdmin.register ConciergeRequest do
       end
     end
   end
-
-  member_action :new do
-    @user = User.find(params[:user_id]) if params[:user_id]
-    @concierge_request = ConciergeRequest.new
-    @concierge_request.user_id = @user.id if @user
-    @concierge_request.completion_date = Date.today if @concierge_request.new_record?
-  end
+  
+  # collection_action :index
+ controller do
+   def new
+     @user = User.find(params[:user_id]) if params[:user_id]
+     @concierge_request = ConciergeRequest.new
+     @concierge_request.user_id = @user.id if @user
+     @concierge_request.completion_date = Date.today if @concierge_request.new_record?
+   end
+ end
 
   member_action :edit do
     @concierge_request = ConciergeRequest.find(params[:id])
