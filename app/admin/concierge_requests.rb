@@ -10,6 +10,7 @@ ActiveAdmin.register ConciergeRequest do
 
   actions :all
   
+  filter :user ,:as => :select , :collection =>  proc { ConciergeRequest.active_users }
   filter :code, :as => "string", :label => "CR ID"
   filter :title, :as => "string"
   filter :request_note, :as => "string"
