@@ -11,7 +11,7 @@ class ConciergeRequest < ActiveRecord::Base
   scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
   scope :completed, lambda{|user_id| where(["operator_id = ? and workflow_state = ?",user_id, "completed"])}
   scope :rejected, lambda{|user_id| where(["operator_id = ? and workflow_state = ?", user_id, "rejected"])}
-  scope :active_users , select("users.id, (profiles.first_name || ' ' || profiles.last_name) as name").joins(:user => :profile).group("users.id,name")
+  scope :active_users , select("users.id, (profiles.first_name || ' ' || profiles.last_name) as name").joins(:user => :profile).group("users.id,name").order("name asc")
   
   #create interaction with type message.
   #create new conversation if not exists and send the request as message to user.
