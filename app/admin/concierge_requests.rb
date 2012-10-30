@@ -1,6 +1,5 @@
-ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
-
-
+ActiveAdmin.register ConciergeRequest do
+  
   controller do
     skip_before_filter :is_admin?
   end
@@ -11,6 +10,13 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
   actions :all
   
+  filter :code, :as => "string", :label => "CR ID"
+  filter :title, :as => "string"
+  filter :request_note, :as => "string"
+  filter :created_at
+  filter :completion_date
+  filter :workflow_state
+     
   scope :all, :default => true do |concierge_requests|
     concierge_requests.join_user_profile
   end
@@ -28,7 +34,6 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
   #scope :concierge, :default => true
 
-  config.clear_sidebar_sections!
 
   index :download_links => false  do
     column(:Member, :sortable => "profiles.first_name"){|concierge_request| concierge_request.user.name}
@@ -44,10 +49,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
    end
   end
-  
-  controller do
-    autocomplete :user, :id
-  end
+ 
 
   #member_action :show, :method => :get do
     #@concierge_request = ConciergeRequest.find(params[:id])
@@ -67,9 +69,7 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
     end
   end
 
-  collection_action :index
-
-  collection_action :new do
+  member_action :new do
     @user = User.find(params[:user_id]) if params[:user_id]
     @concierge_request = ConciergeRequest.new
     @concierge_request.user_id = @user.id if @user
