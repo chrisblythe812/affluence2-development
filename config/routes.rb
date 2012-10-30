@@ -161,6 +161,13 @@ Affluence2::Application.routes.draw do
   resources :orders
   resources :wineshares
 
+  resources :welcome do
+    collection do
+      get :receive_call
+      get :status_call_back
+    end
+  end
+
   resources :promotions do
     member do
       get :become_premium_member

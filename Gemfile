@@ -38,7 +38,7 @@ gem 'rack-ssl'
 gem 'newrelic_rpm'
 gem 'cancan'
 gem 'workflow'
-
+gem 'twilio-rb'
   
 
 # Gems used only for assets and not required
@@ -71,6 +71,7 @@ group :test, :development do
   gem "factory_girl_rails", ">= 1.7.0"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer'
+  gem 'tunnlr_connector', :require => "tunnlr"
   #gem 'ruby-debug19', :require => 'ruby-debug'
 end
  
