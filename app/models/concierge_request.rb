@@ -1,16 +1,17 @@
 class ConciergeRequest < ActiveRecord::Base
 
-  validates_presence_of :user_id, :operator_id, :request_note, :completion_date
-
+  validates_presence_of :user_id, :operator_id, :request_note, :completion_date, :title
   belongs_to :user
 
   has_many :interactions
 
   after_create :create_unique_code, :create_interaction
-
+  validate :validate_completion_date
+  
   scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
   scope :completed, lambda{|user_id| where(["operator_id = ? and workflow_state = ?",user_id, "completed"])}
   scope :rejected, lambda{|user_id| where(["operator_id = ? and workflow_state = ?", user_id, "rejected"])}
+  scope :active_users , select("users.id, (profiles.first_name || ' ' || profiles.last_name) as name").joins(:user => :profile).group("users.id,name").order("name asc")
   
   #create interaction with type message.
   #create new conversation if not exists and send the request as message to user.
@@ -29,13 +30,23 @@ class ConciergeRequest < ActiveRecord::Base
      self.on_reply!
     end
   end
+  
+  def self.join_user_profile
+    self.joins(:user => :profile).order("concierge_requests.completion_date desc")
+  end
 
   def create_unique_code
     unique_code = "CR#{self.id}"
-    subject = unique_code + "-" + self.title
+    subject = unique_code + ":" + self.title
     self.update_attributes(:code => unique_code , :title => subject)
   end
-
+  
+  def validate_completion_date
+    if completion_date.to_date < Date.today
+      errors.add(:completion_date, "invalid date")
+    end
+  end
+  
   include Workflow
   workflow do
     state :new do

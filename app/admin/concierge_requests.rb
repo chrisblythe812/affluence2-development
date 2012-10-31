@@ -1,49 +1,56 @@
-ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
-
-
+ActiveAdmin.register ConciergeRequest do
+  
   controller do
     skip_before_filter :is_admin?
   end
 
-
+  config.sort_order = 'completion_date desc'
+  
   menu :label => "Concierge Requests"
 
   actions :all
-  scope :all
+  
+  filter :user ,:as => :select , :collection =>  proc { ConciergeRequest.active_users }
+  filter :code, :as => "string", :label => "CR ID"
+  filter :title, :as => "string"
+  filter :request_note, :as => "string"
+  filter :created_at
+  filter :completion_date
+  filter :workflow_state
+     
+  scope :all, :default => true do |concierge_requests|
+    concierge_requests.join_user_profile
+  end
   scope :my do |concierge_requests|
-    concierge_requests.my_requests(current_user.id)
+    concierge_requests.my_requests(current_user.id).join_user_profile
   end
   scope :completed do |concierge_requests|
-    concierge_requests.completed(current_user.id)
+    concierge_requests.completed(current_user.id).join_user_profile
   end
   scope :rejected  do |concierge_requests|
-    concierge_requests.rejected(current_user.id)
+    concierge_requests.rejected(current_user.id).join_user_profile
   end
 
   #config.sort_order = 'user_id_desc'
 
   #scope :concierge, :default => true
 
-  config.clear_sidebar_sections!
 
   index :download_links => false  do
-    column(:Member, :sortable => false){|concierge_request| concierge_request.user.name}
-    column(:Profile, :sortable => false){|concierge_request| image_tag display_image(concierge_request.user.profile.photos, :thumb)}
+    column(:Member, :sortable => "profiles.first_name"){|concierge_request| concierge_request.user.name}
+    column(:Profile){|concierge_request| image_tag display_image(concierge_request.user.profile.photos, :thumb)}
     column(:title){|concierge_request| concierge_request.title}
     column(:request_note){|concierge_request| concierge_request.request_note}
-    column(:created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
-    column(:completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
-    column(:workflow_state){|concierge_request|  concierge_request.workflow_state}
+    column(:created_at, :sortable => :created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
+    column(:completion_date, :sortable => :completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
+    column(:workflow_state, :sortable => :workflow_state){|concierge_request|  concierge_request.workflow_state}
     column('Actions', :sortable => false) do |concierge_request|
-      link_to('View', admin_concierge_request_path(concierge_request)) + " " + \
+      link_to('Interactions', admin_concierge_request_path(concierge_request)) + " " + \
       link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
       link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
    end
   end
-  
-  controller do
-    autocomplete :user, :id
-  end
+ 
 
   #member_action :show, :method => :get do
     #@concierge_request = ConciergeRequest.find(params[:id])
@@ -62,14 +69,16 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
       end
     end
   end
-
-  collection_action :index
-
-  collection_action :new do
-    @user = User.find(params[:user_id]) if params[:user_id]
-    @concierge_request = ConciergeRequest.new
-    @concierge_request.user_id = @user.id if @user
-  end
+  
+  # collection_action :index
+ controller do
+   def new
+     @user = User.find(params[:user_id]) if params[:user_id]
+     @concierge_request = ConciergeRequest.new
+     @concierge_request.user_id = @user.id if @user
+     @concierge_request.completion_date = Date.today if @concierge_request.new_record?
+   end
+ end
 
   member_action :edit do
     @concierge_request = ConciergeRequest.find(params[:id])
@@ -88,8 +97,8 @@ ActiveAdmin.register ConciergeRequest, :namespace=> :admin do
 
       #f.input :operator_id, :value => 1, :hidden => true
       f.input :title, :input_html => {:readonly => f.object.new_record? ? false : true}
-      f.input :request_note , :label => "Request"
-      f.input :completion_date, :label => "Date the Request has to be complete by"
+      f.input :request_note , :label => "Request", :input_html => {:readonly => f.object.new_record? ? false : true}
+      f.input :completion_date, :label => "Date the Request has to be complete by", :as => :datepicker, :input_html => {:readonly => true}
       f.input :todo, :label => "Description"
     end
     f.buttons
