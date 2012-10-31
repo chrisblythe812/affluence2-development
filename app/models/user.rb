@@ -159,10 +159,10 @@ class User < ActiveRecord::Base
   end
 
 
-  scope :all_members, :conditions => ['role like ?', 'member']
-  scope :active_members, :conditions => ['role like ? and status like ? and ((invitation_sent_at is null and invitation_accepted_at is null) or (invitation_sent_at is not null and invitation_accepted_at is not null))', 'member', "active"]
-  scope :suspended_members, :conditions => ['role like ? and status like ? ', 'member', "suspended"]
-  scope :deleted_members, :conditions => ['role like ? and status like ? ', 'member', "deleted"]
+  scope :all_members, where('role like ?', 'member')
+  scope :active_members, where('role like ? and status like ? and ((invitation_sent_at is null and invitation_accepted_at is null) or (invitation_sent_at is not null and invitation_accepted_at is not null))', 'member', "active")
+  scope :suspended_members, where('role like ? and status like ? ', 'member', "suspended")
+  scope :deleted_members, where('role like ? and status like ? ', 'member', "deleted")
 
   scope :first_name_or_last_name, lambda { |query| {:conditions => ['role like ? and status like ? email like ? ', 'member', "deleted", query]} }
   scope :registered_users, where("(invited_by_id is null) or (invited_by_id is not null and invitation_sent_at is not null)")

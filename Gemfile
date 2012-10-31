@@ -71,8 +71,9 @@ group :test, :development do
   gem "factory_girl_rails", ">= 1.7.0"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer'
-  gem 'tunnlr_connector', :require => "tunnlr"
   #gem 'ruby-debug19', :require => 'ruby-debug'
+
+  gem 'tunnlr_connector', :require => "tunnlr", :git => 'git://github.com/aashish/tunnlr_connector.git' 
 end
  
 group :test do
