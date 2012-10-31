@@ -160,11 +160,12 @@ Affluence2::Application.routes.draw do
 
   resources :orders
   resources :wineshares
-
-  resources :welcome do
+  resources :welcome
+  
+  resources :twilio_calls do
     collection do
       get :receive_call
-      get :status_call_back
+      post :status_call_back
     end
   end
 
