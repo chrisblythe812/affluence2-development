@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
 
 
   scope :all_members, :conditions => ['role like ?', 'member']
-  scope :active_members, :conditions => ['role like ? and status like ?', 'member', "active"]
+  scope :active_members, :conditions => ['role like ? and status like ? and ((invitation_sent_at is null and invitation_accepted_at is null) or (invitation_sent_at is not null and invitation_accepted_at is not null))', 'member', "active"]
   scope :suspended_members, :conditions => ['role like ? and status like ? ', 'member', "suspended"]
   scope :deleted_members, :conditions => ['role like ? and status like ? ', 'member', "deleted"]
 
