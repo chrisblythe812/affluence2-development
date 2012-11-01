@@ -94,8 +94,14 @@ class ConciergeRequest < ActiveRecord::Base
       puts " buildMessage  and mail to operator"
     end
 
-    state :completed
-    state :rejected
+    state :completed do
+      event :on_message, :transitions_to => :completed
+      event :on_reply, :transitions_to => :completed
+    end
+    state :rejected do
+      event :on_message, :transitions_to => :rejected
+      event :on_reply, :transitions_to => :rejected
+    end
 
     on_transition do |from, to, triggering_event, *event_args|
       #TODO log this transition

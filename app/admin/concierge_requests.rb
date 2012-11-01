@@ -8,7 +8,7 @@ ActiveAdmin.register ConciergeRequest do
   
   menu :label => "Concierge Requests"
 
-  actions :all
+  actions :all, :except => [:destroy]
   
   filter :user ,:as => :select , :collection =>  proc { ConciergeRequest.active_users }
   filter :code, :as => "string", :label => "CR ID"
@@ -53,8 +53,8 @@ ActiveAdmin.register ConciergeRequest do
     column(:workflow_state, :sortable => :workflow_state){|concierge_request|  concierge_request.workflow_state}
     column('Actions', :sortable => false) do |concierge_request|
       link_to('Interactions', admin_concierge_request_path(concierge_request)) + " " + \
-      link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
-      link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
+      link_to('Edit', edit_admin_concierge_request_path(concierge_request))
+      # link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
    end
   end
  
@@ -128,11 +128,10 @@ ActiveAdmin.register ConciergeRequest do
         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
     end
-    unless (concierge_request.workflow_state == 'completed' || concierge_request.workflow_state == 'rejected')
-      div :class => "panel" do
-        panel "Reply to User" do
-          render :partial =>  'reply_form'
-        end
+    
+    div :class => "panel" do
+      panel "Reply to User" do
+        render :partial =>  'reply_form'
       end
     end
   end
