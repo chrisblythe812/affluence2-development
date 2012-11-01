@@ -8,9 +8,21 @@ class ConciergeRequest < ActiveRecord::Base
   after_create :create_unique_code, :create_interaction
   validate :validate_completion_date
   
-  scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
-  scope :completed, lambda{|user_id| where(["operator_id = ? and workflow_state = ?",user_id, "completed"])}
-  scope :rejected, lambda{|user_id| where(["operator_id = ? and workflow_state = ?", user_id, "rejected"])}
+ scope :my_requests, lambda{|user_id| where(["operator_id =? and workflow_state != ? and workflow_state != ?", user_id, "completed", "rejected"])}
+ scope :completed, lambda{|user_id=nil|
+    if user_id
+      where(["operator_id = ? and workflow_state = ?",user_id, "completed"])
+    else
+      where(["workflow_state = ?", "completed"])
+     end
+    }
+  scope :rejected, lambda{|user_id=nil|
+    if user_id
+      where(["operator_id = ? and workflow_state = ?",user_id, "rejected"])
+    else
+      where(["workflow_state = ?", "rejected"])
+     end
+    }
   scope :active_users , select("users.id, (profiles.first_name || ' ' || profiles.last_name) as name").joins(:user => :profile).group("users.id,name").order("name asc")
   
   #create interaction with type message.
@@ -45,6 +57,10 @@ class ConciergeRequest < ActiveRecord::Base
     if completion_date.to_date < Date.today
       errors.add(:completion_date, "invalid date")
     end
+  end
+  
+  def self.all_status
+    ["awaiting_customer","awaiting_operator" ,"completed", "rejected" ]  
   end
   
   include Workflow

@@ -16,20 +16,27 @@ ActiveAdmin.register ConciergeRequest do
   filter :request_note, :as => "string"
   filter :created_at
   filter :completion_date
-  filter :workflow_state
+  filter :workflow_state, :as => :select , :collection =>  proc { ConciergeRequest.all_status }
      
   scope :all, :default => true do |concierge_requests|
     concierge_requests.join_user_profile
   end
+  scope :completed , :if => proc { current_user.superadmin? } do |concierge_requests|
+    concierge_requests.completed.join_user_profile
+  end
+  scope :rejected , :if => proc { current_user.superadmin? } do |concierge_requests|
+    concierge_requests.rejected.join_user_profile
+  end
   scope :my do |concierge_requests|
     concierge_requests.my_requests(current_user.id).join_user_profile
   end
-  scope :completed do |concierge_requests|
+  scope "My (Completed)" do |concierge_requests|
     concierge_requests.completed(current_user.id).join_user_profile
   end
-  scope :rejected  do |concierge_requests|
+  scope "My (Rejected)" do |concierge_requests|
     concierge_requests.rejected(current_user.id).join_user_profile
   end
+
 
   #config.sort_order = 'user_id_desc'
 
