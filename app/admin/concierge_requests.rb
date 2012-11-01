@@ -111,7 +111,7 @@ ActiveAdmin.register ConciergeRequest do
     f.buttons
   end
 
-  show :title => "Concierge Request" do | concierge_request |
+ show :title => "Concierge Request" do | concierge_request |
     panel "Requested Info" do
       attributes_table_for concierge_request do
         row("User") {|concierge_request| concierge_request.user.name}
@@ -123,18 +123,19 @@ ActiveAdmin.register ConciergeRequest do
       #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
       end
     end
-      panel "Conversation with User" do
+    panel "Conversation with User" do
       table_for concierge_request.interactions do |interaction|
         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
-      end
-
-    div :class => "panel" do
-      panel "Reply to User" do
-      render :partial =>  'reply_form'
-        end
     end
-   end
+    unless (concierge_request.workflow_state == 'completed' || concierge_request.workflow_state == 'rejected')
+      div :class => "panel" do
+        panel "Reply to User" do
+          render :partial =>  'reply_form'
+        end
+      end
+    end
+  end
 
 
   action_item :only => [:show] do
