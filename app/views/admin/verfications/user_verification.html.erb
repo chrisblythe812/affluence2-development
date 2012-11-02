@@ -3,112 +3,95 @@
 
 <% if @verfication %>
 
+<div>
+	Here are the verfication answers submitted by user: <b><%= @verfication.user.name %></b>
+	<div/>
+	<br/>
+	<br/>
+	<p>
+		<b>Question 1 : <%= Question.question1 %></b>
+	</p>
+	<p>
+		Answer : <%= @verfication.answer2 %>
+	</p>
+	<br/>
+	<p>
+		<b>Question 2 : <%= Question.question2 %></b>
+	</p>
+	<p>
+		Answer : <%= @verfication.answer2 %>
+	</p>
+	<br/>
+	<p>
+		<b>Question 3 : <%= Question.question3 %></b>
+	</p>
+	<p>
+		Answer : <%= @verfication.answer3 %>
+	</p>
+	<br/>
 
-<div> 
-Here are the verfication answers submitted by user: <b><%= @verfication.user.name %></b>
-<div/>
-<br/>
-<br/>
-<p> <b>Question 1 : <%= Question.question1 %></b></p>
-<p> Answer : <%= @verfication.answer2 %></p>
-<br/>
-<p> <b>Question 2 : <%= Question.question2 %></b></p>
-<p> Answer : <%= @verfication.answer2 %></p>
-<br/>
-<p> <b>Question 3 : <%= Question.question3 %></b></p>
-<p> Answer : <%= @verfication.answer3 %></p>
-<br/>
+	<%if @verfication.check_completed_status?%>
+	<%= link_to "Mark as Verified", '#mark_as_verified', :class => 'verified', :confirm => "Are you sure you want to mark this member as verified?" %>  ||
 
-<% if @verfication.status == 'submited' %>
+	<div style='display:none'>
+		<div id='mark_as_verified' style='padding:10px; background:#fff;'>
+			<p>
+				<strong>You are about to make this member as Verified.</strong>
+			</p>
+			<p>
+				Below is the email notification that will sent to member upon verification.
+			</p>
+			<%= form_tag mark_as_verified_admin_verfication_path(@verfication) do%>
+			<%= text_area_tag 'body', 'You have been successfully verified by admin', :style => "height:200px;"  %>
+			<br/>
+			<%= submit_tag 'Mark as Verified'  %>
+			<%end%>
+		</div>
+	</div>
 
+	<%= link_to "Mark as Rejected", '#mark_as_rejected', :class => 'rejected', :confirm => "Are you sure you want to mark this member as rejected?" %>  ||
+	<div style='display:none'>
+		<div id='mark_as_rejected' style='padding:10px; background:#fff;'>
+			<p>
+				<strong>You are about to make this member as Rejected.</strong>
+			</p>
+			<p>
+				Below is the email notification that will sent to member upon verification.
+			</p>
+			<%= form_tag mark_as_rejected_admin_verfication_path(@verfication) do%>
+			<%= text_area_tag 'body', 'You have been rejected by admin', :style => "height:200px;"  %>
+			<br/>
+			<%= submit_tag 'Mark as Rejected'  %>
+			<%end%>
+		</div>
+	</div>
+	<% else %>
+	<p>
+		Present status : <b><%= h @verfication.status %></b>.&nbsp; Click here to
+		<%= link_to "Cancel", admin_verfications_path %>
+	</p>
+	<% end %>
 
-<%= link_to "Mark as Verified", '#mark_as_verified', :class => 'verified', :confirm => "Are you sure you want to mark this member as verified?" %>  ||
+	<% else %>
+	<div>
+		User has not submitted verfication answers till now.
+	</div>
 
+	<% end %>
 
-      <div style='display:none'>
-        <div id='mark_as_verified' style='padding:10px; background:#fff;'>
-          <p><strong>You are about to make this member as Verified.</strong></p>
-          <p>Below is the email notification that will sent to member upon verification.</p>
-          <%= form_tag mark_as_verified_admin_verfication_path(@verfication) do%>
-          <%= text_area_tag 'body', 'You have been successfully verified by admin', :style => "height:200px;"  %> <br/>
-          <%= submit_tag 'Mark as Verified'  %>
-          <%end%>
-        </div>
-      </div>
+	<script>
+		$(document).ready(function() {
 
-<%= link_to "Mark as Rejected", '#mark_as_rejected', :class => 'rejected', :confirm => "Are you sure you want to mark this member as rejected?" %>  ||
-      <div style='display:none'>
-        <div id='mark_as_rejected' style='padding:10px; background:#fff;'>
-          <p><strong>You are about to make this member as Rejected.</strong></p>
-          <p>Below is the email notification that will sent to member upon verification.</p>
-          <%= form_tag mark_as_rejected_admin_verfication_path(@verfication) do%>
-          <%= text_area_tag 'body', 'You have been rejected by admin', :style => "height:200px;"  %> <br/>
-          <%= submit_tag 'Mark as Rejected'  %>
-          <%end%>
-        </div>
-      </div>
+			//Examples of how to assign the ColorBox event to elements
 
-
-
-<% else %>
-<p> Present status : <b><%= h @verfication.status %></b>.&nbsp; Click here to
-<% if @verfication.status == 'rejected' %>
-<%= link_to "Mark as Verified", '#mark_as_verified', :class => 'verified' %>      ||
-      <%= link_to "Cancel", admin_verfications_path %>
-          <div style='display:none'>
-            <div id='mark_as_verified' style='padding:10px; background:#fff;'>
-              <p><strong>You are about to make this member as Verified.</strong></p>
-              <p>Below is the email notification that will sent to member upon verification.</p>
-              <%= form_tag mark_as_verified_admin_verfication_path(@verfication) do%>
-              <%= text_area_tag 'body', 'You have been successfully verified by admin', :style => "height:200px;"  %> <br/>
-              <%= submit_tag 'Mark as Verified'  %>
-              <%end%>
-            </div>
-          </div>
-<% else %>
-<%= link_to "Mark as Rejected", '#mark_as_rejected', :class => 'rejected' %>          ||
-          <%= link_to "Cancel", admin_verfications_path %>
-          <div style='display:none'>
-            <div id='mark_as_rejected' style='padding:10px; background:#fff;'>
-              <p><strong>You are about to make this member as Rejected.</strong></p>
-              <p>Below is the email notification that will sent to member upon verification.</p>
-              <%= form_tag mark_as_rejected_admin_verfication_path(@verfication) do %>
-              <%= text_area_tag 'body', 'You have been rejected by admin', :style => "height:200px;"  %> <br/>
-              <%= submit_tag 'Mark as Rejected'  %>
-              <%end%>
-            </div>
-          </div>
-<% end %>
-
-<% end %>
-
-
-<% else %>
-<div> 
-User has not submitted verfication answers till now.
-<div/>
-
-<% end %>
-
-
-
-
-
-</p>
-
-
-
-
-
-
-
-<script>
-    $(document).ready(function(){
-
-        //Examples of how to assign the ColorBox event to elements
-
-        $(".verified").colorbox({inline:true, width:"50%"});
-        $(".rejected").colorbox({inline:true, width:"50%"});
-        //$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
-    });
-</script>
+			$(".verified").colorbox({
+				inline : true,
+				width : "50%"
+			});
+			$(".rejected").colorbox({
+				inline : true,
+				width : "50%"
+			});
+			//$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+		});
+	</script>
