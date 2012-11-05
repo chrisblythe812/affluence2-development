@@ -144,22 +144,21 @@ ActiveAdmin.register ConciergeRequest do
     end
   end
 
-  member_action :reply_message, :method => :post do
+ member_action :reply_message, :method => :post do
     concierge_request = ConciergeRequest.find(params[:id])
-    #render :text =>  params.inspect
-    conversation = Conversation.get_conversation_for(concierge_request.operator_id, concierge_request.user_id).first
+    conversation = concierge_request.interactions.last.interactable.conversation
     if conversation.nil?
-      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => params[:message][:body], :subject => 'title'}})
+      raise "Conversion is Nil"
     else
-      last_interaction_message = concierge_request.interactions.last.interactable
+      last_interaction_message = conversation.messages.last
       conversation.messages << Message.new(:subject => "Concierge Request", :body => params[:message][:body], :subject => last_interaction_message.subject)
-    end
-    conversation.messages.last.sender = User.find(concierge_request.operator_id)
-    conversation.messages.last.recipient = User.find(concierge_request.user_id)
-    if conversation.save
-      Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+      conversation.messages.last.sender = User.find(concierge_request.operator_id)
+      conversation.messages.last.recipient = User.find(concierge_request.user_id)
+      if conversation.save
+        Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
       #self.submit!(self.user_id)
       concierge_request.on_reply!
+      end
     end
     redirect_to admin_concierge_request_path(concierge_request.id)
   end
