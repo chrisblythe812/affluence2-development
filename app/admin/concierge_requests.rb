@@ -146,7 +146,7 @@ ActiveAdmin.register ConciergeRequest do
 
  member_action :reply_message, :method => :post do
     concierge_request = ConciergeRequest.find(params[:id])
-    conversation = concierge_request.interactions.last.interactable.conversation
+    conversation = concierge_request.interactions.last.conversation
     if conversation.nil?
       raise "Conversion is Nil"
     else
@@ -155,7 +155,7 @@ ActiveAdmin.register ConciergeRequest do
       conversation.messages.last.sender = User.find(concierge_request.operator_id)
       conversation.messages.last.recipient = User.find(concierge_request.user_id)
       if conversation.save
-        Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+        Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message', :conversation_id => conversation.id)
       #self.submit!(self.user_id)
       concierge_request.on_reply!
       end

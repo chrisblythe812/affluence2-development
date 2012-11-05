@@ -37,7 +37,7 @@ class ConciergeRequest < ActiveRecord::Base
     conversation.messages.last.sender = User.find(self.operator_id)
     conversation.messages.last.recipient = User.find(self.user_id)
     if conversation.save
-     Interaction.create(:concierge_request_id => self.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+     Interaction.create(:concierge_request_id => self.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message', :conversation_id => conversation.id)
      self.submit!(self.user_id)
      self.on_reply!
     end
