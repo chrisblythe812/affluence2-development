@@ -30,6 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   
   def get_contacts
     if params[:provider]
+      session[:provider] = params[:provider]
 
       contact = current_user.contacts.find_by_provider(params[:provider])
       contact.delete if contact.present?
@@ -69,7 +70,7 @@ class Users::InvitationsController < Devise::InvitationsController
     elsif session[:state] == "0"
       session[:selected_emails][params[:current_page]] = params[:users]  
       session[:selected_emails].each_value do |value|
-        user_indexes = user_indexes + value
+        user_indexes = user_indexes + value unless value.nil?
       end
 
       temp = []
@@ -81,7 +82,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
       session[:unselected_emails][params[:current_page]] = params[:unchecked_emails].split(',')
       session[:unselected_emails].each_value do |value|
-        user_indexes = user_indexes + value
+        user_indexes = user_indexes + value unless value.nil? 
       end
       user_indexes.uniq!
 
@@ -89,7 +90,12 @@ class Users::InvitationsController < Devise::InvitationsController
         users.delete_at(index.to_i)
       end  
     end
-    check_emails_and_send_invitation users
+    if user_indexes.blank?
+      flash[:error] = "Please select email"
+      redirect_to new_user_invitation_path
+    else
+      check_emails_and_send_invitation users
+    end
   end
 
   def contacts_provider_callback

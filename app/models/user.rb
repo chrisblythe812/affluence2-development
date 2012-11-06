@@ -30,8 +30,11 @@ class User < ActiveRecord::Base
   }
   has_many :invitations, :class_name => "InvitationHistory"
   has_many :contacts
-
+  has_many :photo_streams, :through => :profile
+  has_many :photos, :through => :photo_streams
   has_many :verfication, :dependent => :destroy
+
+  delegate :name, :to => :profile, :allow_nil => true
 
   def disconnect_with_user(friend_id)
     connection1 = Connection.where("user_id=? and friend_id=?", id, friend_id)

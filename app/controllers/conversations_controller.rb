@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :authorize_conversation_resource, :except => [:index, :show, :confirm]
-  before_filter :set_page_header
+  before_filter :set_page_header, :update_unread_messages_count
   autocomplete :profile, :full_name, :extra_data => [:id]
 
 
@@ -30,7 +30,7 @@ class ConversationsController < ApplicationController
       conversations = Conversation.matching_conversation(current_user.id, params[:search])
       @conversations = Kaminari.paginate_array(conversations).page(params[:page]).per(10)
     else
-      @conversations = Conversation.select("distinct conversations.* ").joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(@archived).order("updated_at DESC").page params[:page]
+      @conversations = Conversation.joins(:conversation_metadata).where("conversation_metadata.user_id = ?", current_user.id).archived?(@archived).order("updated_at DESC").page params[:page]
     end
   end
 

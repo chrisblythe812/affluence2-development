@@ -88,6 +88,10 @@ class ApplicationController < ActionController::Base
     return (x == "true")
   end
 
+  def update_unread_messages_count
+    unread_messages_count = ConversationMetadatum.where(:user_id => current_user.id, :read => false).size
+    current_user.update_attributes(:unread_messages_counter => unread_messages_count)
+  end
   protected
 
   def check_activity_load_time_for(type)

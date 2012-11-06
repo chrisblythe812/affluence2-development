@@ -31,6 +31,8 @@ class Photo < ActiveRecord::Base
       elsif  self.photoable.promotionable_type == 'Offer'
         {:medium => ['210x100#', :png]}
       end
+    elsif self.photoable_type == 'PhotoStream'
+      {:medium => ['260x260#', :png], :preview => ['210x135#', :png]}
     elsif self.photoable_type.nil?
       {:medium => ['260x260#', :png], :thumb => ['60x60#', :png]}
     else

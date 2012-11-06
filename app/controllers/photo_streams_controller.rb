@@ -43,6 +43,16 @@ before_filter :authorize_photo_stream_resource
        render :json => {:id => @photo.id, :pic_path => @photo.image.url.to_s, :name => @photo.image.url(:medium)}, :content_type => 'text/html'
     end
   end
+
+  def update_photo
+    if request.xhr?
+      @photostream = current_user.profile.photo_streams.find(params[:photo_stream_id])
+      photo = @photostream.photos.find(params[:id])
+      photo.update_attributes(:title => params[:photo][:title])
+      render :json => {:title => photo.title}
+    end
+  end
+ 
   def destroy_photo
     photo = Photo.find(params[:id])  
     if !photo.nil? && photo.photoable.profile.user == current_user

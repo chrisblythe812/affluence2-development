@@ -48,11 +48,8 @@ class ProfilesController < ApplicationController
     if params[:user].blank?
       if params[:profile][:photos_attributes]["0"][:image].nil?
         params[:profile].delete("photos_attributes")
-      else
-        @profile.photos.build
       end
-      @profile = Profile.find(params[:id])
-
+ 
       respond_to do |format|
         if @profile.update_attributes(params[:profile])
           @user.save
