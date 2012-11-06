@@ -55,7 +55,7 @@ ActiveAdmin.register ConciergeRequest do
     column('Actions', :sortable => false) do |concierge_request|
       link_to('Interactions', admin_concierge_request_path(concierge_request)) + " " + \
       link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
-      link_to('View User', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
+      # link_to('View User', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
    end
   end
  
