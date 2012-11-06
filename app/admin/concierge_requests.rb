@@ -4,7 +4,7 @@ ActiveAdmin.register ConciergeRequest do
     skip_before_filter :is_admin?
   end
 
-  config.sort_order = 'completion_date desc'
+  config.sort_order = 'updated_at desc'
   
   menu :label => "Concierge Requests"
 
@@ -49,6 +49,7 @@ ActiveAdmin.register ConciergeRequest do
     column(:title){|concierge_request| concierge_request.title}
     column(:request_note){|concierge_request| concierge_request.request_note}
     column(:created_at, :sortable => :created_at){|concierge_request|  global_date_format(concierge_request.created_at)}
+    column(:updated_at, :sortable => :updated_at){|concierge_request|  global_date_format(concierge_request.updated_at)}
     column(:completion_date, :sortable => :completion_date){|concierge_request|  global_date_format(concierge_request.completion_date)}
     column(:workflow_state, :sortable => :workflow_state){|concierge_request|  concierge_request.workflow_state}
     column('Actions', :sortable => false) do |concierge_request|

@@ -44,7 +44,7 @@ class ConciergeRequest < ActiveRecord::Base
   end
   
   def self.join_user_profile
-    self.joins(:user => :profile).order("concierge_requests.completion_date desc")
+    self.joins(:user => :profile).order("concierge_requests.updated_at desc")
   end
 
   def create_unique_code
