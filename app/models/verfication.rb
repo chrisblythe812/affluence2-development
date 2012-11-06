@@ -7,4 +7,7 @@ class Verfication < ActiveRecord::Base
 
 
 
+  def check_completed_status?
+    (status == "submited" && !completed)
+  end
 end

@@ -2,7 +2,8 @@ class Conversation < ActiveRecord::Base
   paginates_per 5
   has_many :messages, :order => "created_at"
   has_many :conversation_metadata, :dependent => :destroy
-
+  has_many :interactions, :dependent => :destroy
+  
   scope :for_user, lambda { |user|
     joins(:conversation_metadata).
         includes(:messages).

@@ -8,7 +8,7 @@ ActiveAdmin.register ConciergeRequest do
   
   menu :label => "Concierge Requests"
 
-  actions :all
+  actions :all, :except => [:destroy]
   
   filter :user ,:as => :select , :collection =>  proc { ConciergeRequest.active_users }
   filter :code, :as => "string", :label => "CR ID"
@@ -16,20 +16,27 @@ ActiveAdmin.register ConciergeRequest do
   filter :request_note, :as => "string"
   filter :created_at
   filter :completion_date
-  filter :workflow_state
+  filter :workflow_state, :as => :select , :collection =>  proc { ConciergeRequest.all_status }
      
   scope :all, :default => true do |concierge_requests|
     concierge_requests.join_user_profile
   end
+  scope :completed , :if => proc { current_user.superadmin? } do |concierge_requests|
+    concierge_requests.completed.join_user_profile
+  end
+  scope :rejected , :if => proc { current_user.superadmin? } do |concierge_requests|
+    concierge_requests.rejected.join_user_profile
+  end
   scope :my do |concierge_requests|
     concierge_requests.my_requests(current_user.id).join_user_profile
   end
-  scope :completed do |concierge_requests|
+  scope "My (Completed)" do |concierge_requests|
     concierge_requests.completed(current_user.id).join_user_profile
   end
-  scope :rejected  do |concierge_requests|
+  scope "My (Rejected)" do |concierge_requests|
     concierge_requests.rejected(current_user.id).join_user_profile
   end
+
 
   #config.sort_order = 'user_id_desc'
 
@@ -47,7 +54,7 @@ ActiveAdmin.register ConciergeRequest do
     column('Actions', :sortable => false) do |concierge_request|
       link_to('Interactions', admin_concierge_request_path(concierge_request)) + " " + \
       link_to('Edit', edit_admin_concierge_request_path(concierge_request)) + " " + \
-      link_to('Delete', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
+      link_to('View User', admin_concierge_request_path(concierge_request) , :method => :delete , :confirm => "Are you sure you want to delete this?")
    end
   end
  
@@ -104,7 +111,7 @@ ActiveAdmin.register ConciergeRequest do
     f.buttons
   end
 
-  show :title => "Concierge Request" do | concierge_request |
+ show :title => "Concierge Request" do | concierge_request |
     panel "Requested Info" do
       attributes_table_for concierge_request do
         row("User") {|concierge_request| concierge_request.user.name}
@@ -116,18 +123,18 @@ ActiveAdmin.register ConciergeRequest do
       #row("Date the Request has to be complete by") {|concierge_request| concierge_request.completed_date }
       end
     end
-      panel "Conversation with User" do
+    panel "Conversation with User" do
       table_for concierge_request.interactions do |interaction|
         column("Message") { |interaction| "#{interaction.interactable.sender.name} : #{interaction.interactable.body}" }
       end
-      end
-
+    end
+    
     div :class => "panel" do
       panel "Reply to User" do
-      render :partial =>  'reply_form'
-        end
+        render :partial =>  'reply_form'
+      end
     end
-   end
+  end
 
 
   action_item :only => [:show] do
@@ -137,22 +144,21 @@ ActiveAdmin.register ConciergeRequest do
     end
   end
 
-  member_action :reply_message, :method => :post do
+ member_action :reply_message, :method => :post do
     concierge_request = ConciergeRequest.find(params[:id])
-    #render :text =>  params.inspect
-    conversation = Conversation.get_conversation_for(concierge_request.operator_id, concierge_request.user_id).first
+    conversation = concierge_request.interactions.last.conversation
     if conversation.nil?
-      conversation = Conversation.new(:messages_attributes => { "0" => { "body" => params[:message][:body], :subject => 'title'}})
+      raise "Conversion is Nil"
     else
-      last_interaction_message = concierge_request.interactions.last.interactable
+      last_interaction_message = conversation.messages.last
       conversation.messages << Message.new(:subject => "Concierge Request", :body => params[:message][:body], :subject => last_interaction_message.subject)
-    end
-    conversation.messages.last.sender = User.find(concierge_request.operator_id)
-    conversation.messages.last.recipient = User.find(concierge_request.user_id)
-    if conversation.save
-      Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message')
+      conversation.messages.last.sender = User.find(concierge_request.operator_id)
+      conversation.messages.last.recipient = User.find(concierge_request.user_id)
+      if conversation.save
+        Interaction.create(:concierge_request_id => concierge_request.id, :interactable_id => conversation.messages.last.id,  :interactable_type => 'Message', :conversation_id => conversation.id)
       #self.submit!(self.user_id)
       concierge_request.on_reply!
+      end
     end
     redirect_to admin_concierge_request_path(concierge_request.id)
   end

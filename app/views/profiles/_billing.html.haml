@@ -13,34 +13,35 @@
                 = image_tag 'ajax-loader.gif', :class => 'ajax-loader'
                 %p Loading....
               .controls
-                %label.radio
+                %label.radio.plan_free
                   - if current_user.plan == 'free'
                     %input#optionsRadios1{:checked => "", :name => "user_plan", :type => "radio", :value => "free"}
                       Free - limited access
-                %label.radio
+                %label.radio.plan_monthly
                   %input#optionsRadios2{:name => "user_plan", :type => "radio", :value => "Monthly",:checked => (current_user.plan == 'Monthly' ? true : false)}
                     Monthly - $50 per Month
-                %label.radio
+                %label.radio.plan_yearly
                   %input#optionsRadios3{:name => "user_plan", :type => "radio", :value => "Yearly",:checked => (current_user.plan == 'Yearly' ? true : false)}
                     Yearly - $450 per Year
                     %em
                       %strong Save 25%
             %hr.zero
-              - if current_user.plan != 'free'
-                - content_for :old_card_fields do
-                  .control-group
-                    %label.control-label{:for => "input05"} Current Card Number
-                    .controls
-                      = @credit_card.masked_number#%input.input.span2{:name => "old_card", :size => "30", :type => "text",:value => @credit_card.masked_number}
-              = render :partial => '/registrations/credit_card_fields'
-              - if current_user.plan == 'free'
-                = hidden_field_tag :tr_data, Braintree::TransparentRedirect.create_customer_data(:redirect_url => billing_info_confirm_profiles_url())
-              - else
-                = hidden_field_tag :tr_data, Braintree::TransparentRedirect.update_customer_data(:redirect_url => billing_info_update_confirm_profiles_url(),:customer_id => current_user.braintree_customer_id)
-                = hidden_field_tag 'customer[credit_card][options][update_existing_token]', @credit_card.token
-              = hidden_field_tag :present_user_plan,current_user.plan
-              .form-actions
-                %button.btn.btn-primary{:type => "submit"} Save changes
+              .credit_card
+                - if current_user.plan != 'free'
+                  - content_for :old_card_fields do
+                    .control-group
+                      %label.control-label{:for => "input05"} Current Card Number
+                      .controls
+                        = @credit_card.masked_number#%input.input.span2{:name => "old_card", :size => "30", :type => "text",:value => @credit_card.masked_number}
+                = render :partial => '/registrations/credit_card_fields'
+                - if current_user.plan == 'free'
+                  = hidden_field_tag :tr_data, Braintree::TransparentRedirect.create_customer_data(:redirect_url => billing_info_confirm_profiles_url())
+                - else
+                  = hidden_field_tag :tr_data, Braintree::TransparentRedirect.update_customer_data(:redirect_url => billing_info_update_confirm_profiles_url(),:customer_id => current_user.braintree_customer_id)
+                  = hidden_field_tag 'customer[credit_card][options][update_existing_token]', @credit_card.token
+                = hidden_field_tag :present_user_plan,current_user.plan
+                .form-actions
+                  %button.btn.btn-primary{:type => "submit"} Save changes
               = link_to "Cancel Membership", cancel_membership_profiles_path  unless current_user.plan == 'free'
 
           :javascript
@@ -170,6 +171,29 @@
                        });
 
                 });
+                
+          :javascript
+              $(function (){
+                var plan = $('#present_user_plan').val();
+                if (plan == "free")
+                {
+                  $('.credit_card').hide();
+                   $('.zero').hide();
+                 }
+                $('.plan_free').click(function(){
+                  $('.credit_card').hide();
+                  $('.zero').hide();
+                });
+                $('.plan_monthly').click(function(){
+                      $('.credit_card').show();
+                      $('.zero').show();
+                    });
+                $('.plan_yearly').click(function(){
+                      $('.credit_card').show();
+                      $('.zero').show();
+                    });
+            
+              });
       / billing
     / accordion-inner
   / accordion-body

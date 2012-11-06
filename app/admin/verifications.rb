@@ -30,7 +30,8 @@ ActiveAdmin.register Verfication do
     end
     column("Date") { |verification| global_date_format(verification.created_at) }
     column('Actions', :sortable => false) do |verification|
-      link_to 'Verify', user_verification_admin_verfication_path(verification.id)
+      action_text =  verification.check_completed_status? ? "Verify" : "Details"
+      link_to action_text, user_verification_admin_verfication_path(verification.id)
     end
   end
 
@@ -42,7 +43,7 @@ ActiveAdmin.register Verfication do
 
   member_action :mark_as_verified, :method => :post do
     @verfication = Verfication.find(params[:id])
-    @verfication.update_attribute(:status,'verified')
+    @verfication.update_attributes(:status => 'verified', :completed => true)
     user = @verfication.user
     user.verified = true
     user.save
@@ -53,7 +54,7 @@ ActiveAdmin.register Verfication do
 
   member_action :mark_as_rejected, :method => :post do
     @verfication = Verfication.find(params[:id])
-    @verfication.update_attribute(:status,'rejected')
+    @verfication.update_attributes(:status => 'rejected', :completed => true)
     user = @verfication.user
     user.verified = false
     user.save

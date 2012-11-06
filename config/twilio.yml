@@ -1,0 +1,23 @@
+development:
+  account_sid: 'AC928413696ead2152b78129be097cc931'
+  auth_token: '52f08792895fe31eb27fe28c918c80b7'
+  twilio_number: "+14155992671"
+  support_number: "+919866439593"
+  call_back_url: "http://web1.tunnlr.com:12609/twilio_calls/receive_call"
+  status_call_back_url: "http://web1.tunnlr.com:12609/twilio_calls/status_call_back" 
+
+staging:
+  account_sid: 'ACda525abca69de6bb2777e074da0ba91e'
+  auth_token: '7a99e95167fce00419dcd90429ce14aa'
+  twilio_number: "+1541-516-1631"
+  support_number: "+919848687833"
+  call_back_url: "https://affluence2-staging.herokuapp.com/twilio_calls/receive_call"
+  status_call_back_url: "https://affluence2-staging.herokuapp.com/twilio_calls/status_call_back"
+
+production:
+  account_sid: 'ACda525abca69de6bb2777e074da0ba91e'
+  auth_token: '7a99e95167fce00419dcd90429ce14aa'
+  twilio_number: "+1541-516-1631"
+  support_number: "+919848687833"
+  call_back_url: "http://affluence2-development.herokuapp.com/twilio_calls/receive_call"
+  status_call_back_url: "http://affluence2-development.herokuapp.com/twilio_calls/status_call_back" 

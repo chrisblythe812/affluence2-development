@@ -2,7 +2,7 @@ ActiveAdmin.register User do
   actions :all, :except => [:new, :destroy]
 
   #actions :index, :show, :new, :create, :update, :edit
-
+  config.sort_order = 'created_at desc'
 
   filter :email
   filter :profile_first_name, :as => "string"
@@ -16,9 +16,15 @@ ActiveAdmin.register User do
   filter :profile_country, :as => "string"
 
 
-  scope :active_members, :default => true
-  scope :suspended_members
-  scope :deleted_members
+ scope :active_members, :default => true do |users|
+    users.active_members.order("created_at desc")
+  end
+  scope :suspended_members do |users|
+    users.suspended_members.order("created_at desc")
+  end
+  scope :deleted_members do |users|
+    users.deleted_members.order("created_at desc")
+  end
 
   #config.clear_sidebar_sections!
 
